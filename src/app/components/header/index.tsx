@@ -10,43 +10,44 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import styles from './index.module.css';
+import { MENUS } from '@/app/dummuData';
 
 
-const menus = [
-  {
-    label: 'Shop',
-    items: ['New Arrivals', 'Best Sellers', 'All T-Shirts', 'Sale'],
-  },
-  {
-    label: 'Styles',
-    items: [
-      'Graphic Tees',
-      'Plain Tees',
-      'Oversized Tees',
-      'Slim Fit Tees',
-      'Athleisure',
-    ],
-  },
-  {
-    label: 'Collections',
-    items: [
-      'Streetwear',
-      'Minimalist',
-      'Bold Prints',
-      'Vintage Vibes',
-      'Premium Collection',
-      'Limited Edition',
-    ],
-  },
-  {
-    label: 'Shop by Color',
-    items: ['Black', 'White', 'Neutrals', 'Earth Tones', 'Brights'],
-  },
-  {
-    label: 'Shop by Occasion',
-    items: ['Everyday Wear', 'Night Out', 'Workwear', 'Lounge / Home'],
-  },
-];
+// const menus = [
+//   {
+//     label: 'Shop',
+//     items: ['New Arrivals', 'Best Sellers', 'All T-Shirts', 'Sale'],
+//   },
+//   {
+//     label: 'Styles',
+//     items: [
+//       'Graphic Tees',
+//       'Plain Tees',
+//       'Oversized Tees',
+//       'Slim Fit Tees',
+//       'Athleisure',
+//     ],
+//   },
+//   {
+//     label: 'Collections',
+//     items: [
+//       'Streetwear',
+//       'Minimalist',
+//       'Bold Prints',
+//       'Vintage Vibes',
+//       'Premium Collection',
+//       'Limited Edition',
+//     ],
+//   },
+//   {
+//     label: 'Shop by Color',
+//     items: ['Black', 'White', 'Neutrals', 'Earth Tones', 'Brights'],
+//   },
+//   {
+//     label: 'Shop by Occasion',
+//     items: ['Everyday Wear', 'Night Out', 'Workwear', 'Lounge / Home'],
+//   },
+// ];
 
 export default function Header() {
   const router = useRouter();                         // 👈 add
@@ -78,7 +79,7 @@ export default function Header() {
 
       {/* centre navigation */}
       <nav className={styles.nav}>
-        {menus.map(({ label, items }, idx) => (
+        {MENUS.map(({ label, items }, idx) => (
           <div key={label}>
             <Button
               aria-controls={activeMenu === idx ? `${label}-menu` : undefined}
