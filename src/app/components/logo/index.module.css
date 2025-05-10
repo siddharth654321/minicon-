@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Bagel+Fat+One&display=swap');
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  background: black;           /* remove if parent already sets bg */
+  width: auto;
+  height: 50%;
+}
+
+.svg {
+  width: 140px;
+  height: 140px;
+  overflow: visible;
+}
+
+.logoText {
+  font-family: 'Bagel Fat One', system-ui;
+  font-size: 140px;
+  letter-spacing: 8px;
+  font-weight: 400;
+  font-style: normal;
+  color: white;
+  display: flex;
+  align-items: center;
+}
+
+.face {
+  transition: opacity 0.5s ease;
+}

@@ -67,7 +67,7 @@ export const MENUS = [
       item: "best-sellers",
       color: "White",
       size: "L",
-      image: "/images/default.svg",
+      image: "/images/M-13.png",
     },
     {
       id: 3,

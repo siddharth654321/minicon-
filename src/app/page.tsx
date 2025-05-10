@@ -4,21 +4,23 @@ import Image from 'next/image';
 import { keyframes } from '@mui/system';
 import Box from '@mui/material/Box';
 import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from '@mui/material';
+import { PRODUCTS } from './dummyData';
+import styles from './page.module.css';
 
 
 
 const heroImages = [
-  '/images/test1.png',
-  '/images/test2.png',
-  '/images/test3.png',
+  '/images/mockup4.png',
+  '/images/M-9.png',
+  '/images/mockup4.png',
 ] as const;
 
 const marqueeImages = [
-  '/images/cloth1.png',
-  '/images/cloth2.png',
-  '/images/cloth3.svg',
-  '/images/cloth4.png',
-  '/images/cloth5.png',
+  '/images/mockup 3.png',
+  '/images/mockup 6.png',
+  '/images/M-10.png',
+  '/images/M-11.png',
+  '/images/M-8.png',
 ] as const;
 
 
@@ -39,19 +41,20 @@ export default function Home() {
   return (
     <Box
       sx={{
-        height: '100vh',
         display: 'flex',
         flexDirection: 'column',
-        overflowY: 'auto',
         overflowX: 'hidden',
         scrollbarWidth: 'none',
         '&::-webkit-scrollbar': { display: 'none' },
+        backgroundColor: '#111'
       }}
     >
-      <Typography variant="h1"
+      <Typography
+        sx={{ margin: '3vh 0 5vh 0' }}
+        variant="h1"
         align="center"
-        color="black">
-        Welcome to MINIcon
+        color="white">
+        Welcome to MINICON
       </Typography>
       <Box
         component="section"
@@ -75,14 +78,14 @@ export default function Home() {
               scrollSnapAlign: 'start',
             }}
           >
-            <Image src={src} alt="" fill priority />
+            <Image src={src} alt="" fill priority style={{ objectFit: 'contain' }} />
           </Box>
         ))}
       </Box>
       <Typography variant="h4"
         align="center"
-        style={{margin:'5vh 0 2vh 0'}}
-        color="black">
+        style={{ margin: '5vh 0 5vh 0' }}
+        color="white">
         Top picks for the week
       </Typography>
       <Box
@@ -101,7 +104,7 @@ export default function Home() {
               key={i}
               sx={{ position: 'relative', flex: '0 0 33.33%' }}
             >
-              <Image src={src} alt="" fill />
+              <Image src={src} alt="" fill style={{ objectFit: 'contain' }} />
             </Box>
           ))}
         </Box>
@@ -109,35 +112,74 @@ export default function Home() {
 
       <Typography variant="h4"
         align="center"
-        style={{margin:'5vh 0 2vh 0'}}
-        color="black">
+        style={{ margin: '5vh 0 5vh 0' }}
+        color="white">
         New Arrivals
       </Typography>
 
-      <Grid  justifyContent="center"  container spacing={3}>
-                {MOCK_PRODUCTS.map((p) => (
-                  <Grid item key={p.id}>
-                    <Card variant="outlined" sx={{ height: '100%' }}>
-                      <CardActionArea sx={{ height: '100%' }}>
-                        <CardMedia sx={{ position: 'relative', height: 260 }}>
-                          <Image src={p.img} alt={p.title} fill style={{ objectFit: 'cover' }} />
-                        </CardMedia>
-                        <CardContent>
-                          <Typography variant="subtitle2" fontWeight={600} gutterBottom noWrap>
-                            {p.title}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            {p.subtitle}
-                          </Typography>
-                          <Typography variant="subtitle2" fontWeight={700} mt={1}>
-                            ₹ {p.price}
-                          </Typography>
-                        </CardContent>
-                      </CardActionArea>
-                    </Card>
-                  </Grid>
-                ))}
-              </Grid>
+      <Grid container spacing={5} justifyContent="center">
+        {PRODUCTS.map((p) => (
+          <Grid item key={p.id}>
+            {/* ───────────────  “Card” wrapper  ─────────────── */}
+            <div
+              style={{
+                height: '50vh',
+                width: '20vw',
+                border: '1px solid rgba(255,255,255,0.15)',  // simple outline → like Card variant="outlined"
+                borderRadius: 6,
+                overflow: 'hidden',                          // ensures rounded corners on image
+                display: 'flex',
+                flexDirection: 'column',
+                background: '#1a1a1a',                       // dark backdrop to match theme
+              }}
+            >
+              <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gridTemplateRows: 'repeat(10, 1fr)' }}>
+                <div className={styles.imageContainer}>
+                  <Image
+                    src={p.image}
+                    alt={p.title}
+                    fill                    // makes the Image component stretch to its parent
+                    sizes="(max-width:768px) 100vw, 20vw"
+                    style={{ objectFit: 'cover' }}   // or 'contain'
+                  />
+                </div>
+                <div className={styles.titleContainer}>
+                  <Typography color='white' sx={{ fontSize: '0.8rem', fontWeight: 200 }}>
+                    {p.title}
+                  </Typography>
+                </div>
+                <div className={styles.subtitleContainer}>
+                  <Typography color='white' sx={{ fontSize: '0.6rem', fontWeight: 200 }}>
+                    {p.subtitle}
+                  </Typography>
+                </div>
+                <div className={styles.priceContainer}>
+                  <Typography color='white' sx={{ fontSize: '0.6rem', fontWeight: 100 }}>
+                    ₹{p.price}
+                  </Typography>
+                </div>
+
+                {/* <Box sx={{ position: 'relative', height: 260 }}>
+                  <Image src={p.img} alt={p.title} fill style={{ objectFit: 'cover' }} />
+                </Box>
+
+                
+                <div style={{ padding: 12 }}>
+                  <Typography variant="subtitle2" fontWeight={600} gutterBottom noWrap>
+                    {p.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {p.subtitle}
+                  </Typography>
+                  <Typography variant="subtitle2" fontWeight={700} mt={1}>
+                    ₹ {p.price}
+                  </Typography>
+                </div> */}
+              </div>
+            </div>
+          </Grid>
+        ))}
+      </Grid>
     </Box>
   );
 }

@@ -1,9 +1,8 @@
-// app/categories/[[...cat]]/page.tsx
 'use client';
 
 import { useMemo, useState } from 'react';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   Box,
   Typography,
@@ -13,7 +12,6 @@ import {
   FormControlLabel,
   Checkbox,
   Divider,
-  Grid,
   Card,
   CardActionArea,
   CardContent,
@@ -21,11 +19,12 @@ import {
   Select,
   MenuItem,
 } from '@mui/material';
+import Grid from '@mui/material/Grid';
 
 /* -------------------------------------------------------------------------- */
 /*                        Main dummy catalogue data                           */
 /* -------------------------------------------------------------------------- */
-import { PRODUCTS as ALL_PRODUCTS } from '@/app/dummuData'; // from src/app/dummuData.ts
+import { PRODUCTS as ALL_PRODUCTS } from '@/app/dummyData'; // from src/app/dummuData.ts
 
 /* Derive category & size lists straight from the data */
 const ALL_FILTERS = {
@@ -34,6 +33,7 @@ const ALL_FILTERS = {
 };
 
 export default function CataloguePage() {
+  const router = useRouter();                        
   /* ---------------- Parse /categories/[label]/[item] ---------------------- */
   const pathname = usePathname();                         // e.g. /categories/styles/graphic-tees
   const catSegments = useMemo(() => pathname.split('/').slice(2), [pathname]);
@@ -153,7 +153,12 @@ export default function CataloguePage() {
           {products.map((p) => (
             <Grid item key={p.id} xs={12} sm={6} md={4} lg={3}>
               <Card  variant="outlined" sx={{ height: '100%' }}>
-                <CardActionArea  onClick={() => console.log('Clicked product:', p)} sx={{ height: '100%' }}>
+                <CardActionArea  
+onClick={() => {
+      const encoded = encodeURIComponent(JSON.stringify(p));
+      router.push(`/preCheckout`);
+    }}
+                  sx={{ height: '100%' }}>
                   <CardMedia sx={{ position: 'relative', height: 260 }}>
                     <Image
                       src={p.img}
