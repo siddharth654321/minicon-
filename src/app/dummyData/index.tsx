@@ -40,11 +40,17 @@ export const MENUS = [
     size: string;
     image: string;    // secondary/icon image ⇒ '/images/default.svg'
   }
+  const IMAGE_POOL = [
+  'M-1.png',  'M-7.png',  'M-8.png',  'M-10.png', 'M-11.png',
+  'M-12.png', 'M-13.png', 'M-14.png', 'M-15.png',
+  
+  'mockup 3.png', 'mockup 5.png', 'mockup 6.png',
+] as const;
   
   /* -------------------------------------------------------------------------- */
   /*  Hard-coded PRODUCTS array (24 entries – one per menu item)                */
   /* -------------------------------------------------------------------------- */
-  export const PRODUCTS: Product[] = [
+  export const preProduct: Product[] = [
     {
       id: 1,
       title: "New Arrivals Tee 1",
@@ -646,4 +652,7 @@ export const MENUS = [
       image: "/images/default.svg",
     },
   ];
-  
+  export const PRODUCTS: Product[] = preProduct.map((p) => ({
+  ...p,
+  image: `/images/${IMAGE_POOL[Math.floor(Math.random() * IMAGE_POOL.length)]}`,
+}));
