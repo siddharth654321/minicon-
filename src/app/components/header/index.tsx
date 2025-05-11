@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, MouseEvent } from 'react';
-import { useRouter } from 'next/navigation';          // 👈 add
+import { useRouter } from 'next/navigation';         
 import Image from 'next/image';
 import Link from 'next/link';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -10,43 +10,46 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import styles from './index.module.css';
+import { MENUS } from '@/app/dummyData';
+import { Typography } from '@mui/material';
+import MiniconLogo from '../logo';
 
 
-const menus = [
-  {
-    label: 'Shop',
-    items: ['New Arrivals', 'Best Sellers', 'All T-Shirts', 'Sale'],
-  },
-  {
-    label: 'Styles',
-    items: [
-      'Graphic Tees',
-      'Plain Tees',
-      'Oversized Tees',
-      'Slim Fit Tees',
-      'Athleisure',
-    ],
-  },
-  {
-    label: 'Collections',
-    items: [
-      'Streetwear',
-      'Minimalist',
-      'Bold Prints',
-      'Vintage Vibes',
-      'Premium Collection',
-      'Limited Edition',
-    ],
-  },
-  {
-    label: 'Shop by Color',
-    items: ['Black', 'White', 'Neutrals', 'Earth Tones', 'Brights'],
-  },
-  {
-    label: 'Shop by Occasion',
-    items: ['Everyday Wear', 'Night Out', 'Workwear', 'Lounge / Home'],
-  },
-];
+// const menus = [
+//   {
+//     label: 'Shop',
+//     items: ['New Arrivals', 'Best Sellers', 'All T-Shirts', 'Sale'],
+//   },
+//   {
+//     label: 'Styles',
+//     items: [
+//       'Graphic Tees',
+//       'Plain Tees',
+//       'Oversized Tees',
+//       'Slim Fit Tees',
+//       'Athleisure',
+//     ],
+//   },
+//   {
+//     label: 'Collections',
+//     items: [
+//       'Streetwear',
+//       'Minimalist',
+//       'Bold Prints',
+//       'Vintage Vibes',
+//       'Premium Collection',
+//       'Limited Edition',
+//     ],
+//   },
+//   {
+//     label: 'Shop by Color',
+//     items: ['Black', 'White', 'Neutrals', 'Earth Tones', 'Brights'],
+//   },
+//   {
+//     label: 'Shop by Occasion',
+//     items: ['Everyday Wear', 'Night Out', 'Workwear', 'Lounge / Home'],
+//   },
+// ];
 
 export default function Header() {
   const router = useRouter();                         // 👈 add
@@ -72,15 +75,16 @@ export default function Header() {
   return (
     <header className={styles.header}>
       {/* logo */}
-      <Link href="/" className={styles.logo}>
-        <Image src="/images/logo.webp" alt="Logo" width={120} height={40} priority />
+      <Link href="/"  scroll={false} className={styles.logo}>
+        <Image src="/images/logo.png" alt="Logo" width={120} height={40} priority />
       </Link>
 
       {/* centre navigation */}
       <nav className={styles.nav}>
-        {menus.map(({ label, items }, idx) => (
+        {MENUS.map(({ label, items }, idx) => (
           <div key={label}>
             <Button
+            sx={{fontFamily: "'Bagel Fat One', system-ui",color:'white'}}
               aria-controls={activeMenu === idx ? `${label}-menu` : undefined}
               aria-haspopup="true"
               onClick={handleOpen(idx)}
@@ -100,13 +104,17 @@ export default function Header() {
             >
               {items.map((item) => (
                 <MenuItem
+                color='red'
                   key={item}
                   onClick={() => {
                     router.push(`/categories/${slug(label)}/${slug(item)}`); // 👈 navigate
                     handleClose();
                   }}
                 >
+                  <Typography>
                   {item}
+                  </Typography>
+                  
                 </MenuItem>
               ))}
             </Menu>
