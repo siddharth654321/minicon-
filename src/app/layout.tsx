@@ -1,9 +1,16 @@
 import Header from './components/header';
-import Footer from './components/footer';   // ← import here
+import Footer from './components/footer';  
+import MuiTheme from './components/ThemeProvider';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+        <head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body
         style={{
           display: 'flex',
@@ -13,7 +20,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         }}
       >
         <Header />
-        <main style={{ flex: 1, paddingTop: '8vh' }}>{children}</main>
+        <main style={{ flex: 1 }}>
+          <MuiTheme>
+            <div style={{marginTop: '8vh'}}>
+            {children}
+            </div>
+         
+          </MuiTheme>
+       
+          </main>
         <Footer />                         
       </body>
     </html>

@@ -54,3 +54,34 @@
 /* optional: remove scrollbar for carousel rows */
 .carousel::-webkit-scrollbar { display: none; }
 .carousel { -ms-overflow-style: none; scrollbar-width: none; }
+
+
+.imageContainer {
+  grid-area: 1 / 1 / 9 / 9;   /* rows 1-6, cols 1-6 */
+  overflow: hidden;           /* ⬅️ clips overflow   */
+  position: relative;
+}
+
+
+
+
+.titleContainer{
+  grid-area:9/1/10/5 ;
+  padding: 1vh 1vw;
+}
+
+.subtitleContainer{
+  grid-area:9/5/10/7 ;
+  padding: 1vh 0vw;
+}
+
+.priceContainer{
+  grid-area:10/1/11/5 ;
+  padding: 1vh 1vw;
+}
+
+.productImg {
+  width: 100%;                /* % works in CSS      */
+  height: 100%;
+  display: block;             /* removes inline-gap  */
+}

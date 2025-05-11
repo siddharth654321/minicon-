@@ -1,0 +1,76 @@
+.container {
+    display: grid;
+    grid-template-columns: repeat(14, 1fr);
+    grid-template-rows: repeat(14, 1fr);
+    height: 100vh;
+    width: 100%;
+    background-color: #111;
+}
+
+.productImage {
+    grid-area: 2/2/11/8;
+    position: relative;
+    overflow: hidden;
+}
+
+.productDetails {
+    grid-area: 2/9/14/14;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(12, 1fr);
+}
+
+.productName {
+    grid-area: 1/1/2/9;
+    padding: 1vh 1vw;
+}
+
+.titlecss.titlecss {
+    font-size: 2rem;
+}
+
+.productsubtitle {
+    grid-area: 2/1/3/8;
+}
+
+.subtitlecss.subtitlecss {
+    font-size: 1.5rem;
+    padding: 1vh 1vw;
+
+}
+
+.productPrice{
+   grid-area:7/1/8/6 ;
+       padding: 1vh 1vw;
+
+}
+
+.productSize{
+    grid-area:4/1/6/12 ;
+        padding: 1vh 1vw;
+
+}
+.price.price{
+    font-size: 1rem;
+    font-weight: 100;
+}
+
+.buyButton{
+    grid-area:9/4/10/10 ;
+}
+
+.addToCartButton{
+    grid-area:10/4/11/10 ;
+}
+
+.buybutton.buybutton{
+    width: 100%;
+    background-color: aliceblue;
+    color: black;
+}
+
+.cartbutton.cartbutton{
+    background-color: gray;
+    color: white;
+    width: 100%;
+}

@@ -4,21 +4,24 @@ import Image from 'next/image';
 import { keyframes } from '@mui/system';
 import Box from '@mui/material/Box';
 import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from '@mui/material';
+import { PRODUCTS } from './dummyData';
+import styles from './page.module.css';
+import { ProductCard } from './components/productCard';
 
 
 
 const heroImages = [
-  '/images/test1.png',
-  '/images/test2.png',
-  '/images/test3.png',
+  '/images/mockup4.png',
+  '/images/M-9.png',
+  '/images/mockup4.png',
 ] as const;
 
 const marqueeImages = [
-  '/images/cloth1.png',
-  '/images/cloth2.png',
-  '/images/cloth3.svg',
-  '/images/cloth4.png',
-  '/images/cloth5.png',
+  '/images/mockup 3.png',
+  '/images/mockup 6.png',
+  '/images/M-10.png',
+  '/images/M-11.png',
+  '/images/M-8.png',
 ] as const;
 
 
@@ -39,19 +42,20 @@ export default function Home() {
   return (
     <Box
       sx={{
-        height: '100vh',
         display: 'flex',
         flexDirection: 'column',
-        overflowY: 'auto',
         overflowX: 'hidden',
         scrollbarWidth: 'none',
         '&::-webkit-scrollbar': { display: 'none' },
+        backgroundColor: '#111'
       }}
     >
-      <Typography variant="h1"
+      <Typography
+        sx={{ margin: '3vh 0 5vh 0' }}
+        variant="h1"
         align="center"
-        color="black">
-        Welcome to MINIcon
+        color="white">
+        Welcome to MINICON
       </Typography>
       <Box
         component="section"
@@ -75,14 +79,14 @@ export default function Home() {
               scrollSnapAlign: 'start',
             }}
           >
-            <Image src={src} alt="" fill priority />
+            <Image src={src} alt="" fill priority style={{ objectFit: 'contain' }} />
           </Box>
         ))}
       </Box>
       <Typography variant="h4"
         align="center"
-        style={{margin:'5vh 0 2vh 0'}}
-        color="black">
+        style={{ margin: '5vh 0 5vh 0' }}
+        color="white">
         Top picks for the week
       </Typography>
       <Box
@@ -101,7 +105,7 @@ export default function Home() {
               key={i}
               sx={{ position: 'relative', flex: '0 0 33.33%' }}
             >
-              <Image src={src} alt="" fill />
+              <Image src={src} alt="" fill style={{ objectFit: 'contain' }} />
             </Box>
           ))}
         </Box>
@@ -109,35 +113,18 @@ export default function Home() {
 
       <Typography variant="h4"
         align="center"
-        style={{margin:'5vh 0 2vh 0'}}
-        color="black">
+        style={{ margin: '5vh 0 5vh 0' }}
+        color="white">
         New Arrivals
       </Typography>
 
-      <Grid  justifyContent="center"  container spacing={3}>
-                {MOCK_PRODUCTS.map((p) => (
-                  <Grid item key={p.id}>
-                    <Card variant="outlined" sx={{ height: '100%' }}>
-                      <CardActionArea sx={{ height: '100%' }}>
-                        <CardMedia sx={{ position: 'relative', height: 260 }}>
-                          <Image src={p.img} alt={p.title} fill style={{ objectFit: 'cover' }} />
-                        </CardMedia>
-                        <CardContent>
-                          <Typography variant="subtitle2" fontWeight={600} gutterBottom noWrap>
-                            {p.title}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            {p.subtitle}
-                          </Typography>
-                          <Typography variant="subtitle2" fontWeight={700} mt={1}>
-                            ₹ {p.price}
-                          </Typography>
-                        </CardContent>
-                      </CardActionArea>
-                    </Card>
-                  </Grid>
-                ))}
-              </Grid>
+      <Grid container spacing={5} justifyContent="center">
+        {PRODUCTS.map((p) => (
+          <Grid item key={p.id}>
+            <ProductCard product={p} />
+          </Grid>
+        ))}
+      </Grid>
     </Box>
   );
 }

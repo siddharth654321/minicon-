@@ -1,9 +1,8 @@
-// app/categories/[[...cat]]/page.tsx
 'use client';
 
 import { useMemo, useState } from 'react';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   Box,
   Typography,
@@ -13,19 +12,21 @@ import {
   FormControlLabel,
   Checkbox,
   Divider,
-  Grid,
   Card,
   CardActionArea,
   CardContent,
   CardMedia,
   Select,
   MenuItem,
+  Button,
 } from '@mui/material';
+import Grid from '@mui/material/Grid';
 
 /* -------------------------------------------------------------------------- */
 /*                        Main dummy catalogue data                           */
 /* -------------------------------------------------------------------------- */
-import { PRODUCTS as ALL_PRODUCTS } from '@/app/dummuData'; // from src/app/dummuData.ts
+import { PRODUCTS as ALL_PRODUCTS } from '@/app/dummyData'; // from src/app/dummuData.ts
+import { ProductCard } from '@/app/components/productCard';
 
 /* Derive category & size lists straight from the data */
 const ALL_FILTERS = {
@@ -34,6 +35,7 @@ const ALL_FILTERS = {
 };
 
 export default function CataloguePage() {
+  const router = useRouter();
   /* ---------------- Parse /categories/[label]/[item] ---------------------- */
   const pathname = usePathname();                         // e.g. /categories/styles/graphic-tees
   const catSegments = useMemo(() => pathname.split('/').slice(2), [pathname]);
@@ -53,10 +55,10 @@ export default function CataloguePage() {
   const products = useMemo(() => {
     const list = [...filteredProducts];
     switch (sortOpt) {
-      case 'new':        return list.reverse();           // dummy “newest first”
-      case 'price_low':  return list.sort((a, b) => a.price - b.price);
+      case 'new': return list.reverse();           // dummy “newest first”
+      case 'price_low': return list.sort((a, b) => a.price - b.price);
       case 'price_high': return list.sort((a, b) => b.price - a.price);
-      default:           return list;
+      default: return list;
     }
   }, [filteredProducts, sortOpt]);
 
@@ -69,53 +71,47 @@ export default function CataloguePage() {
 
   /* ==============================  RENDER  =============================== */
   return (
-    <Box component="section" sx={{ display: 'flex', px: 2, py: 4, gap: 4 }}>
+    <Box component="section" sx={{ display: 'flex', px: 2, py: 4, gap: 4, backgroundColor: 'black' }}>
       {/* ------------------------------- Sidebar ---------------------------- */}
       <Box sx={{ width: 260, flexShrink: 0, overflowY: 'auto' }}>
         {/* Category filter */}
-        <Typography variant="subtitle1" fontWeight={700} mb={1}>
+        <Typography color='white' variant="subtitle1" fontWeight={700} mb={1}>
           CATEGORIES
         </Typography>
-        <TextField
-          variant="outlined"
-          placeholder="Search for Categories"
-          size="small"
-          fullWidth
-          sx={{ mb: 1 }}
-        />
-        <List dense sx={{ maxHeight: 320, overflowY: 'auto' }}>
+
+        <List dense sx={{ maxHeight: 320, overflowY: 'auto', color: 'white' }}>
           {ALL_FILTERS.categories.map((c) => (
             <ListItem key={c} disableGutters>
               <FormControlLabel
-                control={<Checkbox size="small" />}
+                control={<Checkbox size="small" sx={{ color: 'white' }} />}
                 label={<Typography variant="body2">{c}</Typography>}
               />
             </ListItem>
           ))}
         </List>
 
-        <Divider sx={{ my: 2 }} />
+        <Divider sx={{ my: 2, color: 'white' }} />
 
         {/* Size filter */}
-        <Typography variant="subtitle1" fontWeight={700} mb={1}>
+        <Typography color='white' variant="subtitle1" fontWeight={700} mb={1}>
           SIZE
         </Typography>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
           {ALL_FILTERS.size.map((s) => (
-            <Box
+            <Button
               key={s}
               sx={{
                 border: '1px solid',
-                borderColor: 'grey.400',
                 borderRadius: 1,
                 px: 1.5,
                 py: 0.5,
                 fontSize: 14,
                 cursor: 'pointer',
+                color: 'white',
               }}
             >
               {s}
-            </Box>
+            </Button>
           ))}
         </Box>
       </Box>
@@ -131,7 +127,7 @@ export default function CataloguePage() {
             mb: 2,
           }}
         >
-          <Typography variant="h6" fontWeight={600}>
+          <Typography color='white' variant="h6" fontWeight={600}>
             {heading} — {products.length} items
           </Typography>
 
@@ -151,35 +147,10 @@ export default function CataloguePage() {
         {/* Product cards */}
         <Grid container spacing={3}>
           {products.map((p) => (
-            <Grid item key={p.id} xs={12} sm={6} md={4} lg={3}>
-              <Card  variant="outlined" sx={{ height: '100%' }}>
-                <CardActionArea  onClick={() => console.log('Clicked product:', p)} sx={{ height: '100%' }}>
-                  <CardMedia sx={{ position: 'relative', height: 260 }}>
-                    <Image
-                      src={p.img}
-                      alt={p.title}
-                      fill
-                      style={{ objectFit: 'cover' }}
-                      sizes="(max-width:600px) 100vw,
-                             (max-width:1200px) 50vw,
-                             25vw"
-                    />
-                  </CardMedia>
-                  <CardContent>
-                    <Typography variant="subtitle2" fontWeight={600} gutterBottom noWrap>
-                      {p.title}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {p.subtitle}
-                    </Typography>
-                    <Typography variant="subtitle2" fontWeight={700} mt={1}>
-                      ₹ {p.price}
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
-            </Grid>
-          ))}
+          <Grid item key={p.id}>
+            <ProductCard product={p} />
+          </Grid>
+        ))}
         </Grid>
       </Box>
     </Box>
