@@ -20,7 +20,7 @@ import {
   MenuItem,
   Button,
 } from '@mui/material';
-import Grid from '@mui/material/Grid';
+import { GridLegacy as Grid } from '@mui/material';  
 
 /* -------------------------------------------------------------------------- */
 /*                        Main dummy catalogue data                           */
