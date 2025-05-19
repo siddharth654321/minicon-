@@ -124,8 +124,16 @@ export default function Header() {
 
       {/* right-side icons */}
       <div className={styles.actions}>
-        <AccountCircleIcon className={styles.icon} />
-        <ShoppingCartIcon className={styles.icon} />
+        <AccountCircleIcon
+          className={styles.icon}
+          onClick={() => router.push('/account')}
+          style={{ cursor: 'pointer' }}
+        />
+        <ShoppingCartIcon
+          className={styles.icon}
+          onClick={() => router.push('/cart')}
+          style={{ cursor: 'pointer' }}
+        />
       </div>
     </header>
   );
