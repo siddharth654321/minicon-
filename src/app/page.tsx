@@ -3,10 +3,11 @@
 import Image from 'next/image';
 import { keyframes } from '@mui/system';
 import Box from '@mui/material/Box';
-import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from '@mui/material';
+import { Card, CardActionArea, CardContent, CardMedia, Typography } from '@mui/material';
 import { PRODUCTS } from './dummyData';
 import styles from './page.module.css';
 import { ProductCard } from './components/productCard';
+import { GridLegacy as Grid } from '@mui/material';  
 
 
 
@@ -50,14 +51,24 @@ export default function Home() {
         backgroundColor: '#111'
       }}
     >
-      <Typography
-        sx={{ margin: '3vh 0 5vh 0' }}
+      <div style={{ margin: '10vh 0 20vh 0' }}
+>
+  <Typography
+    sx={{ margin: '0 0 2vh 0' }}
         variant="h1"
         align="center"
         color="white">
-        Welcome to MINICON
+        Bold Streetwear
       </Typography>
-      <Box
+       <Typography
+        variant="h5"
+        align="center"
+        color="white">
+        For men who don't follow trends, they set them.
+      </Typography>
+      </div>
+    
+      {/* <Box
         component="section"
         sx={{
           flex: '0 0 60vh',
@@ -82,10 +93,10 @@ export default function Home() {
             <Image src={src} alt="" fill priority style={{ objectFit: 'contain' }} />
           </Box>
         ))}
-      </Box>
+      </Box> */}
       <Typography variant="h4"
         align="center"
-        style={{ margin: '5vh 0 5vh 0' }}
+        style={{ margin: '5vh 0 10vh 0' }}
         color="white">
         Top picks for the week
       </Typography>
@@ -113,7 +124,7 @@ export default function Home() {
 
       <Typography variant="h4"
         align="center"
-        style={{ margin: '5vh 0 5vh 0' }}
+        style={{ margin: '20vh 0 10vh 0' }}
         color="white">
         New Arrivals
       </Typography>

@@ -13,6 +13,9 @@ import {
   Divider,
 } from '@mui/material';
 import { GridLegacy as Grid } from '@mui/material';  
+import ProfileSection from './profile';
+import OrdersSection from './orders';
+import AddressesSection from './address';
 /* -------------------------------------------------------------------------- */
 /*                             Mock data types                                */
 /* -------------------------------------------------------------------------- */
@@ -126,97 +129,14 @@ export default function AccountPage() {
       </Tabs>
 
       {/* --------------------------- Profile ------------------------------- */}
-      <TabPanel value={tab} index={0}>
-        <Card variant="outlined" sx={{ maxWidth: 600 ,backgroundColor:'#1f1f1f'}}>
-          <CardContent>
-            <Typography color='white' variant="h6" fontWeight={600} gutterBottom>
-              Personal Information
-            </Typography>
-            <Stack spacing={1}>
-              <Typography color='white'>Name: John Doe</Typography>
-              <Typography color='white'>Email: john.doe@example.com</Typography>
-              <Typography color='white'>Phone: +1 217 555 0113</Typography>
-            </Stack>
-            <Button variant="contained" sx={{ mt: 2 }}>
-              Edit Profile
-            </Button>
-          </CardContent>
-        </Card>
+        <TabPanel value={tab} index={0}>
+        <ProfileSection />
       </TabPanel>
-
-      {/* ---------------------------- Orders -------------------------------- */}
       <TabPanel value={tab} index={1}>
-        {MOCK_ORDERS.length === 0 ? (
-          <Typography>No past orders.</Typography>
-        ) : (
-          <Stack spacing={2}>
-            {MOCK_ORDERS.map((o) => (
-              <Card key={o.id} variant="outlined" sx={{ backgroundColor:'#1f1f1f'}}>
-                <CardContent>
-                  <Grid container spacing={2} alignItems="center">
-                    <Grid item xs={12} sm={6} md={4}>
-                      <Typography fontWeight={600}>{o.id}</Typography>
-                      <Typography variant="body2" >
-                        {o.date}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={4} sm={2}>
-                      <Typography>{o.items} item{o.items > 1 ? 's' : ''}</Typography>
-                    </Grid>
-                    <Grid item xs={4} sm={2}>
-                      <Typography fontWeight={700}>₹ {o.total}</Typography>
-                    </Grid>
-                    <Grid item xs={4} sm={2}>
-                      <Typography>{o.status}</Typography>
-                    </Grid>
-                    <Grid item xs={12} sm={2}>
-                      <Button fullWidth size="small" variant="outlined">
-                        View Details
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </CardContent>
-              </Card>
-            ))}
-          </Stack>
-        )}
+        <OrdersSection />
       </TabPanel>
-
-      {/* --------------------------- Addresses ------------------------------ */}
       <TabPanel value={tab} index={2}>
-        <Stack spacing={2}>
-          {MOCK_ADDRESSES.map((a) => (
-            <Card key={a.id} variant="outlined" sx={{ backgroundColor:'#1f1f1f'}}>
-              <CardContent>
-                <Typography  fontWeight={600} gutterBottom>
-                  {a.name}
-                </Typography>
-                <Typography >{a.line1}</Typography>
-                <Typography >
-                  {a.city}, {a.state} – {a.pincode}
-                </Typography>
-                <Typography >
-                    Phone:
-                    {a.phone}
-                </Typography>
-
-                <Divider sx={{ my: 1 }} />
-                <Stack direction="row" spacing={1}>
-                  <Button size="small" variant="outlined">
-                    Edit
-                  </Button>
-                  <Button size="small" color="error" variant="outlined">
-                    Delete
-                  </Button>
-                </Stack>
-              </CardContent>
-            </Card>
-          ))}
-
-          <Button variant="contained" sx={{ alignSelf: 'start' }}>
-            + Add New Address
-          </Button>
-        </Stack>
+        <AddressesSection />
       </TabPanel>
     </Box>
   );
