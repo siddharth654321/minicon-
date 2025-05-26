@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { Suspense } from 'react'
 import styles from './index.module.css'
 import { useSearchParams } from 'next/navigation';
 import { PRODUCTS } from '../dummyData';
@@ -85,4 +85,10 @@ const ALL_FILTERS = {
   )
 }
 
-export default PreCheckout
+export default function PreCheckoutPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PreCheckout />
+    </Suspense>
+  );
+}

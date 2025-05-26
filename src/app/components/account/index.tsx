@@ -6,81 +6,16 @@ import {
   Tabs,
   Tab,
   Typography,
-  Card,
-  CardContent,
-  Button,
-  Stack,
-  Divider,
+  
 } from '@mui/material';
-import { GridLegacy as Grid } from '@mui/material';  
 import ProfileSection from './profile';
 import OrdersSection from './orders';
 import AddressesSection from './address';
 /* -------------------------------------------------------------------------- */
 /*                             Mock data types                                */
 /* -------------------------------------------------------------------------- */
-interface Order {
-  id: string;
-  date: string;
-  items: number;
-  total: number;
-  status: string;
-}
 
-interface Address {
-  id: string;
-  name: string;
-  line1: string;
-  city: string;
-  state: string;
-  pincode: string;
-  phone: string;
-}
 
-/* -------------------------------------------------------------------------- */
-/*                               Mock data                                    */
-/* -------------------------------------------------------------------------- */
-const MOCK_ORDERS: Order[] = [
-  {
-    id: 'ORD‑230519‑A7F2',
-    date: '19 May 2025',
-    items: 3,
-    total: 2799,
-    status: 'Shipped',
-  },
-  {
-    id: 'ORD‑230428‑X3J9',
-    date: '28 Apr 2025',
-    items: 1,
-    total: 1199,
-    status: 'Delivered',
-  },
-];
-
-const MOCK_ADDRESSES: Address[] = [
-  {
-    id: 'ADDR‑01',
-    name: 'John Doe',
-    line1: '221B Baker Street',
-    city: 'London',
-    state: 'Greater London',
-    pincode: 'NW1 6XE',
-    phone: '+44 20 7946 0958',
-  },
-  {
-    id: 'ADDR‑02',
-    name: 'John Doe',
-    line1: '742 Evergreen Terrace',
-    city: 'Springfield',
-    state: 'IL',
-    pincode: '62704',
-    phone: '+1 217 555 0113',
-  },
-];
-
-/* -------------------------------------------------------------------------- */
-/*                           Helper – TabPanel                                */
-/* -------------------------------------------------------------------------- */
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
