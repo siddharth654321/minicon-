@@ -1,14 +1,14 @@
 'use client';
 
 import { Box, Typography, Link, Stack, IconButton } from '@mui/material';
-import GitHubIcon from '@mui/icons-material/GitHub';   // optional; remove if not needed
+import InstagramIcon from '@mui/icons-material/Instagram';
 
 export default function Footer() {
   return (
     <Box
       component="footer"
       sx={{
-        mt: 'auto',            // push to bottom when page is short
+        mt: 'auto',
         px: 2,
         py: 3,
         backgroundColor: '#f5f5f5',
@@ -21,26 +21,41 @@ export default function Footer() {
         justifyContent="space-between"
         alignItems="center"
       >
-        {/* left side */}
-        <Typography variant="body2" color="text.secondary">
-          © {new Date().getFullYear()} MINIcon. All rights reserved.
-        </Typography>
-
-        {/* right side */}
+        {/* Left side */}
         <Stack direction="row" spacing={2} alignItems="center">
-          <Link href="/privacy" underline="hover" color="inherit">
-            Privacy
+          <Link href="/about" underline="hover" color="inherit">
+            About Us
+          </Link>
+          <Link href="/help" underline="hover" color="inherit">
+            Help
           </Link>
           <Link href="/terms" underline="hover" color="inherit">
-            Terms
+            Terms of Service
           </Link>
+          <Link href="/privacy" underline="hover" color="inherit">
+            Privacy Policy
+          </Link>
+        </Stack>
+
+        {/* Right side */}
+        <Stack direction="row" spacing={2} alignItems="center">
+          <Typography variant="body2" color="text.secondary">
+            Contact: +91 9876543210
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Email: <Link href="mailto:Support@wearvara.com" underline="hover" color="inherit">
+              minicon@email.com
+            </Link>
+          </Typography>
           <IconButton
             size="small"
             component="a"
-            href="https://github.com/"     // replace with real repo
-            aria-label="GitHub"
+            href="https://www.instagram.com/minicon.clothing?igsh=MTczMjFsNXU1bXpkYQ==" // replace with your real Insta
+            aria-label="Instagram"
+            target="_blank"
+            rel="noopener"
           >
-            <GitHubIcon fontSize="inherit" />
+            <InstagramIcon fontSize="inherit" />
           </IconButton>
         </Stack>
       </Stack>
