@@ -6,7 +6,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import { FavoriteBorderOutlined } from '@mui/icons-material';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
@@ -15,7 +14,6 @@ import TextField from '@mui/material/TextField';   // ADD THIS IMPORT
 import styles from './index.module.css';
 import { MENUS } from '@/app/dummyData';
 import { Typography } from '@mui/material';
-import MiniconLogo from '../logo';
 
 export default function Header() {
   const router = useRouter();

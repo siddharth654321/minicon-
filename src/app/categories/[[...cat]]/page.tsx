@@ -1,21 +1,15 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import {
   Box,
   Typography,
-  TextField,
   List,
   ListItem,
   FormControlLabel,
   Checkbox,
   Divider,
-  Card,
-  CardActionArea,
-  CardContent,
-  CardMedia,
   Select,
   MenuItem,
   Button,
@@ -35,7 +29,6 @@ const ALL_FILTERS = {
 };
 
 export default function CataloguePage() {
-  const router = useRouter();
   /* ---------------- Parse /categories/[label]/[item] ---------------------- */
   const pathname = usePathname();                         // e.g. /categories/styles/graphic-tees
   const catSegments = useMemo(() => pathname.split('/').slice(2), [pathname]);

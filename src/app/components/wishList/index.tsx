@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { PRODUCTS } from '@/app/dummyData';
+import { Product, PRODUCTS } from '@/app/dummyData';
 import { GridLegacy as Grid } from '@mui/material';
 import {
   Box,
@@ -25,12 +25,12 @@ export default function WishlistPage() {
     setWishlist((curr) => curr.filter((item) => item.id !== id));
   };
 
-  const addToCart = (product: any) => {
+  const addToCart = (product: Product) => {
     // TODO: Connect to cart state/api
     alert(`Added "${product.title}" to cart!`);
   };
 
-  const buyNow = (product: any) => {
+  const buyNow = (product: Product) => {
     // TODO: Connect to buy now flow, pass single product in URL or context
     router.push(`/checkout?product=${encodeURIComponent(JSON.stringify(product))}`);
   };

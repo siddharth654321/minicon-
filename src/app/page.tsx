@@ -3,19 +3,18 @@
 import Image from 'next/image';
 import { keyframes } from '@mui/system';
 import Box from '@mui/material/Box';
-import { Card, CardActionArea, CardContent, CardMedia, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { PRODUCTS } from './dummyData';
-import styles from './page.module.css';
 import { ProductCard } from './components/productCard';
 import { GridLegacy as Grid } from '@mui/material';  
 
 
 
-const heroImages = [
-  '/images/mockup4.png',
-  '/images/M-9.png',
-  '/images/mockup4.png',
-] as const;
+// const heroImages = [
+//   '/images/mockup4.png',
+//   '/images/M-9.png',
+//   '/images/mockup4.png',
+// ] as const;
 
 const marqueeImages = [
   '/images/mockup 3.png',
@@ -57,7 +56,7 @@ export default function Home() {
         variant="h5"
         align="center"
         color="white">
-        For men who don't follow trends, they set them.
+        For men who don&#39;t follow trends, they set them.
       </Typography>
       </div>
     
