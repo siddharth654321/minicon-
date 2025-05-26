@@ -30,13 +30,6 @@ const scroll = keyframes`
   0%   { transform: translateX(0);   }
   100% { transform: translateX(-50%); }
 `;
-const MOCK_PRODUCTS = Array.from({ length: 10 }).map((_, i) => ({
-  id: i + 1,
-  title: ['TSS Originals: Street Graffiti', 'Textured T‑Shirt: Kung Fu Panda Peace', 'Star Wars: Darth Vader Pattern', 'TSS Originals: Vintage Pane'][i % 4],
-  subtitle: ['Oversized T‑Shirts', 'T‑Shirts', 'Holiday Shirts'][i % 3],
-  price: [1499, 899, 1299, 1399][i % 4],
-  img: `/images/mock/product${(i % 4) + 1}.jpg`, // place holder images
-}));
 
 
 export default function Home() {
@@ -51,7 +44,7 @@ export default function Home() {
         backgroundColor: '#111'
       }}
     >
-      <div style={{ margin: '10vh 0 20vh 0' }}
+      <div style={{ margin: '30vh 0 30vh 0' }}
 >
   <Typography
     sx={{ margin: '0 0 2vh 0' }}

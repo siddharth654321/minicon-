@@ -121,7 +121,6 @@ export default function CartPage() {
         <Box
             sx={{
                 px: { xs: 2, sm: 4 },
-                py: 4,
                 maxWidth: 1200,
                 mx: 'auto',
                 bgcolor: '#111',

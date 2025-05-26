@@ -71,8 +71,8 @@
 }
 
 .subtitleContainer{
-  grid-area:9/5/10/7 ;
-  padding: 1vh 0vw;
+  grid-area:9/5/11/7 ;
+  padding: 2vh 1vw 2vh 4vw;
 }
 
 .priceContainer{

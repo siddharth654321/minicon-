@@ -71,7 +71,7 @@ export default function CataloguePage() {
 
   /* ==============================  RENDER  =============================== */
   return (
-    <Box component="section" sx={{ display: 'flex', px: 2, py: 4, gap: 4, backgroundColor: 'black' }}>
+    <Box component="section" sx={{ display: 'flex', px: 2, py: 4, gap: 4, backgroundColor: '#111' }}>
       {/* ------------------------------- Sidebar ---------------------------- */}
       <Box sx={{ width: 260, flexShrink: 0, overflowY: 'auto' }}>
         {/* Category filter */}
@@ -131,17 +131,92 @@ export default function CataloguePage() {
             {heading} — {products.length} items
           </Typography>
 
-          <Select
+            <Select
             size="small"
             displayEmpty
             value={sortOpt}
             onChange={(e) => setSortOpt(e.target.value)}
-          >
-            <MenuItem value="">Select Sorting Options</MenuItem>
-            <MenuItem value="new">Newest First</MenuItem>
-            <MenuItem value="price_low">Price — Low to High</MenuItem>
-            <MenuItem value="price_high">Price — High to Low</MenuItem>
-          </Select>
+            sx={{
+              border: '1px solid white',
+              color: 'white',
+              '.MuiSelect-icon': { color: 'white' },
+              backgroundColor: 'transparent',
+            }}
+            MenuProps={{
+              PaperProps: {
+              sx: {
+                backgroundColor: 'black',
+                color: 'white',
+                border: '1px solid white',
+              },
+              },
+            }}
+            >
+            <MenuItem
+              value=""
+              sx={{
+              backgroundColor: 'black',
+              color: 'white',
+              border: '1px solid white',
+              '&.Mui-selected': {
+                backgroundColor: 'black',
+              },
+              '&:hover': {
+                backgroundColor: '#222',
+              },
+              }}
+            >
+              Select Sorting Options
+            </MenuItem>
+            <MenuItem
+              value="new"
+              sx={{
+              backgroundColor: 'black',
+              color: 'white',
+              border: '1px solid white',
+              '&.Mui-selected': {
+                backgroundColor: 'black',
+              },
+              '&:hover': {
+                backgroundColor: '#222',
+              },
+              }}
+            >
+              Newest First
+            </MenuItem>
+            <MenuItem
+              value="price_low"
+              sx={{
+              backgroundColor: 'black',
+              color: 'white',
+              border: '1px solid white',
+              '&.Mui-selected': {
+                backgroundColor: 'black',
+              },
+              '&:hover': {
+                backgroundColor: '#222',
+              },
+              }}
+            >
+              Price — Low to High
+            </MenuItem>
+            <MenuItem
+              value="price_high"
+              sx={{
+              backgroundColor: 'black',
+              color: 'white',
+              border: '1px solid white',
+              '&.Mui-selected': {
+                backgroundColor: 'black',
+              },
+              '&:hover': {
+                backgroundColor: '#222',
+              },
+              }}
+            >
+              Price — High to Low
+            </MenuItem>
+            </Select>
         </Box>
 
         {/* Product cards */}
