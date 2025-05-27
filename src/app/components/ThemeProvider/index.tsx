@@ -8,7 +8,11 @@ const theme = createTheme({
   },
   palette: {
     text: {
-      primary: '#fff',
+      primary: '#000',
+    },
+    background: {
+      default: '#fff',
+      paper: '#fff',
     },
   },
   components: {
@@ -19,7 +23,6 @@ const theme = createTheme({
         },
       },
     },
-    
   },
 });
 
