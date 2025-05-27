@@ -43,8 +43,8 @@ export default function AccountPage() {
   const [tab, setTab] = useState(0);
 
   return (
-    <Box  sx={{ maxWidth: 1200, mx: 'auto', px: { xs: 2, md: 4 }, py: 4, backgroundColor:'#111', height:'100vh' }  }>
-      <Typography color='white' variant="h4" fontWeight={700} mb={3}>
+    <Box  sx={{ maxWidth: 1200, mx: 'auto', px: { xs: 2, md: 4 }, py: 4, backgroundColor:'#fff', height:'100vh' }  }>
+      <Typography color='black' variant="h4" fontWeight={700} mb={3}>
         My Account
       </Typography>
 
@@ -55,12 +55,12 @@ export default function AccountPage() {
         variant="scrollable"
         scrollButtons="auto"
         aria-label="My account sections"
-        sx={{ mb: 3,color:'white' }}
-        style={{color:'white'}}
+        sx={{ mb: 3,color:'black' }}
+        style={{color:'black'}}
       >
-        <Tab label="Profile" id="account‑tab‑0" aria-controls="account‑tab‑panel‑0" style={{color:'white'}}/>
-        <Tab label="Orders" id="account‑tab‑1" aria-controls="account‑tab‑panel‑1" style={{color:'white'}} />
-        <Tab label="Addresses" id="account‑tab‑2" aria-controls="account‑tab‑panel‑2" style={{color:'white'}}/>
+        <Tab label="Profile" id="account‑tab‑0" aria-controls="account‑tab‑panel‑0" style={{color:'black'}}/>
+        <Tab label="Orders" id="account‑tab‑1" aria-controls="account‑tab‑panel‑1" style={{color:'black'}} />
+        <Tab label="Addresses" id="account‑tab‑2" aria-controls="account‑tab‑panel‑2" style={{color:'black'}}/>
       </Tabs>
 
       {/* --------------------------- Profile ------------------------------- */}

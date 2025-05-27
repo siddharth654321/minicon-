@@ -109,16 +109,16 @@ export default function AddressesSection() {
     <>
       <Stack spacing={2}>
         {addresses.map((a) => (
-          <Card key={a.id} variant="outlined" sx={{ backgroundColor: '#1f1f1f' }}>
+          <Card key={a.id} variant="outlined" sx={{ backgroundColor: '#fff' }}>
             <CardContent>
-              <Typography fontWeight={600} gutterBottom>
+              <Typography fontWeight={600} color="black" gutterBottom>
                 {a.name}
               </Typography>
-              <Typography>{a.line1}</Typography>
-              <Typography>
+              <Typography color="black">{a.line1}</Typography>
+              <Typography color="black">
                 {a.city}, {a.state} – {a.pincode}
               </Typography>
-              <Typography>Phone: {a.phone}</Typography>
+              <Typography color="black">Phone: {a.phone}</Typography>
               <Divider sx={{ my: 1 }} />
               <Stack direction="row" spacing={1}>
                 <Button size="small" variant="outlined" onClick={() => handleOpen(a)}>
@@ -143,70 +143,58 @@ export default function AddressesSection() {
 
       {/* Add/Edit Modal */}
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle style={{ backgroundColor: '#111', border:'opx solid white' }}>{editId ? 'Edit Address' : 'Add New Address'}</DialogTitle>
-        <form style={{ backgroundColor: '#111' }} onSubmit={handleSubmit}>
+        <DialogTitle style={{ backgroundColor: '#fff', border:'1px solid black' }}>{editId ? 'Edit Address' : 'Add New Address'}</DialogTitle>
+        <form style={{ backgroundColor: '#fff' }} onSubmit={handleSubmit}>
           <DialogContent sx={{ minWidth: 340 }}>
             <Stack spacing={2}>
               <TextField
-                //label="Name"
                 name="name"
                 value={form.name}
                 onChange={handleChange}
                 required
                 fullWidth
                 autoFocus
-                style={{ border: '1px solid white' }}
-
+                style={{ border: '1px solid black' }}
               />
               <TextField
-                //label="Address Line 1"
                 name="line1"
                 value={form.line1}
                 onChange={handleChange}
                 required
                 fullWidth
-                style={{ border: '1px solid white' }}
-
+                style={{ border: '1px solid black' }}
               />
               <TextField
-                //label="City"
                 name="city"
                 value={form.city}
                 onChange={handleChange}
                 required
                 fullWidth
-                style={{ border: '1px solid white' }}
-
+                style={{ border: '1px solid black' }}
               />
               <TextField
-                //label="State"
                 name="state"
                 value={form.state}
                 onChange={handleChange}
                 required
                 fullWidth
-                style={{ border: '1px solid white' }}
-
+                style={{ border: '1px solid black' }}
               />
               <TextField
-                //label="Pincode"
                 name="pincode"
                 value={form.pincode}
                 onChange={handleChange}
                 required
                 fullWidth
-                style={{ border: '1px solid white' }}
-
+                style={{ border: '1px solid black' }}
               />
               <TextField
-                //label="Phone"
                 name="phone"
                 value={form.phone}
                 onChange={handleChange}
                 required
                 fullWidth
-                style={{ border: '1px solid white' }}
-
+                style={{ border: '1px solid black' }}
               />
             </Stack>
           </DialogContent>

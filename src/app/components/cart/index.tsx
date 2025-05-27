@@ -123,11 +123,11 @@ export default function CartPage() {
                 px: { xs: 2, sm: 4 },
                 maxWidth: 1200,
                 mx: 'auto',
-                bgcolor: '#111',
+                bgcolor: '#fff',
                 minHeight: '100vh',
             }}
         >
-            <Typography variant="h4" fontWeight={700} mb={3} color="white">
+            <Typography variant="h4" fontWeight={700} mb={3} color="black">
                 My Cart
             </Typography>
             <Stack
@@ -137,7 +137,7 @@ export default function CartPage() {
             >
                 {/* Cart items */}
                 <Box sx={{ flex: 1, width: '100%' }}>
-                    <Typography variant="h6" mb={2} color="white">
+                    <Typography variant="h6" mb={2} color="black">
                         Items ({cart.length})
                     </Typography>
                     {cart.map((item) => (
@@ -146,9 +146,9 @@ export default function CartPage() {
                             variant="outlined"
                             sx={{
                                 mb: 2,
-                                bgcolor: '#111',
-                                borderColor: '#222',
-                                color: 'white',
+                                bgcolor: '#fff',
+                                borderColor: '#eee',
+                                color: 'black',
                             }}
                         >
                             <Box sx={{
@@ -163,7 +163,7 @@ export default function CartPage() {
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        background: '#181818',
+                                        background: '#f5f5f5',
                                         flexShrink: 0,
                                         borderRadius: 2,
                                         overflow: 'hidden',
@@ -178,21 +178,21 @@ export default function CartPage() {
                                     />
                                 </Box>
                                 <Box sx={{ flex: 1, p: 2 }}>
-                                    <Typography fontWeight={600} color="white">
+                                    <Typography fontWeight={600} color="black">
                                         {item.title}
                                     </Typography>
-                                    <Typography variant="body2" color="#ccc">
+                                    <Typography variant="body2" color="#333">
                                         {item.subtitle}
                                     </Typography>
-                                    <Typography variant="body2" color="#ccc">
+                                    <Typography variant="body2" color="#333">
                                         Size: {item.size}
                                     </Typography>
-                                    <Typography variant="body2" color="#ccc">
+                                    <Typography variant="body2" color="#333">
                                         Qty: {item.qty}
                                     </Typography>
                                 </Box>
                                 <Box sx={{ p: 2, minWidth: 90, textAlign: 'right' }}>
-                                    <Typography fontWeight={700} color="white">
+                                    <Typography fontWeight={700} color="black">
                                         {formatINR(item.price * item.qty)}
                                     </Typography>
                                 </Box>
@@ -214,35 +214,35 @@ export default function CartPage() {
                         variant="outlined"
                         sx={{
                             mt: 2,
-                            bgcolor: '#111',
-                            borderColor: '#222',
-                            color: 'white',
+                            bgcolor: '#fff',
+                            borderColor: '#eee',
+                            color: 'black',
                         }}
                     >
                         <CardContent>
-                            <Typography fontWeight={700} gutterBottom color="white">
+                            <Typography fontWeight={700} gutterBottom color="black">
                                 Price Details
                             </Typography>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography color="white">Subtotal</Typography>
-                                <Typography color="white">{formatINR(subtotal)}</Typography>
+                                <Typography color="black">Subtotal</Typography>
+                                <Typography color="black">{formatINR(subtotal)}</Typography>
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography color="white">Shipping</Typography>
-                                <Typography color="white">
+                                <Typography color="black">Shipping</Typography>
+                                <Typography color="black">
                                     {shipping === 0 ? 'Free' : formatINR(shipping)}
                                 </Typography>
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography color="white">Taxes &amp; Fees</Typography>
-                                <Typography color="white">{formatINR(taxes)}</Typography>
+                                <Typography color="black">Taxes &amp; Fees</Typography>
+                                <Typography color="black">{formatINR(taxes)}</Typography>
                             </Box>
-                            <Divider sx={{ my: 1, borderColor: '#222' }} />
+                            <Divider sx={{ my: 1, borderColor: '#eee' }} />
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography fontWeight={700} color="white">
+                                <Typography fontWeight={700} color="black">
                                     Total
                                 </Typography>
-                                <Typography fontWeight={700} color="white">
+                                <Typography fontWeight={700} color="black">
                                     {formatINR(total)}
                                 </Typography>
                             </Box>
@@ -257,13 +257,13 @@ export default function CartPage() {
                         variant="outlined"
                         sx={{
                             mb: 3,
-                            bgcolor: '#111',
-                            borderColor: '#222',
-                            color: 'white',
+                            bgcolor: '#fff',
+                            borderColor: '#eee',
+                            color: 'black',
                         }}
                     >
                         <CardContent>
-                            <Typography variant="h6" fontWeight={700} gutterBottom color="white">
+                            <Typography variant="h6" fontWeight={700} gutterBottom color="black">
                                 Shipping Address
                             </Typography>
                             <Select
@@ -273,46 +273,46 @@ export default function CartPage() {
                                 size="small"
                                 sx={{
                                     mb: 2,
-                                    color: 'white',
+                                    color: 'black',
                                     '.MuiOutlinedInput-notchedOutline': {
-                                        borderColor: '#444',
+                                        borderColor: '#ccc',
                                     },
                                     '& .MuiSvgIcon-root': {
-                                        color: 'white',
+                                        color: 'black',
                                     },
-                                    bgcolor: '#1a1a1a',
+                                    bgcolor: '#f5f5f5',
                                 }}
                                 MenuProps={{
                                     PaperProps: {
                                         sx: {
-                                            bgcolor: '#222',
-                                            color: 'white',
+                                            bgcolor: '#eee',
+                                            color: 'black',
                                         },
                                     },
                                 }}
                             >
                                 {addresses.map(addr => (
-                                    <MenuItem key={addr.id} value={addr.id} sx={{ color: 'white', bgcolor: '#222' }}>
+                                    <MenuItem key={addr.id} value={addr.id} sx={{ color: 'black', bgcolor: '#eee' }}>
                                         {`${addr.name}, ${addr.city}`}
                                     </MenuItem>
                                 ))}
                             </Select>
                             {selectedAddressObj && (
                                 <Box sx={{ mb: 1 }}>
-                                    <Typography fontWeight={600} color="white">
+                                    <Typography fontWeight={600} color="black">
                                         {selectedAddressObj.name}
                                     </Typography>
-                                    <Typography variant="body2" color="#ccc">
+                                    <Typography variant="body2" color="#333">
                                         {selectedAddressObj.line1}, {selectedAddressObj.city}, {selectedAddressObj.state} - {selectedAddressObj.pincode}
                                     </Typography>
-                                    <Typography variant="body2" color="#ccc">
+                                    <Typography variant="body2" color="#333">
                                         {selectedAddressObj.phone}
                                     </Typography>
                                 </Box>
                             )}
                             <Button
                                 size="small"
-                                sx={{ mt: 1, color: 'white', borderColor: '#444' }}
+                                sx={{ mt: 1, color: 'black', borderColor: '#ccc' }}
                                 variant="outlined"
                                 onClick={() => setOpenAddModal(true)}
                             >
@@ -323,7 +323,7 @@ export default function CartPage() {
 
                     {/* Add Address Modal */}
                     <Dialog open={openAddModal} onClose={() => setOpenAddModal(false)} PaperProps={{
-                        sx: { bgcolor: '#222', color: 'white' }
+                        sx: { bgcolor: '#eee', color: 'black' }
                     }}>
                         <DialogTitle>Add New Address</DialogTitle>
                         <DialogContent>
@@ -335,7 +335,7 @@ export default function CartPage() {
                                     onChange={handleAddrChange}
                                     fullWidth
                                     InputLabelProps={{ style: { color: '#bbb' } }}
-                                    sx={{ '& .MuiInputBase-root': { color: 'white' } }}
+                                    sx={{ '& .MuiInputBase-root': { color: 'black' } }}
                                 />
                                 <TextField
                                     label="Address Line"
@@ -344,7 +344,7 @@ export default function CartPage() {
                                     onChange={handleAddrChange}
                                     fullWidth
                                     InputLabelProps={{ style: { color: '#bbb' } }}
-                                    sx={{ '& .MuiInputBase-root': { color: 'white' } }}
+                                    sx={{ '& .MuiInputBase-root': { color: 'black' } }}
                                 />
                                 <TextField
                                     label="City"
@@ -353,7 +353,7 @@ export default function CartPage() {
                                     onChange={handleAddrChange}
                                     fullWidth
                                     InputLabelProps={{ style: { color: '#bbb' } }}
-                                    sx={{ '& .MuiInputBase-root': { color: 'white' } }}
+                                    sx={{ '& .MuiInputBase-root': { color: 'black' } }}
                                 />
                                 <TextField
                                     label="State"
@@ -362,7 +362,7 @@ export default function CartPage() {
                                     onChange={handleAddrChange}
                                     fullWidth
                                     InputLabelProps={{ style: { color: '#bbb' } }}
-                                    sx={{ '& .MuiInputBase-root': { color: 'white' } }}
+                                    sx={{ '& .MuiInputBase-root': { color: 'black' } }}
                                 />
                                 <TextField
                                     label="Pincode"
@@ -371,7 +371,7 @@ export default function CartPage() {
                                     onChange={handleAddrChange}
                                     fullWidth
                                     InputLabelProps={{ style: { color: '#bbb' } }}
-                                    sx={{ '& .MuiInputBase-root': { color: 'white' } }}
+                                    sx={{ '& .MuiInputBase-root': { color: 'black' } }}
                                 />
                                 <TextField
                                     label="Phone"
@@ -380,7 +380,7 @@ export default function CartPage() {
                                     onChange={handleAddrChange}
                                     fullWidth
                                     InputLabelProps={{ style: { color: '#bbb' } }}
-                                    sx={{ '& .MuiInputBase-root': { color: 'white' } }}
+                                    sx={{ '& .MuiInputBase-root': { color: 'black' } }}
                                 />
                             </Stack>
                         </DialogContent>
@@ -404,13 +404,13 @@ export default function CartPage() {
                         variant="outlined"
                         sx={{
                             mb: 3,
-                            bgcolor: '#111',
-                            borderColor: '#222',
-                            color: 'white',
+                            bgcolor: '#fff',
+                            borderColor: '#eee',
+                            color: 'black',
                         }}
                     >
                         <CardContent>
-                            <Typography variant="h6" fontWeight={700} gutterBottom color="white">
+                            <Typography variant="h6" fontWeight={700} gutterBottom color="black">
                                 Payment Mode
                             </Typography>
                             <Select
@@ -420,34 +420,34 @@ export default function CartPage() {
                                 size="small"
                                 sx={{
                                     mt: 1,
-                                    color: 'white',
+                                    color: 'black',
                                     '.MuiOutlinedInput-notchedOutline': {
-                                        borderColor: '#444',
+                                        borderColor: '#ccc',
                                     },
                                     '& .MuiSvgIcon-root': {
-                                        color: 'white',
+                                        color: 'black',
                                     },
-                                    bgcolor: '#1a1a1a',
+                                    bgcolor: '#f5f5f5',
                                 }}
                                 MenuProps={{
                                     PaperProps: {
                                         sx: {
-                                            bgcolor: '#222',
-                                            color: 'white',
+                                            bgcolor: '#eee',
+                                            color: 'black',
                                         },
                                     },
                                 }}
                             >
-                                <MenuItem value="card" sx={{ color: 'white', bgcolor: '#222' }}>
+                                <MenuItem value="card" sx={{ color: 'black', bgcolor: '#eee' }}>
                                     Credit / Debit Card
                                 </MenuItem>
-                                <MenuItem value="cod" sx={{ color: 'white', bgcolor: '#222' }}>
+                                <MenuItem value="cod" sx={{ color: 'black', bgcolor: '#eee' }}>
                                     Cash on Delivery
                                 </MenuItem>
-                                <MenuItem value="upi" sx={{ color: 'white', bgcolor: '#222' }}>
+                                <MenuItem value="upi" sx={{ color: 'black', bgcolor: '#eee' }}>
                                     UPI
                                 </MenuItem>
-                                <MenuItem value="netbanking" sx={{ color: 'white', bgcolor: '#222' }}>
+                                <MenuItem value="netbanking" sx={{ color: 'black', bgcolor: '#eee' }}>
                                     Netbanking
                                 </MenuItem>
                             </Select>

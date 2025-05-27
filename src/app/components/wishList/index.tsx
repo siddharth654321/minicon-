@@ -37,19 +37,19 @@ export default function WishlistPage() {
     console.log("PRODUCTS", PRODUCTS);
 
   return (
-    <Box sx={{ p: { xs: 1, md: 4 }, maxWidth: 1200, mx: 'auto', backgroundColor:'#111'}}>
-      <Typography color='white' variant="h4" fontWeight={700} mb={3} align="center">
+    <Box sx={{ p: { xs: 1, md: 4 }, maxWidth: 1200, mx: 'auto', backgroundColor:'#fff'}}>
+      <Typography color='black' variant="h4" fontWeight={700} mb={3} align="center">
         Your Wishlist
       </Typography>
       {wishlist.length === 0 ? (
-        <Typography align="center"  color='white'>
+        <Typography align="center" color='black'>
           Your wishlist is empty!
         </Typography>
       ) : (
         <Grid container spacing={3} justifyContent="center">
           {wishlist.map((item) => (
             <Grid item xs={12} sm={6} md={4} key={item.id}>
-              <Card variant="outlined" sx={{ position: 'relative',backgroundColor:'black' }}>
+              <Card variant="outlined" sx={{ position: 'relative', backgroundColor:'#fff' }}>
                 <IconButton
                   aria-label="Remove from wishlist"
                   sx={{ position: 'absolute', top: 8, right: 8, zIndex: 1 }}

@@ -48,7 +48,7 @@ export default function CataloguePage() {
   const products = useMemo(() => {
     const list = [...filteredProducts];
     switch (sortOpt) {
-      case 'new': return list.reverse();           // dummy “newest first”
+      case 'new': return list.reverse();           // dummy "newest first"
       case 'price_low': return list.sort((a, b) => a.price - b.price);
       case 'price_high': return list.sort((a, b) => b.price - a.price);
       default: return list;
@@ -64,29 +64,29 @@ export default function CataloguePage() {
 
   /* ==============================  RENDER  =============================== */
   return (
-    <Box component="section" sx={{ display: 'flex', px: 2, py: 4, gap: 4, backgroundColor: '#111' }}>
+    <Box component="section" sx={{ display: 'flex', px: 2, py: 4, gap: 4, backgroundColor: '#fff' }}>
       {/* ------------------------------- Sidebar ---------------------------- */}
-      <Box sx={{ width: 260, flexShrink: 0, overflowY: 'auto' }}>
+      <Box sx={{ width: 260, flexShrink: 0, overflowY: 'auto', backgroundColor: '#fff', color: 'black', borderRight: '1px solid #eee' }}>
         {/* Category filter */}
-        <Typography color='white' variant="subtitle1" fontWeight={700} mb={1}>
+        <Typography color='black' variant="subtitle1" fontWeight={700} mb={1}>
           CATEGORIES
         </Typography>
 
-        <List dense sx={{ maxHeight: 320, overflowY: 'auto', color: 'white' }}>
+        <List dense sx={{ maxHeight: 320, overflowY: 'auto', color: 'black' }}>
           {ALL_FILTERS.categories.map((c) => (
             <ListItem key={c} disableGutters>
               <FormControlLabel
-                control={<Checkbox size="small" sx={{ color: 'white' }} />}
-                label={<Typography variant="body2">{c}</Typography>}
+                control={<Checkbox size="small" sx={{ color: 'black' }} />}
+                label={<Typography variant="body2" style={{color:'black'}}>{c}</Typography>}
               />
             </ListItem>
           ))}
         </List>
 
-        <Divider sx={{ my: 2, color: 'white' }} />
+        <Divider sx={{ my: 2, color: 'black' }} />
 
         {/* Size filter */}
-        <Typography color='white' variant="subtitle1" fontWeight={700} mb={1}>
+        <Typography color='black' variant="subtitle1" fontWeight={700} mb={1}>
           SIZE
         </Typography>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
@@ -94,13 +94,15 @@ export default function CataloguePage() {
             <Button
               key={s}
               sx={{
-                border: '1px solid',
+                border: '1px solid #000',
                 borderRadius: 1,
                 px: 1.5,
                 py: 0.5,
                 fontSize: 14,
                 cursor: 'pointer',
-                color: 'white',
+                color: 'black',
+                backgroundColor: '#fff',
+                '&:hover': { backgroundColor: '#f5f5f5' },
               }}
             >
               {s}
@@ -120,7 +122,7 @@ export default function CataloguePage() {
             mb: 2,
           }}
         >
-          <Typography color='white' variant="h6" fontWeight={600}>
+          <Typography color='black' variant="h6" fontWeight={600}>
             {heading} — {products.length} items
           </Typography>
 
@@ -130,17 +132,17 @@ export default function CataloguePage() {
             value={sortOpt}
             onChange={(e) => setSortOpt(e.target.value)}
             sx={{
-              border: '1px solid white',
-              color: 'white',
-              '.MuiSelect-icon': { color: 'white' },
+              border: '1px solid black',
+              color: 'black',
+              '.MuiSelect-icon': { color: 'black' },
               backgroundColor: 'transparent',
             }}
             MenuProps={{
               PaperProps: {
               sx: {
-                backgroundColor: 'black',
-                color: 'white',
-                border: '1px solid white',
+                backgroundColor: '#fff',
+                color: 'black',
+                border: '1px solid black',
               },
               },
             }}
@@ -148,14 +150,14 @@ export default function CataloguePage() {
             <MenuItem
               value=""
               sx={{
-              backgroundColor: 'black',
-              color: 'white',
-              border: '1px solid white',
+              backgroundColor: '#fff',
+              color: 'black',
+              border: '1px solid black',
               '&.Mui-selected': {
-                backgroundColor: 'black',
+                backgroundColor: '#f5f5f5',
               },
               '&:hover': {
-                backgroundColor: '#222',
+                backgroundColor: '#f5f5f5',
               },
               }}
             >
@@ -164,14 +166,14 @@ export default function CataloguePage() {
             <MenuItem
               value="new"
               sx={{
-              backgroundColor: 'black',
-              color: 'white',
-              border: '1px solid white',
+              backgroundColor: '#fff',
+              color: 'black',
+              border: '1px solid black',
               '&.Mui-selected': {
-                backgroundColor: 'black',
+                backgroundColor: '#f5f5f5',
               },
               '&:hover': {
-                backgroundColor: '#222',
+                backgroundColor: '#f5f5f5',
               },
               }}
             >
@@ -180,14 +182,14 @@ export default function CataloguePage() {
             <MenuItem
               value="price_low"
               sx={{
-              backgroundColor: 'black',
-              color: 'white',
-              border: '1px solid white',
+              backgroundColor: '#fff',
+              color: 'black',
+              border: '1px solid black',
               '&.Mui-selected': {
-                backgroundColor: 'black',
+                backgroundColor: '#f5f5f5',
               },
               '&:hover': {
-                backgroundColor: '#222',
+                backgroundColor: '#f5f5f5',
               },
               }}
             >
@@ -196,14 +198,14 @@ export default function CataloguePage() {
             <MenuItem
               value="price_high"
               sx={{
-              backgroundColor: 'black',
-              color: 'white',
-              border: '1px solid white',
+              backgroundColor: '#fff',
+              color: 'black',
+              border: '1px solid black',
               '&.Mui-selected': {
-                backgroundColor: 'black',
+                backgroundColor: '#f5f5f5',
               },
               '&:hover': {
-                backgroundColor: '#222',
+                backgroundColor: '#f5f5f5',
               },
               }}
             >
