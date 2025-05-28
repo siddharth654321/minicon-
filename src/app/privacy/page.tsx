@@ -13,7 +13,7 @@ const Privacy = () => {
       <h2 style={{ fontSize: '1.3rem', fontWeight: 600, marginTop: '2rem' }}>Changes to This Privacy Policy</h2>
       <ul style={{ fontSize: '1.1rem', color: '#222', marginLeft: '1.5rem', marginBottom: '2rem', lineHeight: 1.7 }}>
         <li>We may update this Privacy Policy from time to time, including to reflect changes to our practices or for other operational, legal, or regulatory reasons.</li>
-        <li>We will post the revised Privacy Policy on the Site, update the "Last updated" date and take any other steps required by applicable law.</li>
+        <li>We will post the revised Privacy Policy on the Site, update the &quot;Last updated&quot; date and take any other steps required by applicable law.</li>
       </ul>
       <h2 style={{ fontSize: '1.3rem', fontWeight: 600, marginTop: '2rem' }}>How We Collect and Use Your Personal Information</h2>
       <ul style={{ fontSize: '1.1rem', color: '#222', marginLeft: '1.5rem', marginBottom: '2rem', lineHeight: 1.7 }}>
@@ -22,7 +22,7 @@ const Privacy = () => {
       </ul>
       <h2 style={{ fontSize: '1.3rem', fontWeight: 600, marginTop: '2rem' }}>What Personal Information We Collect</h2>
       <ul style={{ fontSize: '1.1rem', color: '#222', marginLeft: '1.5rem', marginBottom: '2rem', lineHeight: 1.7 }}>
-        <li>The types of personal information we obtain about you depends on how you interact with our Site and use our Services. "Personal information" refers to information that identifies, relates to, describes or can be associated with you.</li>
+        <li>The types of personal information we obtain about you depends on how you interact with our Site and use our Services. &quot;Personal information&quot; refers to information that identifies, relates to, describes or can be associated with you.</li>
       </ul>
       <h3 style={{ fontSize: '1.15rem', fontWeight: 600, marginTop: '1.5rem' }}>Information We Collect Directly from You</h3>
       <ul style={{ fontSize: '1.1rem', color: '#222', marginLeft: '2rem', marginBottom: '1.5rem', lineHeight: 1.7 }}>
@@ -35,7 +35,7 @@ const Privacy = () => {
       </ul>
       <h3 style={{ fontSize: '1.15rem', fontWeight: 600, marginTop: '1.5rem' }}>Information We Collect through Cookies</h3>
       <ul style={{ fontSize: '1.1rem', color: '#222', marginLeft: '2rem', marginBottom: '1.5rem', lineHeight: 1.7 }}>
-        <li>We also automatically collect certain information about your interaction with the Services ("Usage Data"). To do this, we may use cookies, pixels and similar technologies ("Cookies").</li>
+        <li>We also automatically collect certain information about your interaction with the Services (&quot;Usage Data&quot;). To do this, we may use cookies, pixels and similar technologies (&quot;Cookies&quot;).</li>
         <li>Usage Data may include information about how you access and use our Site and your account, including device information, browser information, information about your network connection, your IP address and other information regarding your interaction with the Services.</li>
       </ul>
       <h3 style={{ fontSize: '1.15rem', fontWeight: 600, marginTop: '1.5rem' }}>Information We Obtain from Third Parties</h3>
@@ -43,7 +43,7 @@ const Privacy = () => {
         <li>We may obtain information about you from third parties, including from vendors and service providers who may collect information on our behalf.</li>
         <li>Our payment processors collect payment information (e.g., bank account, credit or debit card information, billing address) to process your payment in order to fulfill your orders and provide you with products or services you have requested.</li>
         <li>When you visit our Site, open or click on emails we send you, or interact with our Services or advertisements, we, or third parties we work with, may automatically collect certain information using online tracking technologies such as pixels, web beacons, software developer kits, third-party libraries, and cookies.</li>
-        <li>Any information we obtain from third parties will be treated in accordance with this Privacy Policy. We are not responsible or liable for the accuracy of the information provided to us by third parties and are not responsible for any third party's policies or practices.</li>
+        <li>Any information we obtain from third parties will be treated in accordance with this Privacy Policy. We are not responsible or liable for the accuracy of the information provided to us by third parties and are not responsible for any third party&apos;s policies or practices.</li>
       </ul>
       <h2 style={{ fontSize: '1.3rem', fontWeight: 600, marginTop: '2rem' }}>How We Use Your Personal Information</h2>
       <ul style={{ fontSize: '1.1rem', color: '#222', marginLeft: '1.5rem', marginBottom: '2rem', lineHeight: 1.7 }}>
@@ -72,15 +72,15 @@ const Privacy = () => {
         <li>Information you provide on public or semi-public venues, including information you share on third-party social networking platforms may also be viewable by other users of the Services and/or users of those third-party platforms without limitation as to its use by us or by a third party.</li>
         <li>Our inclusion of such links does not, by itself, imply any endorsement of the content on such platforms or of their owners or operators, except as disclosed on the Services.</li>
       </ul>
-      <h2 style={{ fontSize: '1.3rem', fontWeight: 600, marginTop: '2rem' }}>Children's Data</h2>
+      <h2 style={{ fontSize: '1.3rem', fontWeight: 600, marginTop: '2rem' }}>Children&apos;s Data</h2>
       <ul style={{ fontSize: '1.1rem', color: '#222', marginLeft: '1.5rem', marginBottom: '2rem', lineHeight: 1.7 }}>
         <li>The Services are not intended to be used by children, and we do not knowingly collect any personal information about children.</li>
         <li>If you are the parent or guardian of a child who has provided us with their personal information, you may contact us using the contact details set out below to request that it be deleted.</li>
-        <li>As of the Effective Date of this Privacy Policy, we do not have actual knowledge that we "share" or "sell" (as those terms are defined in applicable law) personal information of individuals under 16 years of age.</li>
+        <li>As of the Effective Date of this Privacy Policy, we do not have actual knowledge that we &quot;share&quot; or &quot;sell&quot; (as those terms are defined in applicable law) personal information of individuals under 16 years of age.</li>
       </ul>
       <h2 style={{ fontSize: '1.3rem', fontWeight: 600, marginTop: '2rem' }}>Security and Retention of Your Information</h2>
       <ul style={{ fontSize: '1.1rem', color: '#222', marginLeft: '1.5rem', marginBottom: '2rem', lineHeight: 1.7 }}>
-        <li>No security measures are perfect or impenetrable, and we cannot guarantee "perfect security."</li>
+        <li>No security measures are perfect or impenetrable, and we cannot guarantee &quot;perfect security.&quot;</li>
         <li>Any information you send to us may not be secure while in transit. We recommend that you do not use unsecure channels to communicate sensitive or confidential information to us.</li>
         <li>How long we retain your personal information depends on different factors, such as whether we need the information to maintain your account, to provide the Services, comply with legal obligations, resolve disputes or enforce other applicable contracts and policies.</li>
       </ul>
@@ -105,7 +105,7 @@ const Privacy = () => {
       <h2 style={{ fontSize: '1.3rem', fontWeight: 600, marginTop: '2rem' }}>International Users</h2>
       <ul style={{ fontSize: '1.1rem', color: '#222', marginLeft: '1.5rem', marginBottom: '2rem', lineHeight: 1.7 }}>
         <li>We may transfer, store and process your personal information outside the country you live in, including the United States. Your personal information is also processed by staff and third party service providers and partners in these countries.</li>
-        <li>If we transfer your personal information out of Europe, we will rely on recognized transfer mechanisms like the European Commission's Standard Contractual Clauses, or any equivalent contracts issued by the relevant competent authority of the UK, as relevant, unless the data transfer is to a country that has been determined to provide an adequate level of protection.</li>
+        <li>If we transfer your personal information out of Europe, we will rely on recognized transfer mechanisms like the European Commission&apos;s Standard Contractual Clauses, or any equivalent contracts issued by the relevant competent authority of the UK, as relevant, unless the data transfer is to a country that has been determined to provide an adequate level of protection.</li>
       </ul>
       <h2 style={{ fontSize: '1.3rem', fontWeight: 600, marginTop: '2rem' }}>Contact</h2>
       <ul style={{ fontSize: '1.1rem', color: '#222', marginLeft: '1.5rem', marginBottom: '2rem', lineHeight: 1.7 }}>
