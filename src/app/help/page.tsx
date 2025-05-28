@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'next/image'
 import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import LocalShippingIcon from '@mui/icons-material/LocalShipping'
@@ -42,7 +43,14 @@ const Help = () => {
         </AccordionSummary>
         <AccordionDetails>
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-            <img src="/images/Size-chart.webp" alt="Size Guide" style={{ maxWidth: '100%', height: 'auto', borderRadius: 8 }} />
+            <Image
+              src="/images/Size-chart.webp"
+              alt="Size Guide"
+              width={800}
+              height={600}
+              style={{ maxWidth: '100%', height: 'auto', borderRadius: 8 }}
+              priority
+            />
           </div>
         </AccordionDetails>
       </Accordion>
@@ -72,7 +80,7 @@ const Help = () => {
               <li>Cancellations will be considered only if the request is made within 2 days of placing the order. However, the cancellation request may not be entertained if the orders have been communicated to the vendors/merchants and they have initiated the process of shipping them.</li>
               <li>In case of receipt of damaged or defective items please report the same to our Customer Service team. The request will, however, be entertained once the merchant has checked and determined the same at his own end. This should be reported within 2 days of receipt of the products.</li>
               <li>In case you feel that the product received is not as shown on the site or as per your expectations, you must bring it to the notice of our customer service within 2 days of receiving the product. The Customer Service Team after looking into your complaint will take an appropriate decision.</li>
-              <li>In case of any Refunds approved by the company, it'll take 16-30 days for the refund to be processed to the end customer.</li>
+              <li>In case of any Refunds approved by the company, it'll take 16–30 days for the refund to be processed to the end customer.</li>
             </ul>
             <li>Contact Customer Support to place your return request.</li>
           </ul>

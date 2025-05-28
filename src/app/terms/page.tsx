@@ -15,7 +15,7 @@ const Terms = () => {
         <li>All trademarks reproduced in our website which are not the property of, or licensed to, the operator are acknowledged on the website.</li>
         <li>Unauthorized use of information provided by us shall give rise to a claim for damages and/or be a criminal offense.</li>
         <li>From time to time our website may also include links to other websites. These links are provided for your convenience to provide further information.</li>
-        <li>You may not create a link to our website from another website or document without VA RA's prior written consent.</li>
+        <li>You may not create a link to our website from another website or document without Minicon&rsquo;s prior written consent.</li>
         <li>Any dispute arising out of use of our website and/or purchase with us and/or any engagement with us is subject to the laws of India.</li>
         <li>We, shall be under no liability whatsoever in respect of any loss or damage arising directly or indirectly out of the decline of authorization for any Transaction, on Account of the Cardholder having exceeded the preset limit mutually agreed by us with our acquiring bank from time to time.</li>
       </ul>

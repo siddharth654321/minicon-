@@ -5,7 +5,7 @@ const Privacy = () => {
     <div style={{ maxWidth: 900, margin: '0 auto', padding: '2rem' }}>
       <h1 style={{ fontSize: '2.5rem', fontWeight: 500, marginBottom: '2rem' }}>Privacy Policy</h1>
       <p style={{ fontSize: '1.1rem', marginBottom: '1.5rem', color: '#222' }}>
-        For purposes of this Privacy Policy, <b>"you" and "your"</b> means you as the user of the Services, whether you are a customer, website visitor, or another individual whose information we have collected pursuant to this Privacy Policy.
+        For purposes of this Privacy Policy, <b>&quot;you&quot; and &quot;your&quot;</b> means you as the user of the Services, whether you are a customer, website visitor, or another individual whose information we have collected pursuant to this Privacy Policy.
       </p>
       <p style={{ fontSize: '1.1rem', marginBottom: '1.5rem', color: '#222' }}>
         Please read this Privacy Policy carefully. By using and accessing any of the Services, you agree to the collection, use, and disclosure of your information as described in this Privacy Policy. If you do not agree to this Privacy Policy, please do not use or access any of the Services.
