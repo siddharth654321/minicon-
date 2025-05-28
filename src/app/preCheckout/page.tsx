@@ -38,9 +38,7 @@ const PreCheckout = () => {
         flexDirection: { xs: "column", md: "row" },
         gap: { xs: 2, md: 6 },
         padding: { xs: "3vw", md: "5vh 7vw" },
-
         bgcolor: "white",
-
         minHeight: "100vh",
         width: "100%",
       }}
@@ -52,9 +50,7 @@ const PreCheckout = () => {
           width: { xs: "90vw", md: "38vw" },
           minWidth: 220,
           aspectRatio: "4/5",
-
           bgcolor: "white",
-
           borderRadius: 3,
           overflow: "hidden",
           flexShrink: 0,
@@ -76,9 +72,7 @@ const PreCheckout = () => {
           display: "flex",
           flexDirection: "column",
           gap: 2,
-
           color: "black",
-
           pl: { md: 2 },
         }}
       >
@@ -102,9 +96,7 @@ const PreCheckout = () => {
                 px: 1.5,
                 py: 0.5,
                 fontSize: 14,
-
                 color: "black",
-
                 margin: "1vh 0.5vw",
                 textTransform: "none",
               }}
@@ -150,9 +142,7 @@ const PreCheckout = () => {
           <ul style={{ paddingLeft: 20, margin: 0 }}>
             {PRODUCT_DESCRIPTION.map((line, idx) => (
               <li key={idx} style={{ marginBottom: 3 }}>
-
                 <Typography variant="body2" color="black">
-
                   {line}
                 </Typography>
               </li>
