@@ -27,23 +27,23 @@ export default function OrdersSection() {
       ) : (
         <Stack spacing={2}>
           {MOCK_ORDERS.map((o) => (
-            <Card key={o.id} variant="outlined" sx={{ backgroundColor: '#1f1f1f' }}>
+            <Card key={o.id} variant="outlined" sx={{ backgroundColor: '#fff' }}>
               <CardContent>
                 <Grid container spacing={2} alignItems="center">
                   <Grid item xs={12} sm={6} md={4}>
-                    <Typography fontWeight={600}>{o.id}</Typography>
-                    <Typography variant="body2">{o.date}</Typography>
+                    <Typography fontWeight={600} color="black">{o.id}</Typography>
+                    <Typography variant="body2" color="black">{o.date}</Typography>
                   </Grid>
                   <Grid item xs={4} sm={2}>
-                    <Typography>
+                    <Typography color="black">
                       {o.items} item{o.items > 1 ? 's' : ''}
                     </Typography>
                   </Grid>
                   <Grid item xs={4} sm={2}>
-                    <Typography fontWeight={700}>₹ {o.total}</Typography>
+                    <Typography fontWeight={700} color="black">₹ {o.total}</Typography>
                   </Grid>
                   <Grid item xs={4} sm={2}>
-                    <Typography>{o.status}</Typography>
+                    <Typography color="black">{o.status}</Typography>
                   </Grid>
                   <Grid item xs={12} sm={2}>
                     <Button fullWidth size="small" variant="outlined">
