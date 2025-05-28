@@ -22,7 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Header />
         <main style={{ flex: 1 }}>
           <MuiTheme>
-            <div style={{marginTop: '16vh'}}>
+            <div style={{margin: '16vh 0 8vh 0' }}>
             {children}
             </div>
          

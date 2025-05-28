@@ -3,7 +3,7 @@ import CartPage from '../components/cart'
 
 const Cart = () => {
   return (
-    <div style={{backgroundColor: '#111', height: '100vh'}}>
+    <div style={{backgroundColor: '#fff', height: '100vh'}}>
         <CartPage />
     </div>
   )

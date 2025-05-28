@@ -47,15 +47,15 @@ export default function ProfileSection() {
 
   return (
     <>
-      <Card variant="outlined" sx={{ maxWidth: 600, backgroundColor: '#1f1f1f' }}>
+      <Card variant="outlined" sx={{ maxWidth: 600, backgroundColor: '#fff' }}>
         <CardContent>
-          <Typography color="white" variant="h6" fontWeight={600} gutterBottom>
+          <Typography color="black" variant="h6" fontWeight={600} gutterBottom>
             Personal Information
           </Typography>
           <Stack spacing={1}>
-            <Typography color="white">Name: {profile.name}</Typography>
-            <Typography color="white">Email: {profile.email}</Typography>
-            <Typography color="white">Phone: {profile.phone}</Typography>
+            <Typography color="black">Name: {profile.name}</Typography>
+            <Typography color="black">Email: {profile.email}</Typography>
+            <Typography color="black">Phone: {profile.phone}</Typography>
           </Stack>
           <Button variant="contained" sx={{ mt: 2 }} onClick={handleOpen}>
             Edit Profile
@@ -65,7 +65,7 @@ export default function ProfileSection() {
 
       {/* Edit Profile Modal */}
       <Dialog  open={open} onClose={handleClose}>
-        <form style={{backgroundColor:'#111'}} onSubmit={handleSubmit}>
+        <form style={{backgroundColor:'#fff'}} onSubmit={handleSubmit}>
           <DialogContent sx={{ minWidth: 340 }}>
             <Stack spacing={2}>
               <TextField
@@ -76,26 +76,24 @@ export default function ProfileSection() {
                 onChange={handleChange}
                 autoFocus
                 required
-                style={{border:'1px solid white'}}
+                style={{border:'1px solid black'}}
               />
               <TextField
-               // label="Email"
                 name="email"
                 fullWidth
                 type="email"
                 value={form.email}
                 onChange={handleChange}
                 required
-                  style={{border:'1px solid white'}}
+                style={{border:'1px solid black'}}
               />
               <TextField
-                //label="Phone"
                 name="phone"
                 fullWidth
                 value={form.phone}
                 onChange={handleChange}
                 required
-                  style={{border:'1px solid white'}}
+                style={{border:'1px solid black'}}
               />
             </Stack>
           </DialogContent>
