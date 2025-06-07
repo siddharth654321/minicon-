@@ -76,15 +76,15 @@ const PreCheckout = () => {
           pl: { md: 2 },
         }}
       >
-        <Typography sx={{ fontSize: "2.1rem", fontWeight: 300 }}>
+        <Typography sx={{ fontSize: "2.1rem", fontWeight: 300,fontFamily: 'sans-serif' }}>
           {product.title}
         </Typography>
-        <Typography sx={{ fontSize: "1.2rem", mb: 1 }}>
+        <Typography sx={{ fontSize: "1.2rem", mb: 1 ,fontFamily: 'sans-serif'}}>
           {product.subtitle}
         </Typography>
         {/* Size Buttons */}
         <Box sx={{ mb: 2 }}>
-          <Typography variant="subtitle1" fontWeight={700} mb={1}>
+          <Typography variant="subtitle1" fontWeight={700} mb={1} sx={{ fontFamily: 'sans-serif' }}>
             Select size
           </Typography>
           {ALL_FILTERS.size.map((s) => (
@@ -105,7 +105,7 @@ const PreCheckout = () => {
             </Button>
           ))}
         </Box>
-        <Typography sx={{ fontSize: "1.6rem", fontWeight: 600, mb: 1 }}>
+        <Typography sx={{ fontSize: "1.6rem", fontWeight: 600, mb: 1 ,fontFamily: 'sans-serif'}}>
           ₹{product.price}
         </Typography>
         <Box sx={{ mb: 1 }}>
@@ -116,7 +116,8 @@ const PreCheckout = () => {
               width: 140,
               fontWeight: 700,
               mr: 1,
-              mb: { xs: 1, md: 0 }
+              mb: { xs: 1, md: 0 },
+              fontFamily: 'sans-serif'
             }}
           >
             Buy Now
@@ -129,6 +130,7 @@ const PreCheckout = () => {
             sx={{
               width: 140,
               fontWeight: 700,
+              fontFamily: 'sans-serif'
             }}
           >
             Add to Cart
@@ -136,13 +138,13 @@ const PreCheckout = () => {
         </Box>
         {/* Description Section */}
         <Box sx={{ mt: 2 }}>
-          <Typography variant="subtitle1" fontWeight={700} mb={1}>
+          <Typography variant="subtitle1" fontWeight={700} mb={1} sx={{ fontFamily: 'sans-serif' }}>
             DESCRIPTION
           </Typography>
           <ul style={{ paddingLeft: 20, margin: 0 }}>
             {PRODUCT_DESCRIPTION.map((line, idx) => (
               <li key={idx} style={{ marginBottom: 3 }}>
-                <Typography variant="body2" color="black">
+                <Typography variant="body2" color="black"sx={{ fontFamily: 'sans-serif' }}>
                   {line}
                 </Typography>
               </li>

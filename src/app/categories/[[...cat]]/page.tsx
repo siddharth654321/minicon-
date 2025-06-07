@@ -68,7 +68,7 @@ export default function CataloguePage() {
       {/* ------------------------------- Sidebar ---------------------------- */}
       <Box sx={{ width: 260, flexShrink: 0, overflowY: 'auto', backgroundColor: '#fff', color: 'black', borderRight: '1px solid #eee' }}>
         {/* Category filter */}
-        <Typography color='black' variant="subtitle1" fontWeight={700} mb={1}>
+        <Typography color='black' variant="subtitle1" fontWeight={700} mb={1} sx={{ fontFamily: 'sans-serif' }}>
           CATEGORIES
         </Typography>
 
@@ -77,7 +77,7 @@ export default function CataloguePage() {
             <ListItem key={c} disableGutters>
               <FormControlLabel
                 control={<Checkbox size="small" sx={{ color: 'black' }} />}
-                label={<Typography variant="body2" style={{color:'black'}}>{c}</Typography>}
+                label={<Typography variant="body2" style={{color:'black',fontFamily: 'sans-serif'}}>{c}</Typography>}
               />
             </ListItem>
           ))}
@@ -86,7 +86,7 @@ export default function CataloguePage() {
         <Divider sx={{ my: 2, color: 'black' }} />
 
         {/* Size filter */}
-        <Typography color='black' variant="subtitle1" fontWeight={700} mb={1}>
+        <Typography color='black' variant="subtitle1" fontWeight={700} mb={1 } sx={{ fontFamily: 'sans-serif' }}>
           SIZE
         </Typography>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
@@ -103,6 +103,7 @@ export default function CataloguePage() {
                 color: 'black',
                 backgroundColor: '#fff',
                 '&:hover': { backgroundColor: '#f5f5f5' },
+                fontFamily: 'sans-serif'
               }}
             >
               {s}
@@ -122,7 +123,7 @@ export default function CataloguePage() {
             mb: 2,
           }}
         >
-          <Typography color='black' variant="h6" fontWeight={600}>
+          <Typography color='black' variant="h6" fontWeight={600} sx={{ fontFamily: 'sans-serif' }}>
             {heading} — {products.length} items
           </Typography>
 
@@ -136,6 +137,7 @@ export default function CataloguePage() {
               color: 'black',
               '.MuiSelect-icon': { color: 'black' },
               backgroundColor: 'transparent',
+              fontFamily: 'sans-serif'
             }}
             MenuProps={{
               PaperProps: {
@@ -143,6 +145,7 @@ export default function CataloguePage() {
                 backgroundColor: '#fff',
                 color: 'black',
                 border: '1px solid black',
+                fontFamily: 'sans-serif'
               },
               },
             }}
@@ -159,6 +162,7 @@ export default function CataloguePage() {
               '&:hover': {
                 backgroundColor: '#f5f5f5',
               },
+              fontFamily: 'sans-serif'
               }}
             >
               Select Sorting Options
@@ -174,7 +178,7 @@ export default function CataloguePage() {
               },
               '&:hover': {
                 backgroundColor: '#f5f5f5',
-              },
+              },fontFamily: 'sans-serif'
               }}
             >
               Newest First
@@ -190,7 +194,7 @@ export default function CataloguePage() {
               },
               '&:hover': {
                 backgroundColor: '#f5f5f5',
-              },
+              },fontFamily: 'sans-serif'
               }}
             >
               Price — Low to High
@@ -206,7 +210,7 @@ export default function CataloguePage() {
               },
               '&:hover': {
                 backgroundColor: '#f5f5f5',
-              },
+              },fontFamily: 'sans-serif'
               }}
             >
               Price — High to Low
