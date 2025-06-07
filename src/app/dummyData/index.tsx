@@ -12,14 +12,7 @@ export const MENUS = [
       label: 'Collections',
       items: ['Streetwear', 'Minimalist', 'Bold Prints', 'Vintage Vibes', 'Premium Collection', 'Limited Edition'],
     },
-    {
-      label: 'Shop by Color',
-      items: ['Black', 'White', 'Neutrals', 'Earth Tones', 'Brights'],
-    },
-    {
-      label: 'Shop by Occasion',
-      items: ['Everyday Wear', 'Night Out', 'Workwear', 'Lounge / Home'],
-    },
+   
   ] as const;
   
   /* Helper left here in case other files import it */

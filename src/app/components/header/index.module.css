@@ -1,55 +1,51 @@
-/* fixed rectangular bar */
 .header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 16vh;
-    background: black;
-    display: flex;
-    align-items: center;
-    padding: 0 24px;
-    z-index: 1000;
-  }
-  
-  /* left */
- .logo {                          /* the <Link> */
-  height: 100%;                 /* make it as tall as the header */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 10vh;
+  background: black;
   display: flex;
   align-items: center;
-  padding-left: 12vw;
+  padding: 0 32px;
+  z-index: 1000;
 }
 
-  
-  /* centre */
-  .nav {
-  flex: 1 1 auto;
+.centerGroup {
   display: flex;
-  flex-direction: column;  /* Stack vertically */
-  gap: 8px;
-  background-color: black;
-  padding: 0 10vw 0 3vw;
+  align-items: center;
+  gap: 32px;
+  flex: 1;
+  justify-content: center; /* Center the group horizontally */
 }
 
-  
-  .navItem {
-    border: none;
-    font-weight: 500;
-    cursor: pointer;
+.logo {
+  display: flex;
+  align-items: center;
+}
 
-  }
-  
-  /* right */
-  .actions {
-    display: flex;
-    gap: 16px;
-    margin-right: 4vw;
-    margin-top: 2vh;
-    align-self: baseline;
-  }
-  
-  .icon {
-    cursor: pointer;
-    color: white;
-  }
-  
+.menus {
+  display: flex;
+  gap: 20px;
+}
+
+.navItem {
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  background: none;
+}
+
+.actions {
+  display: flex;
+  gap: 18px;
+  margin-left: auto; /* Pushes .actions to the far right */
+  align-items: center;
+  margin-right: 4vw;
+}
+
+.icon {
+  cursor: pointer;
+  color: white;
+  font-size: 28px;
+}

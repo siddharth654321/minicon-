@@ -33,20 +33,16 @@ export default function Home() {
         backgroundColor: '#fff'
       }}
     >
-      <div style={{ margin: '30vh 0 30vh 0' }}>
-        <Typography
-          sx={{ margin: '0 0 2vh 0' }}
-          variant="h1"
-          align="center"
-          color="black">
-          Bold Streetwear
-        </Typography>
-        <Typography
-          variant="h5"
-          align="center"
-          color="black">
-          For men who don&#39;t follow trends, they set them.
-        </Typography>
+      {/* Hero section replaced with looping video */}
+      <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+        <video
+          src="/gifs/Banner.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          style={{ width: '100%', }}
+        />
       </div>
 
       <Typography variant="h4"
@@ -56,15 +52,26 @@ export default function Home() {
         Top picks for the week
       </Typography>
 
+      {/* Horizontally scrolling marquee with border radius */}
       <Box
         component="section"
-        sx={{ flex: '0 0 40vh', overflow: 'hidden' }}
+        sx={{
+          position: 'relative',
+          width: '100%',
+          height: '40vh',
+          overflow: 'hidden',
+          display: 'flex',
+          alignItems: 'center',
+          background: '#fff',
+        }}
       >
         <Box
           sx={{
-            height: '100%',
             display: 'flex',
+            alignItems: 'center',
+            whiteSpace: 'nowrap',
             animation: `${scroll} 30s linear infinite`,
+            width: 'max-content',
           }}
         >
           {[...marqueeImages, ...marqueeImages].map((src, i) => (
@@ -72,18 +79,26 @@ export default function Home() {
               key={i}
               sx={{
                 position: 'relative',
-                flex: '0 0 33.33%',
-                padding: '1rem'
+                width: { xs: '150px', sm: '220px', md: '300px' },
+                height: { xs: '120px', sm: '180px', md: '240px' },
+                marginRight: '10vw',
+                borderRadius: '20px',
+                overflow: 'hidden',
+                flex: '0 0 auto',
+                boxShadow: 2,
+                background: '#f5f5f5',
               }}
             >
               <Image
                 src={src}
-                alt=""
+                alt="marquee image"
                 fill
                 style={{
-                  objectFit: 'contain',
-                  borderRadius: '20px' // 👈 Added curved border here
+                  objectFit: 'cover',
+                  borderRadius: '20px',
                 }}
+                sizes="(max-width: 600px) 150px, (max-width: 900px) 220px, 300px"
+                priority={i < 2}
               />
             </Box>
           ))}

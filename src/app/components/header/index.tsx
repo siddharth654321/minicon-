@@ -10,8 +10,8 @@ import { FavoriteBorderOutlined } from '@mui/icons-material';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import TextField from '@mui/material/TextField';   // ADD THIS IMPORT
-import styles from './index.module.css';
+import TextField from '@mui/material/TextField';
+import styles from './index.module.css';          // <-- your CSS file
 import { MENUS } from '@/app/dummyData';
 import { Typography } from '@mui/material';
 
@@ -19,7 +19,7 @@ export default function Header() {
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [activeMenu, setActiveMenu] = useState<number | null>(null);
-  const [search, setSearch] = useState(''); // 👈 ADD THIS LINE
+  const [search, setSearch] = useState('');
 
   const handleOpen =
     (index: number) =>
@@ -38,22 +38,23 @@ export default function Header() {
 
   return (
     <header className={styles.header}>
-      {/* logo */}
-      <Link href="/" scroll={false} className={styles.logo}>
-        <Image src="/images/logoGif.gif"
-          alt="Logo"
-          width={180}
-          height={60}
-          style={{
-            height: 'auto',
-            width: '12vw',
-            maxWidth: '100%',
-          }}
-          priority />
-      </Link>
+      {/* Center group: logo, search bar, menus */}
+      <div className={styles.centerGroup}>
+        <Link href="/" scroll={false} className={styles.logo}>
+          <Image
+            src="/images/logoGif.gif"
+            alt="Logo"
+            width={150}
+            height={50}
+            style={{
+              height: 'auto',
+              width: '8vw',
+              maxWidth: '100%',
+            }}
+            priority
+          />
+        </Link>
 
-      {/* centre navigation */}
-      <nav className={styles.nav}>
         <TextField
           value={search}
           onChange={e => setSearch(e.target.value)}
@@ -61,12 +62,12 @@ export default function Header() {
           size="small"
           variant="outlined"
           sx={{
-            width: '40vw',
+            width: '26vw',
             background: '#111',
             borderRadius: 1,
             color: 'white',
             '& .MuiInputBase-input': {
-              color: 'white', // <-- Set value color here
+              color: 'white',
             },
             '& .MuiInputBase-input::placeholder': {
               color: '#aaa',
@@ -93,8 +94,8 @@ export default function Header() {
           }}
         />
 
-        {/* --- MENUS BELOW --- */}
-        <div style={{ display: 'flex', gap: 32 }}>
+        {/* Menus */}
+        <div className={styles.menus}>
           {MENUS.map(({ label, items }, idx) => (
             <div key={label}>
               <Button
@@ -106,7 +107,6 @@ export default function Header() {
               >
                 {label}
               </Button>
-
               <Menu
                 id={`${label}-menu`}
                 anchorEl={anchorEl}
@@ -123,21 +123,28 @@ export default function Header() {
                       router.push(`/categories/${slug(label)}/${slug(item)}`);
                       handleClose();
                     }}
-                    sx={{ bgcolor: '#000', color: 'white', borderBottom: '1px solid #444', '&:last-child': { borderBottom: 'none' }, '&:hover': { bgcolor: '#222' } }}
+                    sx={{
+                      bgcolor: '#000',
+                      color: 'white',
+                      borderBottom: '1px solid #444',
+                      '&:last-child': { borderBottom: 'none' },
+                      '&:hover': { bgcolor: '#222' }
+                    }}
                   >
-                    <Typography sx={{ color: 'white',fontFamily: "'Bagel Fat One', system-ui", }}>{item}</Typography>
+                    <Typography sx={{ color: 'white', fontFamily: "'Bagel Fat One', system-ui" }}>
+                      {item}
+                    </Typography>
                   </MenuItem>
                 ))}
               </Menu>
             </div>
           ))}
         </div>
-      </nav>
+      </div>
 
-      {/* right-side icons */}
+      {/* Right actions */}
       <div className={styles.actions}>
         <FavoriteBorderOutlined
-
           className={styles.icon}
           onClick={() => router.push('/wishlist')}
           style={{ cursor: 'pointer' }}
