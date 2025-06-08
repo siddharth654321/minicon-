@@ -13,8 +13,13 @@ import {
   Select,
   MenuItem,
   Button,
+  IconButton,
+  Drawer,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
-import { GridLegacy as Grid } from '@mui/material';  
+import { GridLegacy as Grid } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 
 /* -------------------------------------------------------------------------- */
 /*                        Main dummy catalogue data                           */
@@ -29,8 +34,10 @@ const ALL_FILTERS = {
 };
 
 export default function CataloguePage() {
-  /* ---------------- Parse /categories/[label]/[item] ---------------------- */
-  const pathname = usePathname();                         // e.g. /categories/styles/graphic-tees
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = usePathname();
   const catSegments = useMemo(() => pathname.split('/').slice(2), [pathname]);
   const [sortOpt, setSortOpt] = useState<string>('');
 
@@ -62,169 +69,312 @@ export default function CataloguePage() {
       : catSegments.join(' • ').replace(/-/g, ' ')
   ), [catSegments]);
 
-  /* ==============================  RENDER  =============================== */
-  return (
-    <Box component="section" sx={{ display: 'flex', px: 2, py: 4, gap: 4, backgroundColor: '#fff' }}>
-      {/* ------------------------------- Sidebar ---------------------------- */}
-      <Box sx={{ width: 260, flexShrink: 0, overflowY: 'auto', backgroundColor: '#fff', color: 'black', borderRight: '1px solid #eee' }}>
-        {/* Category filter */}
-        <Typography color='black' variant="subtitle1" fontWeight={700} mb={1} sx={{ fontFamily: 'sans-serif' }}>
-          CATEGORIES
-        </Typography>
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
 
-        <List dense sx={{ maxHeight: 320, overflowY: 'auto', color: 'black' }}>
-          {ALL_FILTERS.categories.map((c) => (
-            <ListItem key={c} disableGutters>
-              <FormControlLabel
-                control={<Checkbox size="small" sx={{ color: 'black' }} />}
-                label={<Typography variant="body2" style={{color:'black',fontFamily: 'sans-serif'}}>{c}</Typography>}
-              />
-            </ListItem>
-          ))}
-        </List>
+  const drawer = (
+    <Box sx={{ width: { xs: '100%', sm: 260 }, p: 2 }}>
+      {/* Category filter */}
+      <Typography color='black' variant="subtitle1" fontWeight={700} mb={1} sx={{ fontFamily: 'sans-serif' }}>
+        CATEGORIES
+      </Typography>
 
-        <Divider sx={{ my: 2, color: 'black' }} />
+      <List dense sx={{ maxHeight: 320, overflowY: 'auto', color: 'black' }}>
+        {ALL_FILTERS.categories.map((c) => (
+          <ListItem key={c} disableGutters>
+            <FormControlLabel
+              control={<Checkbox size="small" sx={{ color: 'black' }} />}
+              label={<Typography variant="body2" style={{color:'black',fontFamily: 'sans-serif'}}>{c}</Typography>}
+            />
+          </ListItem>
+        ))}
+      </List>
 
-        {/* Size filter */}
-        <Typography color='black' variant="subtitle1" fontWeight={700} mb={1 } sx={{ fontFamily: 'sans-serif' }}>
-          SIZE
-        </Typography>
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-          {ALL_FILTERS.size.map((s) => (
-            <Button
-              key={s}
-              sx={{
-                border: '1px solid #000',
-                borderRadius: 1,
-                px: 1.5,
-                py: 0.5,
-                fontSize: 14,
-                cursor: 'pointer',
-                color: 'black',
-                backgroundColor: '#fff',
-                '&:hover': { backgroundColor: '#f5f5f5' },
-                fontFamily: 'sans-serif'
-              }}
-            >
-              {s}
-            </Button>
-          ))}
-        </Box>
+      <Divider sx={{ my: 2, color: 'black' }} />
+
+      {/* Size filter */}
+      <Typography color='black' variant="subtitle1" fontWeight={700} mb={1} sx={{ fontFamily: 'sans-serif' }}>
+        SIZE
+      </Typography>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+        {ALL_FILTERS.size.map((s) => (
+          <Button
+            key={s}
+            sx={{
+              border: '1px solid #000',
+              borderRadius: 1,
+              px: 1.5,
+              py: 0.5,
+              fontSize: 14,
+              cursor: 'pointer',
+              color: 'black',
+              backgroundColor: '#fff',
+              '&:hover': { backgroundColor: '#f5f5f5' },
+              fontFamily: 'sans-serif'
+            }}
+          >
+            {s}
+          </Button>
+        ))}
       </Box>
+    </Box>
+  );
 
-      {/* ---------------------------- Product grid -------------------------- */}
-      <Box sx={{ flex: 1, minWidth: 0 }}>
-        {/* Top bar */}
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            mb: 2,
-          }}
-        >
+  return (
+    <Box component="section" sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, px: { xs: 1, sm: 2 }, py: 4, gap: 4, backgroundColor: '#fff' }}>
+      {/* Mobile drawer toggle */}
+      {isMobile && (
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, color: 'black' }}
+          >
+            <MenuIcon />
+          </IconButton>
           <Typography color='black' variant="h6" fontWeight={600} sx={{ fontFamily: 'sans-serif' }}>
             {heading} — {products.length} items
           </Typography>
+        </Box>
+      )}
+
+      {/* Sidebar/Drawer */}
+      {isMobile ? (
+        <Drawer
+          variant="temporary"
+          anchor="left"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile
+          }}
+          sx={{
+            display: { xs: 'block', md: 'none' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 260 },
+          }}
+        >
+          {drawer}
+        </Drawer>
+      ) : (
+        <Box sx={{ width: 260, flexShrink: 0, overflowY: 'auto', backgroundColor: '#fff', color: 'black', borderRight: '1px solid #eee' }}>
+          {drawer}
+        </Box>
+      )}
+
+      {/* Main content */}
+      <Box sx={{ flex: 1, minWidth: 0 }}>
+        {/* Top bar - only show on desktop */}
+        {!isMobile && (
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              mb: 2,
+            }}
+          >
+            <Typography color='black' variant="h6" fontWeight={600} sx={{ fontFamily: 'sans-serif' }}>
+              {heading} — {products.length} items
+            </Typography>
 
             <Select
-            size="small"
-            displayEmpty
-            value={sortOpt}
-            onChange={(e) => setSortOpt(e.target.value)}
-            sx={{
-              border: '1px solid black',
-              color: 'black',
-              '.MuiSelect-icon': { color: 'black' },
-              backgroundColor: 'transparent',
-              fontFamily: 'sans-serif'
-            }}
-            MenuProps={{
-              PaperProps: {
-              sx: {
+              size="small"
+              displayEmpty
+              value={sortOpt}
+              onChange={(e) => setSortOpt(e.target.value)}
+              sx={{
+                border: '1px solid black',
+                color: 'black',
+                '.MuiSelect-icon': { color: 'black' },
+                backgroundColor: 'transparent',
+                fontFamily: 'sans-serif'
+              }}
+              MenuProps={{
+                PaperProps: {
+                  sx: {
+                    backgroundColor: '#fff',
+                    color: 'black',
+                    border: '1px solid black',
+                    fontFamily: 'sans-serif'
+                  },
+                },
+              }}
+            >
+              <MenuItem
+                value=""
+                sx={{
                 backgroundColor: '#fff',
                 color: 'black',
                 border: '1px solid black',
+                '&.Mui-selected': {
+                  backgroundColor: '#f5f5f5',
+                },
+                '&:hover': {
+                  backgroundColor: '#f5f5f5',
+                },
                 fontFamily: 'sans-serif'
-              },
-              },
-            }}
-            >
-            <MenuItem
-              value=""
-              sx={{
-              backgroundColor: '#fff',
-              color: 'black',
-              border: '1px solid black',
-              '&.Mui-selected': {
-                backgroundColor: '#f5f5f5',
-              },
-              '&:hover': {
-                backgroundColor: '#f5f5f5',
-              },
-              fontFamily: 'sans-serif'
-              }}
-            >
-              Select Sorting Options
-            </MenuItem>
-            <MenuItem
-              value="new"
-              sx={{
-              backgroundColor: '#fff',
-              color: 'black',
-              border: '1px solid black',
-              '&.Mui-selected': {
-                backgroundColor: '#f5f5f5',
-              },
-              '&:hover': {
-                backgroundColor: '#f5f5f5',
-              },fontFamily: 'sans-serif'
-              }}
-            >
-              Newest First
-            </MenuItem>
-            <MenuItem
-              value="price_low"
-              sx={{
-              backgroundColor: '#fff',
-              color: 'black',
-              border: '1px solid black',
-              '&.Mui-selected': {
-                backgroundColor: '#f5f5f5',
-              },
-              '&:hover': {
-                backgroundColor: '#f5f5f5',
-              },fontFamily: 'sans-serif'
-              }}
-            >
-              Price — Low to High
-            </MenuItem>
-            <MenuItem
-              value="price_high"
-              sx={{
-              backgroundColor: '#fff',
-              color: 'black',
-              border: '1px solid black',
-              '&.Mui-selected': {
-                backgroundColor: '#f5f5f5',
-              },
-              '&:hover': {
-                backgroundColor: '#f5f5f5',
-              },fontFamily: 'sans-serif'
-              }}
-            >
-              Price — High to Low
-            </MenuItem>
+                }}
+              >
+                Select Sorting Options
+              </MenuItem>
+              <MenuItem
+                value="new"
+                sx={{
+                backgroundColor: '#fff',
+                color: 'black',
+                border: '1px solid black',
+                '&.Mui-selected': {
+                  backgroundColor: '#f5f5f5',
+                },
+                '&:hover': {
+                  backgroundColor: '#f5f5f5',
+                },fontFamily: 'sans-serif'
+                }}
+              >
+                Newest First
+              </MenuItem>
+              <MenuItem
+                value="price_low"
+                sx={{
+                backgroundColor: '#fff',
+                color: 'black',
+                border: '1px solid black',
+                '&.Mui-selected': {
+                  backgroundColor: '#f5f5f5',
+                },
+                '&:hover': {
+                  backgroundColor: '#f5f5f5',
+                },fontFamily: 'sans-serif'
+                }}
+              >
+                Price — Low to High
+              </MenuItem>
+              <MenuItem
+                value="price_high"
+                sx={{
+                backgroundColor: '#fff',
+                color: 'black',
+                border: '1px solid black',
+                '&.Mui-selected': {
+                  backgroundColor: '#f5f5f5',
+                },
+                '&:hover': {
+                  backgroundColor: '#f5f5f5',
+                },fontFamily: 'sans-serif'
+                }}
+              >
+                Price — High to Low
+              </MenuItem>
             </Select>
-        </Box>
+          </Box>
+        )}
+
+        {/* Mobile sorting - show below the header */}
+        {isMobile && (
+          <Box sx={{ mb: 2 }}>
+            <Select
+              fullWidth
+              size="small"
+              displayEmpty
+              value={sortOpt}
+              onChange={(e) => setSortOpt(e.target.value)}
+              sx={{
+                border: '1px solid black',
+                color: 'black',
+                '.MuiSelect-icon': { color: 'black' },
+                backgroundColor: 'transparent',
+                fontFamily: 'sans-serif'
+              }}
+              MenuProps={{
+                PaperProps: {
+                  sx: {
+                    backgroundColor: '#fff',
+                    color: 'black',
+                    border: '1px solid black',
+                    fontFamily: 'sans-serif'
+                  },
+                },
+              }}
+            >
+              <MenuItem
+                value=""
+                sx={{
+                backgroundColor: '#fff',
+                color: 'black',
+                border: '1px solid black',
+                '&.Mui-selected': {
+                  backgroundColor: '#f5f5f5',
+                },
+                '&:hover': {
+                  backgroundColor: '#f5f5f5',
+                },
+                fontFamily: 'sans-serif'
+                }}
+              >
+                Select Sorting Options
+              </MenuItem>
+              <MenuItem
+                value="new"
+                sx={{
+                backgroundColor: '#fff',
+                color: 'black',
+                border: '1px solid black',
+                '&.Mui-selected': {
+                  backgroundColor: '#f5f5f5',
+                },
+                '&:hover': {
+                  backgroundColor: '#f5f5f5',
+                },fontFamily: 'sans-serif'
+                }}
+              >
+                Newest First
+              </MenuItem>
+              <MenuItem
+                value="price_low"
+                sx={{
+                backgroundColor: '#fff',
+                color: 'black',
+                border: '1px solid black',
+                '&.Mui-selected': {
+                  backgroundColor: '#f5f5f5',
+                },
+                '&:hover': {
+                  backgroundColor: '#f5f5f5',
+                },fontFamily: 'sans-serif'
+                }}
+              >
+                Price — Low to High
+              </MenuItem>
+              <MenuItem
+                value="price_high"
+                sx={{
+                backgroundColor: '#fff',
+                color: 'black',
+                border: '1px solid black',
+                '&.Mui-selected': {
+                  backgroundColor: '#f5f5f5',
+                },
+                '&:hover': {
+                  backgroundColor: '#f5f5f5',
+                },fontFamily: 'sans-serif'
+                }}
+              >
+                Price — High to Low
+              </MenuItem>
+            </Select>
+          </Box>
+        )}
 
         {/* Product cards */}
-        <Grid container spacing={3}>
+        <Grid container spacing={{ xs: 1, sm: 2, md: 3 }}>
           {products.map((p) => (
-          <Grid item key={p.id}>
-            <ProductCard product={p} />
-          </Grid>
-        ))}
+            <Grid item xs={6} sm={4} md={3} key={p.id}>
+              <ProductCard product={p} />
+            </Grid>
+          ))}
         </Grid>
       </Box>
     </Box>

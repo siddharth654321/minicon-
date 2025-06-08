@@ -4,19 +4,30 @@
   left: 0;
   width: 100%;
   height: 10vh;
+  min-height: 60px;
   background: black;
   display: flex;
   align-items: center;
-  padding: 0 32px;
+  padding: 0 16px;
   z-index: 1000;
 }
 
 .centerGroup {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 16px;
   flex: 1;
-  justify-content: center; /* Center the group horizontally */
+  justify-content: center;
+}
+
+@media (min-width: 600px) {
+  .header {
+    padding: 0 32px;
+  }
+  
+  .centerGroup {
+    gap: 32px;
+  }
 }
 
 .logo {
@@ -27,6 +38,13 @@
 .menus {
   display: flex;
   gap: 20px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 900px) {
+  .menus {
+    gap: 10px;
+  }
 }
 
 .navItem {
@@ -34,18 +52,32 @@
   font-weight: 500;
   cursor: pointer;
   background: none;
+  white-space: nowrap;
 }
 
 .actions {
   display: flex;
   gap: 18px;
-  margin-left: auto; /* Pushes .actions to the far right */
+  margin-left: auto;
   align-items: center;
   margin-right: 4vw;
+}
+
+@media (max-width: 600px) {
+  .actions {
+    margin-right: 0;
+    gap: 12px;
+  }
 }
 
 .icon {
   cursor: pointer;
   color: white;
   font-size: 28px;
+}
+
+@media (max-width: 600px) {
+  .icon {
+    font-size: 24px;
+  }
 }
