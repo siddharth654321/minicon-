@@ -89,9 +89,8 @@ export default function CartPage() {
     const shipping = 0;
     const taxes = Math.round(subtotal * 0.05);
     const total = subtotal + shipping + taxes;
-    const selectedAddressObj = addresses.find(addr => addr.id === selectedAddress);
 
-    function handleAddrChange(e:any) {
+    function handleAddrChange(e: React.ChangeEvent<HTMLInputElement>) {
         setNewAddr({ ...newAddr, [e.target.name]: e.target.value });
     }
 
