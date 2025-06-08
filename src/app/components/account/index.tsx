@@ -6,7 +6,8 @@ import {
   Tabs,
   Tab,
   Typography,
-  
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import ProfileSection from './profile';
 import OrdersSection from './orders';
@@ -41,10 +42,26 @@ function TabPanel({ children, value, index, ...other }: TabPanelProps) {
 /* -------------------------------------------------------------------------- */
 export default function AccountPage() {
   const [tab, setTab] = useState(0);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
-    <Box  sx={{ maxWidth: 1200, mx: 'auto', px: { xs: 2, md: 4 }, py: 4, backgroundColor:'#fff', height:'100vh' }  }>
-      <Typography color='black' variant="h4" fontWeight={700} mb={3}>
+    <Box sx={{ 
+      maxWidth: 1200, 
+      mx: 'auto', 
+      px: { xs: 1, sm: 2, md: 4 }, 
+      py: { xs: 2, sm: 3, md: 4 }, 
+      backgroundColor: '#fff', 
+      minHeight: '100vh',
+      fontFamily: 'sans-serif'
+    }}>
+      <Typography 
+        color='black' 
+        variant={isMobile ? "h5" : "h4"} 
+        fontWeight={700} 
+        mb={3}
+        sx={{ fontFamily: 'sans-serif' }}
+      >
         My Account
       </Typography>
 
@@ -52,15 +69,23 @@ export default function AccountPage() {
       <Tabs
         value={tab}
         onChange={(e, v) => setTab(v)}
-        variant="scrollable"
+        variant={isMobile ? "fullWidth" : "scrollable"}
         scrollButtons="auto"
         aria-label="My account sections"
-        sx={{ mb: 3,color:'black' }}
-        style={{color:'black'}}
+        sx={{ 
+          mb: 3,
+          color: 'black',
+          '& .MuiTab-root': {
+            fontFamily: 'sans-serif',
+            fontSize: { xs: '0.875rem', sm: '1rem' },
+            minWidth: { xs: 'auto', sm: '120px' },
+            padding: { xs: '12px 8px', sm: '12px 16px' }
+          }
+        }}
       >
-        <Tab label="Profile" id="account‑tab‑0" aria-controls="account‑tab‑panel‑0" style={{color:'black'}}/>
-        <Tab label="Orders" id="account‑tab‑1" aria-controls="account‑tab‑panel‑1" style={{color:'black'}} />
-        <Tab label="Addresses" id="account‑tab‑2" aria-controls="account‑tab‑panel‑2" style={{color:'black'}}/>
+        <Tab label="Profile" id="account‑tab‑0" aria-controls="account‑tab‑panel‑0" />
+        <Tab label="Orders" id="account‑tab‑1" aria-controls="account‑tab‑panel‑1" />
+        <Tab label="Addresses" id="account‑tab‑2" aria-controls="account‑tab‑panel‑2" />
       </Tabs>
 
       {/* --------------------------- Profile ------------------------------- */}

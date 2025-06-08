@@ -9,10 +9,15 @@ import {
   Dialog,
   DialogContent,
   DialogActions,
-  TextField
+  TextField,
+  useTheme,
+  useMediaQuery
 } from '@mui/material';
 
 export default function ProfileSection() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  
   // State for profile info
   const [profile, setProfile] = useState({
     name: 'John Doe',
@@ -47,26 +52,45 @@ export default function ProfileSection() {
 
   return (
     <>
-      <Card variant="outlined" sx={{ maxWidth: 600, backgroundColor: '#fff' }}>
+      <Card variant="outlined" sx={{ 
+        maxWidth: 600, 
+        backgroundColor: '#fff',
+        fontFamily: 'sans-serif',
+        width: '100%'
+      }}>
         <CardContent>
-          <Typography color="black" variant="h6" fontWeight={600} gutterBottom>
+          <Typography 
+            color="black" 
+            variant={isMobile ? "subtitle1" : "h6"} 
+            fontWeight={600} 
+            gutterBottom
+            sx={{ fontFamily: 'sans-serif' }}
+          >
             Personal Information
           </Typography>
           <Stack spacing={1}>
-            <Typography color="black">Name: {profile.name}</Typography>
-            <Typography color="black">Email: {profile.email}</Typography>
-            <Typography color="black">Phone: {profile.phone}</Typography>
+            <Typography color="black" sx={{ fontFamily: 'sans-serif' }}>Name: {profile.name}</Typography>
+            <Typography color="black" sx={{ fontFamily: 'sans-serif' }}>Email: {profile.email}</Typography>
+            <Typography color="black" sx={{ fontFamily: 'sans-serif' }}>Phone: {profile.phone}</Typography>
           </Stack>
-          <Button variant="contained" sx={{ mt: 2 }} onClick={handleOpen}>
+          <Button 
+            variant="contained" 
+            sx={{ 
+              mt: 2,
+              fontFamily: 'sans-serif',
+              width: { xs: '100%', sm: 'auto' }
+            }} 
+            onClick={handleOpen}
+          >
             Edit Profile
           </Button>
         </CardContent>
       </Card>
 
       {/* Edit Profile Modal */}
-      <Dialog  open={open} onClose={handleClose}>
-        <form style={{backgroundColor:'#fff'}} onSubmit={handleSubmit}>
-          <DialogContent sx={{ minWidth: 340 }}>
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+        <form style={{ backgroundColor: '#fff', fontFamily: 'sans-serif' }} onSubmit={handleSubmit}>
+          <DialogContent sx={{ minWidth: { xs: '100%', sm: 340 } }}>
             <Stack spacing={2}>
               <TextField
                 label="Name"
@@ -76,30 +100,53 @@ export default function ProfileSection() {
                 onChange={handleChange}
                 autoFocus
                 required
-                style={{border:'1px solid black'}}
+                sx={{ 
+                  '& .MuiInputBase-root': { fontFamily: 'sans-serif' },
+                  '& .MuiInputLabel-root': { fontFamily: 'sans-serif' }
+                }}
               />
               <TextField
+                label="Email"
                 name="email"
                 fullWidth
                 type="email"
                 value={form.email}
                 onChange={handleChange}
                 required
-                style={{border:'1px solid black'}}
+                sx={{ 
+                  '& .MuiInputBase-root': { fontFamily: 'sans-serif' },
+                  '& .MuiInputLabel-root': { fontFamily: 'sans-serif' }
+                }}
               />
               <TextField
+                label="Phone"
                 name="phone"
                 fullWidth
                 value={form.phone}
                 onChange={handleChange}
                 required
-                style={{border:'1px solid black'}}
+                sx={{ 
+                  '& .MuiInputBase-root': { fontFamily: 'sans-serif' },
+                  '& .MuiInputLabel-root': { fontFamily: 'sans-serif' }
+                }}
               />
             </Stack>
           </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="inherit">Cancel</Button>
-            <Button type="submit" variant="contained">Save</Button>
+          <DialogActions sx={{ px: 3, pb: 2 }}>
+            <Button 
+              onClick={handleClose} 
+              color="inherit"
+              sx={{ fontFamily: 'sans-serif' }}
+            >
+              Cancel
+            </Button>
+            <Button 
+              type="submit" 
+              variant="contained"
+              sx={{ fontFamily: 'sans-serif' }}
+            >
+              Save
+            </Button>
           </DialogActions>
         </form>
       </Dialog>

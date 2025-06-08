@@ -11,7 +11,9 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  TextField
+  TextField,
+  useTheme,
+  useMediaQuery
 } from '@mui/material';
 
 interface Address {
@@ -56,6 +58,9 @@ const emptyAddress: Address = {
 };
 
 export default function AddressesSection() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  
   const [addresses, setAddresses] = useState<Address[]>(INITIAL_ADDRESSES);
 
   // Modal control and form state
@@ -109,19 +114,38 @@ export default function AddressesSection() {
     <>
       <Stack spacing={2}>
         {addresses.map((a) => (
-          <Card key={a.id} variant="outlined" sx={{ backgroundColor: '#fff' }}>
+          <Card key={a.id} variant="outlined" sx={{ 
+            backgroundColor: '#fff',
+            fontFamily: 'sans-serif',
+            width: '100%'
+          }}>
             <CardContent>
-              <Typography fontWeight={600} color="black" gutterBottom>
+              <Typography 
+                fontWeight={600} 
+                color="black" 
+                gutterBottom
+                variant={isMobile ? "subtitle1" : "h6"}
+                sx={{ fontFamily: 'sans-serif' }}
+              >
                 {a.name}
               </Typography>
-              <Typography color="black">{a.line1}</Typography>
-              <Typography color="black">
+              <Typography color="black" sx={{ fontFamily: 'sans-serif' }}>{a.line1}</Typography>
+              <Typography color="black" sx={{ fontFamily: 'sans-serif' }}>
                 {a.city}, {a.state} – {a.pincode}
               </Typography>
-              <Typography color="black">Phone: {a.phone}</Typography>
+              <Typography color="black" sx={{ fontFamily: 'sans-serif' }}>Phone: {a.phone}</Typography>
               <Divider sx={{ my: 1 }} />
-              <Stack direction="row" spacing={1}>
-                <Button size="small" variant="outlined" onClick={() => handleOpen(a)}>
+              <Stack 
+                direction={{ xs: 'column', sm: 'row' }} 
+                spacing={1}
+                sx={{ width: { xs: '100%', sm: 'auto' } }}
+              >
+                <Button 
+                  size="small" 
+                  variant="outlined" 
+                  onClick={() => handleOpen(a)}
+                  sx={{ fontFamily: 'sans-serif' }}
+                >
                   Edit
                 </Button>
                 <Button
@@ -129,6 +153,7 @@ export default function AddressesSection() {
                   color="error"
                   variant="outlined"
                   onClick={() => handleDelete(a.id)}
+                  sx={{ fontFamily: 'sans-serif' }}
                 >
                   Delete
                 </Button>
@@ -136,73 +161,118 @@ export default function AddressesSection() {
             </CardContent>
           </Card>
         ))}
-        <Button variant="contained" sx={{ alignSelf: 'start' }} onClick={() => handleOpen()}>
+        <Button 
+          variant="contained" 
+          sx={{ 
+            alignSelf: 'start',
+            fontFamily: 'sans-serif',
+            width: { xs: '100%', sm: 'auto' }
+          }} 
+          onClick={() => handleOpen()}
+        >
           + Add New Address
         </Button>
       </Stack>
 
-      {/* Add/Edit Modal */}
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle style={{ backgroundColor: '#fff', border:'1px solid black' }}>{editId ? 'Edit Address' : 'Add New Address'}</DialogTitle>
-        <form style={{ backgroundColor: '#fff' }} onSubmit={handleSubmit}>
-          <DialogContent sx={{ minWidth: 340 }}>
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+        <DialogTitle sx={{ 
+          backgroundColor: '#fff', 
+          fontFamily: 'sans-serif',
+          fontSize: { xs: '1.1rem', sm: '1.25rem' }
+        }}>
+          {editId ? 'Edit Address' : 'Add New Address'}
+        </DialogTitle>
+        <form style={{ backgroundColor: '#fff', fontFamily: 'sans-serif' }} onSubmit={handleSubmit}>
+          <DialogContent sx={{ minWidth: { xs: '100%', sm: 340 } }}>
             <Stack spacing={2}>
               <TextField
+                label="Full Name"
                 name="name"
                 value={form.name}
                 onChange={handleChange}
                 required
                 fullWidth
                 autoFocus
-                style={{ border: '1px solid black' }}
+                sx={{ 
+                  '& .MuiInputBase-root': { fontFamily: 'sans-serif' },
+                  '& .MuiInputLabel-root': { fontFamily: 'sans-serif' }
+                }}
               />
               <TextField
+                label="Address Line"
                 name="line1"
                 value={form.line1}
                 onChange={handleChange}
                 required
                 fullWidth
-                style={{ border: '1px solid black' }}
+                sx={{ 
+                  '& .MuiInputBase-root': { fontFamily: 'sans-serif' },
+                  '& .MuiInputLabel-root': { fontFamily: 'sans-serif' }
+                }}
               />
               <TextField
+                label="City"
                 name="city"
                 value={form.city}
                 onChange={handleChange}
                 required
                 fullWidth
-                style={{ border: '1px solid black' }}
+                sx={{ 
+                  '& .MuiInputBase-root': { fontFamily: 'sans-serif' },
+                  '& .MuiInputLabel-root': { fontFamily: 'sans-serif' }
+                }}
               />
               <TextField
+                label="State"
                 name="state"
                 value={form.state}
                 onChange={handleChange}
                 required
                 fullWidth
-                style={{ border: '1px solid black' }}
+                sx={{ 
+                  '& .MuiInputBase-root': { fontFamily: 'sans-serif' },
+                  '& .MuiInputLabel-root': { fontFamily: 'sans-serif' }
+                }}
               />
               <TextField
+                label="Pincode"
                 name="pincode"
                 value={form.pincode}
                 onChange={handleChange}
                 required
                 fullWidth
-                style={{ border: '1px solid black' }}
+                sx={{ 
+                  '& .MuiInputBase-root': { fontFamily: 'sans-serif' },
+                  '& .MuiInputLabel-root': { fontFamily: 'sans-serif' }
+                }}
               />
               <TextField
+                label="Phone"
                 name="phone"
                 value={form.phone}
                 onChange={handleChange}
                 required
                 fullWidth
-                style={{ border: '1px solid black' }}
+                sx={{ 
+                  '& .MuiInputBase-root': { fontFamily: 'sans-serif' },
+                  '& .MuiInputLabel-root': { fontFamily: 'sans-serif' }
+                }}
               />
             </Stack>
           </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="inherit">
+          <DialogActions sx={{ px: 3, pb: 2 }}>
+            <Button 
+              onClick={handleClose} 
+              color="inherit"
+              sx={{ fontFamily: 'sans-serif' }}
+            >
               Cancel
             </Button>
-            <Button type="submit" variant="contained">
+            <Button 
+              type="submit" 
+              variant="contained"
+              sx={{ fontFamily: 'sans-serif' }}
+            >
               {editId ? 'Update' : 'Add'}
             </Button>
           </DialogActions>

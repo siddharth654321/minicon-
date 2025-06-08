@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { FavoriteBorderOutlined, Menu as MenuIcon } from '@mui/icons-material';
+import { FavoriteBorderOutlined, Menu as MenuIcon, ExpandMore } from '@mui/icons-material';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -16,6 +16,9 @@ import Drawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
 import styles from './index.module.css';          // <-- your CSS file
 import { MENUS } from '@/app/dummyData';
 import { Typography } from '@mui/material';
@@ -254,57 +257,50 @@ export default function Header() {
           <Box sx={{ 
             display: 'flex', 
             flexDirection: 'column',
-            gap: 2
+            gap: 1
           }}>
-            {MENUS.map(({ label, items }, idx) => (
-              <Box key={label} sx={{ width: '100%' }}>
-                <Button
-                  fullWidth
-                  sx={{ 
-                    fontFamily: "'Bagel Fat One', system-ui", 
-                    color: 'white',
-                    fontSize: '1.1rem',
-                    justifyContent: 'flex-start',
-                    py: 1.5,
-                    borderBottom: '1px solid #333'
+            {MENUS.map(({ label, items }) => (
+              <Accordion
+                key={label}
+                sx={{
+                  bgcolor: '#000',
+                  color: 'white',
+                  '&:before': {
+                    display: 'none',
+                  },
+                  border: '1px solid #333',
+                }}
+              >
+                <AccordionSummary
+                  expandIcon={<ExpandMore sx={{ color: 'white' }} />}
+                  sx={{
+                    '& .MuiAccordionSummary-content': {
+                      margin: '12px 0',
+                    },
                   }}
-                  aria-controls={activeMenu === idx ? `${label}-menu` : undefined}
-                  aria-haspopup="true"
-                  onClick={handleOpen(idx)}
                 >
-                  {label}
-                </Button>
-                <Menu
-                  id={`${label}-menu`}
-                  anchorEl={anchorEl}
-                  open={activeMenu === idx}
-                  onClose={handleClose}
-                  MenuListProps={{ 
-                    onMouseLeave: handleClose, 
-                    sx: { 
-                      bgcolor: '#000', 
-                      border: '1px solid #444',
-                      width: '100%'
-                    } 
-                  }}
-                  keepMounted
-                  disableScrollLock
-                >
+                  <Typography sx={{ 
+                    fontFamily: "'Bagel Fat One', system-ui",
+                    fontSize: '1.1rem'
+                  }}>
+                    {label}
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails sx={{ p: 0 }}>
                   {items.map((item) => (
-                    <MenuItem
+                    <Box
                       key={item}
                       onClick={() => {
                         router.push(`/categories/${slug(label)}/${slug(item)}`);
-                        handleClose();
                         setMobileMenuOpen(false);
                       }}
                       sx={{
-                        bgcolor: '#000',
-                        color: 'white',
-                        borderBottom: '1px solid #444',
-                        '&:last-child': { borderBottom: 'none' },
-                        '&:hover': { bgcolor: '#222' },
-                        py: 1.5
+                        p: 2,
+                        borderTop: '1px solid #333',
+                        cursor: 'pointer',
+                        '&:hover': {
+                          bgcolor: '#222',
+                        },
                       }}
                     >
                       <Typography sx={{ 
@@ -314,10 +310,10 @@ export default function Header() {
                       }}>
                         {item}
                       </Typography>
-                    </MenuItem>
+                    </Box>
                   ))}
-                </Menu>
-              </Box>
+                </AccordionDetails>
+              </Accordion>
             ))}
           </Box>
         </Box>

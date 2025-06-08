@@ -1,6 +1,5 @@
 'use client';
-import { Card, CardContent, Typography, Button, Stack } from '@mui/material';
-import { GridLegacy as Grid } from '@mui/material';
+import { Card, CardContent, Typography, Button, Stack, useTheme, useMediaQuery, Box } from '@mui/material';
 
 const MOCK_ORDERS = [
   {
@@ -20,37 +19,88 @@ const MOCK_ORDERS = [
 ];
 
 export default function OrdersSection() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   return (
     <>
       {MOCK_ORDERS.length === 0 ? (
-        <Typography>No past orders.</Typography>
+        <Typography sx={{ fontFamily: 'sans-serif' }}>No past orders.</Typography>
       ) : (
         <Stack spacing={2}>
           {MOCK_ORDERS.map((o) => (
-            <Card key={o.id} variant="outlined" sx={{ backgroundColor: '#fff' }}>
+            <Card key={o.id} variant="outlined" sx={{ 
+              backgroundColor: '#fff',
+              fontFamily: 'sans-serif',
+              width: '100%'
+            }}>
               <CardContent>
-                <Grid container spacing={2} alignItems="center">
-                  <Grid item xs={12} sm={6} md={4}>
-                    <Typography fontWeight={600} color="black">{o.id}</Typography>
-                    <Typography variant="body2" color="black">{o.date}</Typography>
-                  </Grid>
-                  <Grid item xs={4} sm={2}>
-                    <Typography color="black">
+                <Box sx={{ 
+                  display: 'grid',
+                  gridTemplateColumns: {
+                    xs: '1fr',
+                    sm: 'repeat(4, 1fr)',
+                    md: 'repeat(5, 1fr)'
+                  },
+                  gap: 2,
+                  alignItems: 'center'
+                }}>
+                  <Box>
+                    <Typography 
+                      fontWeight={600} 
+                      color="black"
+                      variant={isMobile ? "subtitle1" : "h6"}
+                      sx={{ fontFamily: 'sans-serif' }}
+                    >
+                      {o.id}
+                    </Typography>
+                    <Typography 
+                      variant="body2" 
+                      color="black"
+                      sx={{ fontFamily: 'sans-serif' }}
+                    >
+                      {o.date}
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <Typography 
+                      color="black"
+                      sx={{ fontFamily: 'sans-serif' }}
+                    >
                       {o.items} item{o.items > 1 ? 's' : ''}
                     </Typography>
-                  </Grid>
-                  <Grid item xs={4} sm={2}>
-                    <Typography fontWeight={700} color="black">₹ {o.total}</Typography>
-                  </Grid>
-                  <Grid item xs={4} sm={2}>
-                    <Typography color="black">{o.status}</Typography>
-                  </Grid>
-                  <Grid item xs={12} sm={2}>
-                    <Button fullWidth size="small" variant="outlined">
+                  </Box>
+                  <Box>
+                    <Typography 
+                      fontWeight={700} 
+                      color="black"
+                      sx={{ fontFamily: 'sans-serif' }}
+                    >
+                      ₹ {o.total}
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <Typography 
+                      color="black"
+                      sx={{ fontFamily: 'sans-serif' }}
+                    >
+                      {o.status}
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <Button 
+                      fullWidth 
+                      size="small" 
+                      variant="outlined"
+                      sx={{ 
+                        fontFamily: 'sans-serif',
+                        mt: { xs: 1, sm: 0 }
+                      }}
+                    >
                       View Details
                     </Button>
-                  </Grid>
-                </Grid>
+                  </Box>
+                </Box>
               </CardContent>
             </Card>
           ))}
