@@ -6,7 +6,7 @@ const Privacy = () => {
     <Box sx={{ maxWidth: 900, mx: 'auto', px: { xs: 1, sm: 2 }, py: { xs: 2, sm: 4 } }}>
       <Typography variant="h3" fontWeight={500} mb={3} fontSize={{ xs: '2rem', md: '2.5rem' }}>Privacy Policy</Typography>
       <Typography fontSize={{ xs: '1rem', md: '1.1rem' }} mb={2} color="#222">
-        For purposes of this Privacy Policy, <b>"you" and "your"</b> means you as the user of the Services, whether you are a customer, website visitor, or another individual whose information we have collected pursuant to this Privacy Policy.
+        For purposes of this Privacy Policy, <b>&quot;you&quot; and &quot;your&quot;</b> means you as the user of the Services, whether you are a customer, website visitor, or another individual whose information we have collected pursuant to this Privacy Policy.
       </Typography>
       <Typography fontSize={{ xs: '1rem', md: '1.1rem' }} mb={2} color="#222">
         Please read this Privacy Policy carefully. By using and accessing any of the Services, you agree to the collection, use, and disclosure of your information as described in this Privacy Policy. If you do not agree to this Privacy Policy, please do not use or access any of the Services.
@@ -23,7 +23,7 @@ const Privacy = () => {
       </Typography>
       <Typography variant="h4" fontWeight={600} mt={3} mb={2} fontSize={{ xs: '1.3rem', md: '1.3rem' }}>What Personal Information We Collect</Typography>
       <Typography fontSize={{ xs: '1rem', md: '1.1rem' }} color="#222" sx={{ ml: { xs: 2, md: 3 }, mb: { xs: 2, md: 4 }, lineHeight: 1.7 }}>
-        <Typography fontWeight={600} component="span">"Personal information" refers to information that identifies, relates to, describes or can be associated with you.</Typography>
+        <Typography fontWeight={600} component="span">&quot;Personal information&quot; refers to information that identifies, relates to, describes or can be associated with you.</Typography>
       </Typography>
       <Typography variant="h5" fontWeight={600} mt={2} mb={1} fontSize={{ xs: '1.15rem', md: '1.15rem' }}>Information We Collect Directly from You</Typography>
       <Typography fontSize={{ xs: '1rem', md: '1.1rem' }} color="#222" sx={{ ml: { xs: 2, md: 3 }, mb: { xs: 1.5, md: 2 }, lineHeight: 1.7 }}>
@@ -36,7 +36,7 @@ const Privacy = () => {
       </Typography>
       <Typography variant="h5" fontWeight={600} mt={2} mb={1} fontSize={{ xs: '1.15rem', md: '1.15rem' }}>Information We Collect through Cookies</Typography>
       <Typography fontSize={{ xs: '1rem', md: '1.1rem' }} color="#222" sx={{ ml: { xs: 2, md: 3 }, mb: { xs: 1.5, md: 2 }, lineHeight: 1.7 }}>
-        <Typography fontWeight={600} component="span">We also automatically collect certain information about your interaction with the Services ("Usage Data"). To do this, we may use cookies, pixels and similar technologies ("Cookies").</Typography>
+        <Typography fontWeight={600} component="span">We also automatically collect certain information about your interaction with the Services (&quot;Usage Data&quot;). To do this, we may use cookies, pixels and similar technologies (&quot;Cookies&quot;).</Typography>
         <Typography fontWeight={600} component="span">Usage Data may include information about how you access and use our Site and your account, including device information, browser information, information about your network connection, your IP address and other information regarding your interaction with the Services.</Typography>
       </Typography>
       <Typography variant="h5" fontWeight={600} mt={2} mb={1} fontSize={{ xs: '1.15rem', md: '1.15rem' }}>Information We Obtain from Third Parties</Typography>
@@ -83,11 +83,11 @@ const Privacy = () => {
       <Typography fontSize={{ xs: '1rem', md: '1.1rem' }} color="#222" sx={{ ml: { xs: 2, md: 3 }, mb: { xs: 2, md: 4 }, lineHeight: 1.7 }}>
         <Typography fontWeight={600} component="span">The Services are not intended to be used by children, and we do not knowingly collect any personal information about children.</Typography>
         <Typography fontWeight={600} component="span">If you are the parent or guardian of a child who has provided us with their personal information, you may contact us using the contact details set out below to request that it be deleted.</Typography>
-        <Typography fontWeight={600} component="span">As of the Effective Date of this Privacy Policy, we do not have actual knowledge that we "share" or "sell" (as those terms are defined in applicable law) personal information of individuals under 16 years of age.</Typography>
+        <Typography fontWeight={600} component="span">As of the Effective Date of this Privacy Policy, we do not have actual knowledge that we &quot;share&quot; or &quot;sell&quot; (as those terms are defined in applicable law) personal information of individuals under 16 years of age.</Typography>
       </Typography>
       <Typography variant="h4" fontWeight={600} mt={3} mb={2} fontSize={{ xs: '1.3rem', md: '1.3rem' }}>Security and Retention of Your Information</Typography>
       <Typography fontSize={{ xs: '1rem', md: '1.1rem' }} color="#222" sx={{ ml: { xs: 2, md: 3 }, mb: { xs: 2, md: 4 }, lineHeight: 1.7 }}>
-        <Typography fontWeight={600} component="span">No security measures are perfect or impenetrable, and we cannot guarantee "perfect security."</Typography>
+        <Typography fontWeight={600} component="span">No security measures are perfect or impenetrable, and we cannot guarantee &quot;perfect security.&quot;</Typography>
         <Typography fontWeight={600} component="span">Any information you send to us may not be secure while in transit. We recommend that you do not use unsecure channels to communicate sensitive or confidential information to us.</Typography>
         <Typography fontWeight={600} component="span">How long we retain your personal information depends on different factors, such as whether we need the information to maintain your account, to provide the Services, comply with legal obligations, resolve disputes or enforce other applicable contracts and policies.</Typography>
       </Typography>
