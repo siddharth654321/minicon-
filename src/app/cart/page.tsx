@@ -3,7 +3,12 @@ import CartPage from '../components/cart'
 
 const Cart = () => {
   return (
-    <div style={{backgroundColor: '#fff', height: '100vh'}}>
+    <div style={{
+      backgroundColor: '#fff',
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+    }}>
         <CartPage />
     </div>
   )
