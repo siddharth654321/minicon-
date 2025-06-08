@@ -65,7 +65,7 @@
 
 @media (max-width: 600px) {
   .actions {
-    margin-right: 0;
+    margin-right: 5vw;
     gap: 12px;
   }
 }

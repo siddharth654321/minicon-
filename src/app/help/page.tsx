@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
-import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material'
+import { Box, Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import LocalShippingIcon from '@mui/icons-material/LocalShipping'
 import AutorenewIcon from '@mui/icons-material/Autorenew'
@@ -10,10 +10,10 @@ import ReplayIcon from '@mui/icons-material/Replay'
 
 const Help = () => {
   return (
-    <div style={{ maxWidth: 900, margin: '0 auto', padding: '2rem' }}>
+    <Box sx={{ maxWidth: 900, mx: 'auto', px: { xs: 1, sm: 2 }, py: { xs: 2, sm: 4 } }}>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <LocalShippingIcon style={{ marginRight: 12 }} />
+          <LocalShippingIcon sx={{ mr: 1 }} />
           <Typography variant="h6">Shipping</Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -25,7 +25,7 @@ const Help = () => {
       </Accordion>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <AutorenewIcon style={{ marginRight: 12 }} />
+          <AutorenewIcon sx={{ mr: 1 }} />
           <Typography variant="h6"><u>Exchange</u></Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -38,11 +38,11 @@ const Help = () => {
       </Accordion>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <StraightenIcon style={{ marginRight: 12 }} />
+          <StraightenIcon sx={{ mr: 1 }} />
           <Typography variant="h6">Size Guide</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
             <Image
               src="/images/Size-chart.webp"
               alt="Size Guide"
@@ -51,16 +51,16 @@ const Help = () => {
               style={{ maxWidth: '100%', height: 'auto', borderRadius: 8 }}
               priority
             />
-          </div>
+          </Box>
         </AccordionDetails>
       </Accordion>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <HelpOutlineIcon style={{ marginRight: 12 }} />
+          <HelpOutlineIcon sx={{ mr: 1 }} />
           <Typography variant="h6">Customer Service</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography style={{ fontSize: '1.1rem', color: '#222', marginBottom: '0.5rem' }}>For further assistance:</Typography>
+          <Typography sx={{ fontSize: '1.1rem', color: '#222', mb: 1 }}>For further assistance:</Typography>
           <ul style={{ fontSize: '1.1rem', color: '#222', marginLeft: '1.5rem', lineHeight: 1.7 }}>
             <li>Call +91 911</li>
             <li>support@minicon.com</li>
@@ -70,7 +70,7 @@ const Help = () => {
       </Accordion>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <ReplayIcon style={{ marginRight: 12 }} />
+          <ReplayIcon sx={{ mr: 1 }} />
           <Typography variant="h6">Cancellation & Refund</Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -91,14 +91,14 @@ const Help = () => {
           <Typography variant="h6">Return & Refund</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography style={{ fontSize: '1.1rem', color: '#222', marginBottom: '0.5rem' }}><b>Returns:</b></Typography>
+          <Typography sx={{ fontSize: '1.1rem', color: '#222', mb: 1 }}><b>Returns:</b></Typography>
           <ul style={{ fontSize: '1.1rem', color: '#222', marginLeft: '1.5rem', lineHeight: 1.7 }}>
             <li>You may return any item purchased from us within 5 days of receiving your order.</li>
             <li>To initiate a return, please contact our customer service team within this period at +91 911</li>
             <li>Returned items must be in their original packaging and condition, unused, with all tags attached.</li>
             <li>Once your return is received and inspected, we will notify you of the approval or rejection of your refund.</li>
           </ul>
-          <Typography style={{ fontSize: '1.1rem', color: '#222', margin: '1rem 0 0.5rem 0' }}><b>Refunds:</b></Typography>
+          <Typography sx={{ fontSize: '1.1rem', color: '#222', my: 1 }}><b>Refunds:</b></Typography>
           <ul style={{ fontSize: '1.1rem', color: '#222', marginLeft: '1.5rem', lineHeight: 1.7 }}>
             <li>Refunds will be processed within 20 days after we receive your returned item.</li>
             <li>The refund amount will be credited back to the original method of payment used during the purchase.</li>
@@ -106,7 +106,7 @@ const Help = () => {
           </ul>
         </AccordionDetails>
       </Accordion>
-    </div>
+    </Box>
   )
 }
 
