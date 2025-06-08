@@ -6,7 +6,6 @@ import Image from "next/image";
 import { Typography, Button, Box } from "@mui/material";
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import FacebookIcon from '@mui/icons-material/Facebook';
-import TwitterIcon from '@mui/icons-material/Twitter';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import Input from '@mui/material/Input';
 import MenuItem from '@mui/material/MenuItem';
