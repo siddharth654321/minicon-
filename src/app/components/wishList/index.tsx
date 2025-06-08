@@ -37,12 +37,12 @@ export default function WishlistPage() {
     console.log("PRODUCTS", PRODUCTS);
 
   return (
-    <Box sx={{ p: { xs: 1, md: 4 }, maxWidth: 1200, mx: 'auto', backgroundColor:'#fff'}}>
-      <Typography color='black' variant="h4" fontWeight={700} mb={3} align="center">
+    <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: 1200, mx: 'auto', backgroundColor:'#fff'}}>
+      <Typography color='black' variant="h4" fontWeight={700} mb={3} align="center" fontFamily="sans-serif">
         Your Wishlist
       </Typography>
       {wishlist.length === 0 ? (
-        <Typography align="center" color='black'>
+        <Typography align="center" color='black' fontFamily="sans-serif">
           Your wishlist is empty!
         </Typography>
       ) : (
@@ -67,13 +67,13 @@ export default function WishlistPage() {
                   />
                 </Box>
                 <CardContent>
-                  <Typography variant="subtitle1" fontWeight={600} noWrap>
+                  <Typography variant="subtitle1" fontWeight={600} noWrap fontFamily="sans-serif">
                     {item.title}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" color="text.secondary" fontFamily="sans-serif">
                     {item.subtitle}
                   </Typography>
-                  <Typography variant="subtitle2" fontWeight={700} mt={1}>
+                  <Typography variant="subtitle2" fontWeight={700} mt={1} fontFamily="sans-serif">
                     ₹ {item.price}
                   </Typography>
                 </CardContent>

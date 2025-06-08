@@ -208,8 +208,8 @@ export default function Header() {
           '& .MuiDrawer-paper': {
             width: '100%',
             maxWidth: '300px',
-            bgcolor: '#000',
-            color: 'white',
+            bgcolor: '#fff',
+            color: '#000',
           },
         }}
       >
@@ -224,21 +224,21 @@ export default function Header() {
               variant="outlined"
               sx={{
                 mb: 2,
-                background: '#111',
+                background: '#f5f5f5',
                 borderRadius: 1,
-                color: 'white',
+                color: '#000',
                 '& .MuiInputBase-input': {
-                  color: 'white',
+                  color: '#000',
                 },
                 '& .MuiInputBase-input::placeholder': {
-                  color: '#aaa',
+                  color: '#666',
                   opacity: 1,
                 },
               }}
               inputProps={{ style: { padding: 8, fontSize: 16 } }}
               InputProps={{
                 endAdornment: (
-                  <span style={{ display: 'flex', alignItems: 'center', color: '#aaa', cursor: 'pointer' }}>
+                  <span style={{ display: 'flex', alignItems: 'center', color: '#666', cursor: 'pointer' }}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       height="20"
@@ -263,16 +263,16 @@ export default function Header() {
               <Accordion
                 key={label}
                 sx={{
-                  bgcolor: '#000',
-                  color: 'white',
+                  bgcolor: '#fff',
+                  color: '#000',
                   '&:before': {
                     display: 'none',
                   },
-                  border: '1px solid #333',
+                  border: '1px solid #ddd',
                 }}
               >
                 <AccordionSummary
-                  expandIcon={<ExpandMore sx={{ color: 'white' }} />}
+                  expandIcon={<ExpandMore sx={{ color: '#000' }} />}
                   sx={{
                     '& .MuiAccordionSummary-content': {
                       margin: '12px 0',
@@ -281,7 +281,8 @@ export default function Header() {
                 >
                   <Typography sx={{ 
                     fontFamily: "'Bagel Fat One', system-ui",
-                    fontSize: '1.1rem'
+                    fontSize: '1.1rem',
+                    color: '#000'
                   }}>
                     {label}
                   </Typography>
@@ -296,15 +297,15 @@ export default function Header() {
                       }}
                       sx={{
                         p: 2,
-                        borderTop: '1px solid #333',
+                        borderTop: '1px solid #ddd',
                         cursor: 'pointer',
                         '&:hover': {
-                          bgcolor: '#222',
+                          bgcolor: '#f5f5f5',
                         },
                       }}
                     >
                       <Typography sx={{ 
-                        color: 'white', 
+                        color: '#000', 
                         fontFamily: "'Bagel Fat One', system-ui",
                         fontSize: '1rem'
                       }}>

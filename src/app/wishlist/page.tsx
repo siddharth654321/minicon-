@@ -3,7 +3,14 @@ import WishlistPage from '../components/wishList'
 
 const WishList = () => {
   return (
-    <div style={{backgroundColor:'#fff', height:'100vh'}}><WishlistPage/></div>
+    <div style={{
+      backgroundColor: '#fff',
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+    }}>
+      <WishlistPage />
+    </div>
   )
 }
 

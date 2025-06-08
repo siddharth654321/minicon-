@@ -151,7 +151,7 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
             variant="contained"
             sx={{
               ml: 'auto',
-              mr: { xs: 1, sm: 3 },
+              mr: { xs: 3, sm: 3 },
               background: '#fe5000',
               color: 'white',
               fontWeight: 700,
