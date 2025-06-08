@@ -3,13 +3,14 @@ import React, { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { PRODUCTS } from "../dummyData";
 import Image from "next/image";
-import { Typography, Button, Box } from "@mui/material";
+import { Typography, Button, Box, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import Input from '@mui/material/Input';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const PRODUCT_DESCRIPTION = [
   "100% Super Combed Cotton",
@@ -46,10 +47,13 @@ const PreCheckout = () => {
         display: "flex",
         flexDirection: { xs: "column", md: "row" },
         gap: { xs: 2, md: 6 },
-        padding: { xs: "3vw", md: "5vh 7vw" },
+        padding: { xs: "3vh 4vw", md: "5vh 7vw" },
         bgcolor: "white",
         minHeight: "100vh",
         width: "100%",
+        maxWidth: "100vw",
+        overflowX: "hidden",
+        boxSizing: "border-box"
       }}
     >
       {/* Product Image with banner */}
@@ -196,18 +200,46 @@ const PreCheckout = () => {
         </Box>
         {/* Description Section */}
         <Box sx={{ mt: 2 }}>
-          <Typography variant="subtitle1" fontWeight={700} mb={1} sx={{ fontFamily: 'sans-serif' }}>
-            DESCRIPTION
-          </Typography>
-          <ul style={{ paddingLeft: 20, margin: 0 }}>
-            {PRODUCT_DESCRIPTION.map((line, idx) => (
-              <li key={idx} style={{ marginBottom: 3 }}>
-                <Typography variant="body2" color="black" sx={{ fontFamily: 'sans-serif' }}>
-                  {line}
-                </Typography>
-              </li>
-            ))}
-          </ul>
+          <Accordion 
+            sx={{ 
+              boxShadow: 'none',
+              '&:before': {
+                display: 'none',
+              },
+              border: '1px solid #e0e0e0',
+              borderRadius: '8px !important',
+              '&.Mui-expanded': {
+                margin: '0',
+              }
+            }}
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              sx={{
+                '& .MuiAccordionSummary-content': {
+                  margin: '12px 0',
+                },
+                '&:hover': {
+                  backgroundColor: '#f5f5f5',
+                }
+              }}
+            >
+              <Typography variant="subtitle1" fontWeight={700} sx={{ fontFamily: 'sans-serif' }}>
+                DESCRIPTION
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails sx={{ pt: 0 }}>
+              <ul style={{ paddingLeft: 20, margin: 0 }}>
+                {PRODUCT_DESCRIPTION.map((line, idx) => (
+                  <li key={idx} style={{ marginBottom: 3 }}>
+                    <Typography variant="body2" color="black" sx={{ fontFamily: 'sans-serif' }}>
+                      {line}
+                    </Typography>
+                  </li>
+                ))}
+              </ul>
+            </AccordionDetails>
+          </Accordion>
         </Box>
       </Box>
     </Box>
