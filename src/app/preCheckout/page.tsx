@@ -4,6 +4,13 @@ import { useSearchParams } from "next/navigation";
 import { PRODUCTS } from "../dummyData";
 import Image from "next/image";
 import { Typography, Button, Box } from "@mui/material";
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import Input from '@mui/material/Input';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 
 const PRODUCT_DESCRIPTION = [
   "100% Super Combed Cotton",
@@ -25,6 +32,9 @@ const PreCheckout = () => {
     categories: Array.from(new Set(PRODUCTS.map((p) => p.subtitle))).sort(),
     size: Array.from(new Set(PRODUCTS.map((p) => p.size))).sort(),
   };
+  const [selectedSize, setSelectedSize] = React.useState(ALL_FILTERS.size[0] || "");
+  const [quantity, setQuantity] = React.useState(1);
+  const [pincode, setPincode] = React.useState("");
 
   if (!value.length) {
     return <Typography color="error">Product not found</Typography>;
@@ -43,27 +53,30 @@ const PreCheckout = () => {
         width: "100%",
       }}
     >
-      {/* Product Image */}
+      {/* Product Image with banner */}
       <Box
         sx={{
-          position: "relative",
-          width: { xs: "90vw", md: "38vw" },
+          position: 'relative',
+          width: { xs: '100%', md: '38vw' },
           minWidth: 220,
-          aspectRatio: "4/5",
-          bgcolor: "white",
+          aspectRatio: '4/5',
+          bgcolor: 'white',
           borderRadius: 3,
-          overflow: "hidden",
+          overflow: 'hidden',
           flexShrink: 0,
-          alignSelf: { md: "flex-start" },
+          alignSelf: { md: 'flex-start' },
+          mb: { xs: 2, md: 0 },
         }}
       >
         <Image
           src={product.image}
           alt={product.title}
           fill
-          style={{ objectFit: "contain" }}
+          style={{ objectFit: 'contain' }}
           sizes="(max-width: 600px) 100vw, 50vw"
         />
+        {/* Banner overlay */}
+       
       </Box>
       {/* Product Details */}
       <Box
@@ -76,12 +89,28 @@ const PreCheckout = () => {
           pl: { md: 2 },
         }}
       >
-        <Typography sx={{ fontSize: "2.1rem", fontWeight: 300,fontFamily: 'sans-serif' }}>
+        <Typography sx={{ fontSize: "2.1rem", fontWeight: 700, fontFamily: 'sans-serif', mb: 0.5 }}>
           {product.title}
         </Typography>
-        <Typography sx={{ fontSize: "1.2rem", mb: 1 ,fontFamily: 'sans-serif'}}>
+        <Typography sx={{ fontSize: "1.2rem", mb: 1, fontFamily: 'sans-serif', color: '#555' }}>
           {product.subtitle}
         </Typography>
+        {/* Price and Quantity */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
+          <Typography sx={{ fontSize: "1.6rem", fontWeight: 600, fontFamily: 'sans-serif', color: '#222' }}>
+            ₹{product.price}
+          </Typography>
+          <Select
+            value={quantity}
+            onChange={e => setQuantity(Number(e.target.value))}
+            size="small"
+            sx={{ minWidth: 60, fontFamily: 'sans-serif', fontWeight: 500 }}
+          >
+            {[...Array(10)].map((_, i) => (
+              <MenuItem key={i + 1} value={i + 1}>{i + 1}</MenuItem>
+            ))}
+          </Select>
+        </Box>
         {/* Size Buttons */}
         <Box sx={{ mb: 2 }}>
           <Typography variant="subtitle1" fontWeight={700} mb={1} sx={{ fontFamily: 'sans-serif' }}>
@@ -90,50 +119,80 @@ const PreCheckout = () => {
           {ALL_FILTERS.size.map((s) => (
             <Button
               key={s}
+              onClick={() => setSelectedSize(s)}
               sx={{
-                border: "1px solid",
+                border: selectedSize === s ? '2px solid #e53935' : '1px solid',
                 borderRadius: 1,
                 px: 1.5,
                 py: 0.5,
                 fontSize: 14,
-                color: "black",
-                margin: "1vh 0.5vw",
-                textTransform: "none",
+                color: selectedSize === s ? '#e53935' : 'black',
+                margin: '1vh 0.5vw',
+                textTransform: 'none',
+                fontWeight: selectedSize === s ? 700 : 400,
+                fontFamily: 'sans-serif',
+                bgcolor: selectedSize === s ? '#ffeaea' : 'white',
+                boxShadow: selectedSize === s ? 2 : 0,
               }}
             >
               {s}
             </Button>
           ))}
+          <Typography variant="body2" sx={{ ml: 1, color: '#1976d2', display: 'inline', fontFamily: 'sans-serif', cursor: 'pointer' }}>
+            Notify Me
+          </Typography>
         </Box>
-        <Typography sx={{ fontSize: "1.6rem", fontWeight: 600, mb: 1 ,fontFamily: 'sans-serif'}}>
-          ₹{product.price}
-        </Typography>
-        <Box sx={{ mb: 1 }}>
+        {/* Action Buttons */}
+        <Box sx={{
+          display: 'flex',
+          flexDirection: { xs: 'column', sm: 'row' },
+          gap: 2,
+          mb: 2,
+          alignItems: { sm: 'center' },
+        }}>
           <Button
             variant="contained"
-            color="primary"
+            color="error"
             sx={{
-              width: 140,
+              width: { xs: '100%', sm: 140 },
               fontWeight: 700,
-              mr: 1,
-              mb: { xs: 1, md: 0 },
-              fontFamily: 'sans-serif'
+              fontFamily: 'sans-serif',
+              mb: { xs: 1, sm: 0 },
+              fontSize: 16,
             }}
           >
-            Buy Now
+            Add to Cart
           </Button>
-        </Box>
-        <Box sx={{ mb: 2 }}>
           <Button
             variant="outlined"
             color="secondary"
             sx={{
-              width: 140,
+              width: { xs: '100%', sm: 140 },
               fontWeight: 700,
-              fontFamily: 'sans-serif'
+              fontFamily: 'sans-serif',
+              fontSize: 16,
             }}
           >
-            Add to Cart
+            Add to Wishlist
+          </Button>
+        </Box>
+        {/* Social Share Icons */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+          <Typography variant="body2" sx={{ fontFamily: 'sans-serif', color: '#888' }}>Share</Typography>
+          <WhatsAppIcon sx={{ color: '#25D366', cursor: 'pointer' }} />
+          <FacebookIcon sx={{ color: '#4267B2', cursor: 'pointer' }} />
+          <InstagramIcon sx={{ color: '#C13584', cursor: 'pointer' }} />
+        </Box>
+        {/* Delivery Details */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+          <Input
+            placeholder="Enter Pincode"
+            value={pincode}
+            onChange={e => setPincode(e.target.value)}
+            sx={{ fontFamily: 'sans-serif', fontSize: 15, width: 160 }}
+          />
+          <Button variant="outlined" color="primary" sx={{ fontFamily: 'sans-serif', fontWeight: 600 }}>
+            CHECK
           </Button>
         </Box>
         {/* Description Section */}
@@ -144,7 +203,7 @@ const PreCheckout = () => {
           <ul style={{ paddingLeft: 20, margin: 0 }}>
             {PRODUCT_DESCRIPTION.map((line, idx) => (
               <li key={idx} style={{ marginBottom: 3 }}>
-                <Typography variant="body2" color="black"sx={{ fontFamily: 'sans-serif' }}>
+                <Typography variant="body2" color="black" sx={{ fontFamily: 'sans-serif' }}>
                   {line}
                 </Typography>
               </li>

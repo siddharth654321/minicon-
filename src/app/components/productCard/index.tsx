@@ -41,12 +41,12 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
     <Box
       onClick={() => router.push(`/preCheckout?id=${encodeURIComponent(product.id)}`)}
       sx={{
-        width: '20vw',
-        minWidth: 220,
-        maxWidth: 300,
-        height: '50vh',
-        minHeight: 340,
-        maxHeight: 400,
+        width: { xs: '90vw', sm: '45vw', md: '20vw' },
+        minWidth: { xs: 'auto', sm: 220 },
+        maxWidth: { xs: '100%', sm: 300 },
+        height: { xs: '45vh', sm: '50vh' },
+        minHeight: { xs: 280, sm: 340 },
+        maxHeight: { xs: 360, sm: 400 },
         border: '1px solid #ededed',
         borderRadius: 4,
         boxShadow: 1,
@@ -56,6 +56,7 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
         position: 'relative',
         cursor: 'pointer',
         overflow: 'hidden',
+        mx: { xs: 'auto', sm: 0 },
       }}
     >
       {/* --- Product Image --- */}
@@ -64,7 +65,7 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
           src={product.image}
           alt={product.title}
           fill
-          sizes="(max-width:768px) 100vw, 20vw"
+          sizes="(max-width:600px) 90vw, (max-width:900px) 45vw, 20vw"
           style={{ objectFit: 'cover' }}
         />
       </Box>
@@ -77,40 +78,72 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
           bottom: 0,
           width: '100%',
           bgcolor: 'rgba(255,255,255,0.98)',
-          px: 2,
-          pt: 1.5,
-          pb: 1,
-          
+          px: { xs: 1.5, sm: 2 },
+          pt: { xs: 1, sm: 1.5 },
+          pb: { xs: 0.5, sm: 1 },
           display: 'flex',
           flexDirection: 'column',
-          gap: 0.5,
+          gap: { xs: 0.25, sm: 0.5 },
         }}
       >
         {/* Info */}
-        <Typography variant="subtitle1" fontWeight={700} color="black" noWrap sx={{ fontFamily: 'sans-serif' }}>
+        <Typography 
+          variant="subtitle1" 
+          fontWeight={700} 
+          color="black" 
+          noWrap 
+          sx={{ 
+            fontFamily: 'sans-serif',
+            fontSize: { xs: '0.9rem', sm: '1rem' }
+          }}
+        >
           {product.title}
         </Typography>
-        <Typography variant="body2" fontWeight={400} color="text.secondary" noWrap sx={{ fontFamily: 'sans-serif' }}>
+        <Typography 
+          variant="body2" 
+          fontWeight={400} 
+          color="text.secondary" 
+          noWrap 
+          sx={{ 
+            fontFamily: 'sans-serif',
+            fontSize: { xs: '0.8rem', sm: '0.875rem' }
+          }}
+        >
           {product.subtitle}
         </Typography>
-        <Typography variant="subtitle2" fontWeight={600} color="black" sx={{ mb: 1, fontFamily: 'sans-serif' }}>
+        <Typography 
+          variant="subtitle2" 
+          fontWeight={600} 
+          color="black" 
+          sx={{ 
+            mb: { xs: 0.5, sm: 1 }, 
+            fontFamily: 'sans-serif',
+            fontSize: { xs: '0.9rem', sm: '1rem' }
+          }}
+        >
           ₹{product.price}
         </Typography>
         {/* Actions */}
-        <Box sx={{ display: 'flex', gap: 1, mt: 0.5 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0.5, sm: 1 } }}>
           <IconButton
             aria-label="add to wishlist"
             onClick={handleWishlistToggle}
-            sx={{ color: isWished ? 'red' : 'grey.600' }}
+            sx={{ 
+              color: isWished ? 'red' : 'grey.600',
+              padding: { xs: 0.5, sm: 1 }
+            }}
           >
-            <FavoriteIcon />
+            <FavoriteIcon sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }} />
           </IconButton>
           <IconButton
             aria-label="add to cart"
             onClick={handleAddToCart}
-            sx={{ color: addCart ? '#3399ff' : 'grey.600'}}
+            sx={{ 
+              color: addCart ? '#3399ff' : 'grey.600',
+              padding: { xs: 0.5, sm: 1 }
+            }}
           >
-            <ShoppingCartIcon />
+            <ShoppingCartIcon sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }} />
           </IconButton>
           <Button
             onClick={handleBuyNow}
@@ -118,18 +151,19 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
             variant="contained"
             sx={{
               ml: 'auto',
-              mr:3,
+              mr: { xs: 1, sm: 3 },
               background: '#fe5000',
               color: 'white',
               fontWeight: 700,
               borderRadius: 3,
-              px: 2,
+              px: { xs: 1, sm: 2 },
               textTransform: 'none',
-              fontSize: 15,
+              fontSize: { xs: '0.8rem', sm: '0.9375rem' },
               boxShadow: 'none',
-              backgroundColor:'black',
+              backgroundColor: 'black',
               fontFamily: 'sans-serif',
               '&:hover': { background: 'black' },
+              py: { xs: 0.5, sm: 1 }
             }}
           >
             Buy Now

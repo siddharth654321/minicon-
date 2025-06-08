@@ -251,7 +251,75 @@ export default function Header() {
               }}
             />
           )}
-          {renderMenus()}
+          <Box sx={{ 
+            display: 'flex', 
+            flexDirection: 'column',
+            gap: 2
+          }}>
+            {MENUS.map(({ label, items }, idx) => (
+              <Box key={label} sx={{ width: '100%' }}>
+                <Button
+                  fullWidth
+                  sx={{ 
+                    fontFamily: "'Bagel Fat One', system-ui", 
+                    color: 'white',
+                    fontSize: '1.1rem',
+                    justifyContent: 'flex-start',
+                    py: 1.5,
+                    borderBottom: '1px solid #333'
+                  }}
+                  aria-controls={activeMenu === idx ? `${label}-menu` : undefined}
+                  aria-haspopup="true"
+                  onClick={handleOpen(idx)}
+                >
+                  {label}
+                </Button>
+                <Menu
+                  id={`${label}-menu`}
+                  anchorEl={anchorEl}
+                  open={activeMenu === idx}
+                  onClose={handleClose}
+                  MenuListProps={{ 
+                    onMouseLeave: handleClose, 
+                    sx: { 
+                      bgcolor: '#000', 
+                      border: '1px solid #444',
+                      width: '100%'
+                    } 
+                  }}
+                  keepMounted
+                  disableScrollLock
+                >
+                  {items.map((item) => (
+                    <MenuItem
+                      key={item}
+                      onClick={() => {
+                        router.push(`/categories/${slug(label)}/${slug(item)}`);
+                        handleClose();
+                        setMobileMenuOpen(false);
+                      }}
+                      sx={{
+                        bgcolor: '#000',
+                        color: 'white',
+                        borderBottom: '1px solid #444',
+                        '&:last-child': { borderBottom: 'none' },
+                        '&:hover': { bgcolor: '#222' },
+                        py: 1.5
+                      }}
+                    >
+                      <Typography sx={{ 
+                        color: 'white', 
+                        fontFamily: "'Bagel Fat One', system-ui",
+                        fontSize: '1rem'
+                      }}>
+                        {item}
+                      </Typography>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </Box>
+            ))}
+          </Box>
         </Box>
       </Drawer>
     </header>
