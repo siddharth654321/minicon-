@@ -1,8 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  devIndicators: false
+  reactStrictMode: true,
+  experimental: {
+    optimizePackageImports: ["@mui/icons-material"],
+  },
 };
 
 export default nextConfig;

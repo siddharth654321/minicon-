@@ -1,5 +1,6 @@
-import React from 'react'
-import AccountPage from '../components/account'
+import dynamic from 'next/dynamic'
+
+const AccountPage = dynamic(() => import('../components/account'), { ssr: false })
 
 const Account = () => {
   return (

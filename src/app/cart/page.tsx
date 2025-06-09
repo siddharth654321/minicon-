@@ -1,5 +1,6 @@
-import React from 'react'
-import CartPage from '../components/cart'
+import dynamic from 'next/dynamic'
+
+const CartPage = dynamic(() => import('../components/cart'), { ssr: false })
 
 const Cart = () => {
   return (
