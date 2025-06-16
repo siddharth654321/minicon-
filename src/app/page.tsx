@@ -5,10 +5,10 @@ import { keyframes } from '@mui/system';
 import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
 import { useMediaQuery } from '@mui/material';
-import { PRODUCTS } from './dummyData';
 import { ProductCard } from './components/productCard';
-import { useEffect } from 'react';
-import { GridLegacy as Grid } from '@mui/material';  
+import { useEffect, useState } from 'react';
+import Grid from '@mui/material/Grid';
+import { Product } from './dummyData';
 
 const marqueeImages = [
   '/images/mockup 3.png',
@@ -29,11 +29,18 @@ const scroll = keyframes`
 
 export default function Home() {
   const isMobile = useMediaQuery('(max-width:600px)');
+  const [products, setProducts] = useState<Product[]>([]);
+
   useEffect(() => {
     async function fetchProducts() {
-      const res = await fetch('/api/products');
-      const data = await res.json();
-      console.log('Products from API:', data);
+      try {
+        const res = await fetch('/api/products');
+        const data = await res.json();
+        console.log('Products from Supabase:', data);
+        setProducts(data);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
     }
     fetchProducts();
   }, []);
@@ -183,7 +190,7 @@ export default function Home() {
 
       <Box component="section" sx={{ px: { xs: 1, sm: 2 }, py: 4 }}>
         <Grid container spacing={{ xs: 1, sm: 2, md: 3 }}>
-          {PRODUCTS.map((p) => (
+          {products.map((p) => (
             <Grid item xs={6} sm={4} md={3} key={p.id}>
               <ProductCard product={p} />
             </Grid>
