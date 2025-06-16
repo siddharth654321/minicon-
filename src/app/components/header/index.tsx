@@ -21,12 +21,14 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import styles from './index.module.css';          // <-- your CSS file
 import { MENUS } from '@/app/dummyData';
-import { Typography } from '@mui/material';
+import { Typography } from '@mui/material'
+import { useAuth } from '../AuthProvider'
 
 export default function Header() {
   const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const { user } = useAuth();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [activeMenu, setActiveMenu] = useState<number | null>(null);
   const [search, setSearch] = useState('');
@@ -185,17 +187,17 @@ export default function Header() {
       <div className={styles.actions}>
         <FavoriteBorderOutlined
           className={styles.icon}
-          onClick={() => router.push('/wishlist')}
+          onClick={() => router.push(user ? '/wishlist' : '/login')}
           style={{ cursor: 'pointer' }}
         />
         <AccountCircleIcon
           className={styles.icon}
-          onClick={() => router.push('/account')}
+          onClick={() => router.push(user ? '/account' : '/login')}
           style={{ cursor: 'pointer' }}
         />
         <ShoppingCartIcon
           className={styles.icon}
-          onClick={() => router.push('/cart')}
+          onClick={() => router.push(user ? '/cart' : '/login')}
           style={{ cursor: 'pointer' }}
         />
       </div>
