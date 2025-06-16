@@ -7,6 +7,7 @@ import { Typography } from '@mui/material';
 import { useMediaQuery } from '@mui/material';
 import { PRODUCTS } from './dummyData';
 import { ProductCard } from './components/productCard';
+import { useEffect } from 'react';
 import { GridLegacy as Grid } from '@mui/material';  
 
 const marqueeImages = [
@@ -28,6 +29,14 @@ const scroll = keyframes`
 
 export default function Home() {
   const isMobile = useMediaQuery('(max-width:600px)');
+  useEffect(() => {
+    async function fetchProducts() {
+      const res = await fetch('/api/products');
+      const data = await res.json();
+      console.log('Products from API:', data);
+    }
+    fetchProducts();
+  }, []);
 
   return (
     <Box
