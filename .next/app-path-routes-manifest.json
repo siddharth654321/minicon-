@@ -1,14 +1,14 @@
 {
   "/_not-found/page": "/_not-found",
   "/favicon.ico/route": "/favicon.ico",
-  "/help/page": "/help",
+  "/cart/page": "/cart",
   "/about/page": "/about",
-  "/account/page": "/account",
+  "/help/page": "/help",
   "/categories/[[...cat]]/page": "/categories/[[...cat]]",
-  "/page": "/",
-  "/terms/page": "/terms",
-  "/wishlist/page": "/wishlist",
-  "/preCheckout/page": "/preCheckout",
+  "/account/page": "/account",
   "/privacy/page": "/privacy",
-  "/cart/page": "/cart"
+  "/preCheckout/page": "/preCheckout",
+  "/terms/page": "/terms",
+  "/page": "/",
+  "/wishlist/page": "/wishlist"
 }
