@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { FavoriteBorderOutlined, Menu as MenuIcon, ExpandMore } from '@mui/icons-material';
+import { FavoriteBorderOutlined, Menu as MenuIcon } from '@mui/icons-material';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
