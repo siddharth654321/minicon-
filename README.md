@@ -34,3 +34,18 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Supabase Backend
+
+This project can optionally use [Supabase](https://supabase.com) as a backend. The
+`supabase/schema.sql` file defines basic tables for products, users, carts,
+wishlists and orders. To load the demo products from `src/app/dummyData/index.tsx`
+into your Supabase project:
+
+1. Create a new Supabase project and run the SQL in `supabase/schema.sql`.
+2. Copy `.env.example` to `.env` and fill in your Supabase credentials.
+3. Install dependencies with `npm install`.
+4. Run `npm run upload:products` to populate the `products` table.
+
+The application expects `SUPABASE_URL`, `SUPABASE_ANON_KEY` and
+`SUPABASE_SERVICE_ROLE_KEY` to be available via environment variables.
