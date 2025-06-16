@@ -7,7 +7,7 @@ import { Typography } from '@mui/material';
 import { useMediaQuery } from '@mui/material';
 import { ProductCard } from './components/productCard';
 import { useEffect, useState } from 'react';
-import Grid from '@mui/material/Grid';
+import { GridLegacy as Grid } from '@mui/material';  
 import { Product } from './dummyData';
 
 const marqueeImages = [
