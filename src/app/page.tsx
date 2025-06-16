@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { keyframes } from '@mui/system';
 import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
+import { useMediaQuery } from '@mui/material';
 import { PRODUCTS } from './dummyData';
 import { ProductCard } from './components/productCard';
 import { GridLegacy as Grid } from '@mui/material';  
@@ -17,11 +18,17 @@ const marqueeImages = [
 ] as const;
 
 const scroll = keyframes`
-  0%   { transform: translateX(0);   }
-  100% { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 `;
 
 export default function Home() {
+  const isMobile = useMediaQuery('(max-width:600px)');
+
   return (
     <Box
       sx={{
@@ -34,20 +41,39 @@ export default function Home() {
       }}
     >
       {/* Hero section replaced with looping video */}
-      <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+      <Box
+        sx={{
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          height: {
+            xs: '100vh',
+            sm: 'auto'
+          }
+        }}
+      >
         <video
-          src="/gifs/Banner.mp4"
+          src={isMobile ? "/gifs/BannerMobile.mp4" : "/gifs/Banner.mp4"}
           autoPlay
           loop
           muted
           playsInline
-          style={{ width: '100%', }}
+          style={{ 
+            width: '100%',
+            height: isMobile ? '100%' : 'auto',
+            objectFit: 'cover'
+          }}
         />
-      </div>
+      </Box>
 
       <Typography variant="h4"
         align="center"
-        style={{ margin: '5vh 0 10vh 0' }}
+        sx={{
+          margin: {
+            xs: '2vh 0 5vh 0',  // smaller margins for mobile
+            sm: '5vh 0 10vh 0'  // original margins for larger screens
+          }
+        }}
         color="black">
         Top picks for the week
       </Typography>
@@ -58,7 +84,10 @@ export default function Home() {
         sx={{
           position: 'relative',
           width: '100%',
-          height: '40vh',
+          height: {
+            xs: '50vh',
+            sm: '40vh'
+          },
           overflow: 'hidden',
           display: 'flex',
           alignItems: 'center',
@@ -70,8 +99,21 @@ export default function Home() {
             display: 'flex',
             alignItems: 'center',
             whiteSpace: 'nowrap',
-            animation: `${scroll} 30s linear infinite`,
             width: 'max-content',
+            animation: `${scroll} ${isMobile ? '20s' : '30s'} linear infinite`,
+            '&:hover': {
+              animationPlayState: 'paused',
+            },
+            '&::-webkit-scrollbar': {
+              display: 'none',
+            },
+            msOverflowStyle: 'none',
+            scrollbarWidth: 'none',
+            WebkitOverflowScrolling: 'touch',
+            userSelect: 'none',
+            touchAction: 'pan-x',
+            '-webkit-overflow-scrolling': 'touch',
+            '-ms-overflow-style': 'none',
           }}
         >
           {[...marqueeImages, ...marqueeImages].map((src, i) => (
@@ -79,14 +121,27 @@ export default function Home() {
               key={i}
               sx={{
                 position: 'relative',
-                width: { xs: '150px', sm: '220px', md: '300px' },
-                height: { xs: '120px', sm: '180px', md: '240px' },
-                marginRight: '10vw',
+                width: {
+                  xs: '80vw',
+                  sm: '280px',
+                  md: '100'
+                },
+                height: {
+                  xs: '45vh',
+                  sm: '220px',
+                  md: '320px'
+                },
+                marginRight: {
+                  xs: '4vw',
+                  sm: '5vw'
+                },
                 borderRadius: '20px',
                 overflow: 'hidden',
                 flex: '0 0 auto',
                 boxShadow: 2,
                 background: '#f5f5f5',
+                pointerEvents: 'auto',
+                touchAction: 'pan-x',
               }}
             >
               <Image
@@ -97,7 +152,7 @@ export default function Home() {
                   objectFit: 'cover',
                   borderRadius: '20px',
                 }}
-                sizes="(max-width: 600px) 150px, (max-width: 900px) 220px, 300px"
+                sizes="(max-width: 600px) 80vw, (max-width: 900px) 280px, 400px"
                 priority={i < 2}
               />
             </Box>
@@ -107,18 +162,25 @@ export default function Home() {
 
       <Typography variant="h4"
         align="center"
-        style={{ margin: '20vh 0 10vh 0' }}
+        sx={{
+          margin: {
+            xs: '10vh 0 5vh 0',  // smaller margins for mobile
+            sm: '20vh 0 10vh 0'  // original margins for larger screens
+          }
+        }}
         color="black">
         New Arrivals
       </Typography>
 
-      <Grid container spacing={5} justifyContent="center">
-        {PRODUCTS.map((p) => (
-          <Grid item key={p.id}>
-            <ProductCard product={p} />
-          </Grid>
-        ))}
-      </Grid>
+      <Box component="section" sx={{ px: { xs: 1, sm: 2 }, py: 4 }}>
+        <Grid container spacing={{ xs: 1, sm: 2, md: 3 }}>
+          {PRODUCTS.map((p) => (
+            <Grid item xs={6} sm={4} md={3} key={p.id}>
+              <ProductCard product={p} />
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
     </Box>
   );
 }

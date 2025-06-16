@@ -1,7 +1,9 @@
 'use client';
 
-import { Box, Typography, Link, Stack, IconButton, Divider, Select, MenuItem, Container } from '@mui/material';
+import { Box, Typography, Link, Stack, IconButton, Divider, Select, MenuItem, Container, TextField, InputAdornment, Button } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import InstagramIcon from '@mui/icons-material/Instagram';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 export default function Footer() {
   return (
@@ -9,109 +11,93 @@ export default function Footer() {
       component="footer"
       sx={{
         mt: 'auto',
-        backgroundColor: '#000',
-        borderTop: '1px solid #222',
+        backgroundColor: '#1a1a1a',
+        borderTop: '1px solid #333',
         color: '#fff',
       }}
     >
       <Container maxWidth="lg">
         <Box sx={{ px: { xs: 2, sm: 3 }, py: { xs: 3, sm: 4 } }}>
-          <Stack
-            direction={{ xs: 'column', md: 'row' }}
-            spacing={{ xs: 4, md: 2 }}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            {/* Left side */}
-            <Stack direction="column" spacing={2} alignItems="center">
-              <Typography variant="subtitle1" sx={{ color: '#fff', fontWeight: 600 }}>Quick Links</Typography>
-              <Stack direction="column" spacing={1.5} alignItems="center">
-                <Link href="/about" underline="hover" sx={{ color: '#fff' }}>
-                  About Us
-                </Link>
-                <Link href="/help" underline="hover" sx={{ color: '#fff' }}>
-                  Help
-                </Link>
-                <Link href="/terms" underline="hover" sx={{ color: '#fff' }}>
-                  Terms of Service
-                </Link>
-                <Link href="/privacy" underline="hover" sx={{ color: '#fff' }}>
-                  Privacy Policy
-                </Link>
+          <Grid container spacing={4}>
+            {/* Left Column: About Us & Policies */}
+            <Grid size={6}>
+              <Stack spacing={3}>
+                {/* About Us */}
+                <Box>
+                  <Link href="/about" underline="hover" sx={{ fontWeight: 700, mb: 1, letterSpacing: 1, fontSize: '0.875rem', color: 'inherit', display: 'inline-block' }}>ABOUT US</Link>
+                  <Typography variant="body2" sx={{ mb: 0.5 }}>Minicon</Typography>
+                  <Typography variant="body2" sx={{ mb: 0.5 }}>
+                    Contact Us<br />
+                    8777073645<br />
+                    <Link href="mailto:miniconclothing@gmail.com" underline="hover" sx={{ color: 'primary.main', fontWeight: 500 }}>miniconclothing@gmail.com</Link>
+                  </Typography>
+                </Box>
+                {/* Policies */}
+                <Box>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1, letterSpacing: 1 }}>POLICIES</Typography>
+                  <Stack spacing={0.5}>
+                    <Link href="#" underline="hover" sx={{ color: 'inherit', fontSize: 14 }}>Return Your Order</Link>
+                    <Link href="#" underline="hover" sx={{ color: 'inherit', fontSize: 14 }}>Shipping Policy</Link>
+                    <Link href="/help" underline="hover" sx={{ color: 'inherit', fontSize: 14 }}>Return, Refund, and Cancellation</Link>
+                    <Link href="/terms" underline="hover" sx={{ color: 'inherit', fontSize: 14 }}>Terms and Conditions</Link>
+                    <Link href="/privacy" underline="hover" sx={{ color: 'inherit', fontSize: 14 }}>Privacy Policy</Link>
+                    <Link href="#" underline="hover" sx={{ color: 'inherit', fontSize: 14 }}>Contact Us</Link>
+                  </Stack>
+                </Box>
               </Stack>
-            </Stack>
-
-            {/* Center - Contact */}
-            <Stack direction="column" spacing={2} alignItems="center">
-              <Typography variant="subtitle1" sx={{ color: '#fff', fontWeight: 600 }}>Contact</Typography>
-              <Stack direction="column" spacing={1.5} alignItems="center">
-                <Typography sx={{ color: '#fff' }}>Call : 8777073645</Typography>
-                <Typography sx={{ color: '#fff' }}>Email : miniconclothing@gmail.com</Typography>
+            </Grid>
+            {/* Right Column: Newsletter & Follow Us */}
+            <Grid size={6}>
+              <Stack spacing={3}>
+                {/* Newsletter */}
+                <Box>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1, letterSpacing: 1 }}>NEWSLETTER</Typography>
+                  <Typography variant="body2" sx={{ mb: 1 }}>
+                    You can be the first one to know about our new releases, latest offers and more. <Link href="#" underline="hover" sx={{ color: 'primary.main', fontWeight: 500 }}>Sign up now!</Link>
+                  </Typography>
+                  <Box component="form" sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
+                    <TextField
+                      placeholder="Your E-mail"
+                      size="small"
+                      variant="outlined"
+                      sx={{
+                        background: '#fff',
+                        borderRadius: 1,
+                        flex: 1,
+                        '& .MuiOutlinedInput-root': { pr: 0 }
+                      }}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton type="submit" sx={{ color: 'primary.main', borderRadius: 1 }}>
+                              <ArrowForwardIcon />
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Box>
+                </Box>
+                {/* Follow Us */}
+                <Box>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1, letterSpacing: 1 }}>FOLLOW US</Typography>
+                  <Typography variant="body2" sx={{ mb: 1 }}>Stay in touch!</Typography>
+                  <Stack direction="row" spacing={1}>
+                    <IconButton size="small" component="a" href="https://www.facebook.com/profile.php?id=61576563387778" aria-label="Facebook" sx={{ color: '#fff', border: '1px solid #333', borderRadius: 1 }}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22.675 0h-21.35C.595 0 0 .592 0 1.326v21.348C0 23.408.595 24 1.325 24h11.495v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.797.143v3.24l-1.918.001c-1.504 0-1.797.715-1.797 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116C23.406 24 24 23.408 24 22.674V1.326C24 .592 23.406 0 22.675 0" fill="#fff"/></svg>
+                    </IconButton>
+                    <IconButton size="small" component="a" href="#" aria-label="Twitter" sx={{ color: '#fff', border: '1px solid #333', borderRadius: 1 }}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 4.557a9.83 9.83 0 0 1-2.828.775 4.932 4.932 0 0 0 2.165-2.724c-.951.564-2.005.974-3.127 1.195A4.916 4.916 0 0 0 16.616 3c-2.717 0-4.92 2.206-4.92 4.924 0 .386.045.762.127 1.124C7.728 8.807 4.1 6.884 1.671 3.965c-.423.722-.666 1.561-.666 2.475 0 1.708.87 3.216 2.188 4.099a4.904 4.904 0 0 1-2.229-.616c-.054 2.281 1.581 4.415 3.949 4.89a4.936 4.936 0 0 1-2.224.084c.627 1.956 2.444 3.377 4.6 3.417A9.867 9.867 0 0 1 0 21.543a13.94 13.94 0 0 0 7.548 2.212c9.057 0 14.009-7.496 14.009-13.986 0-.213-.005-.425-.014-.636A9.936 9.936 0 0 0 24 4.557z" fill="#fff"/></svg>
+                    </IconButton>
+                    <IconButton size="small" component="a" href="https://www.instagram.com/minicon.clothing?igsh=MTczMjFsNXU1bXpkYQ==" aria-label="Instagram" sx={{ color: '#fff', border: '1px solid #333', borderRadius: 1 }}>
+                      <InstagramIcon fontSize="small" />
+                    </IconButton>  
+                  </Stack>
+                </Box>
               </Stack>
-            </Stack>
-
-            {/* Right side - Social */}
-            <Stack direction="column" spacing={2} alignItems="center">
-              <Typography variant="subtitle1" sx={{ color: '#fff', fontWeight: 600 }}>Connect With Us</Typography>
-              <Stack direction="row" spacing={2} justifyContent="center">
-                <IconButton
-                  size="small"
-                  component="a"
-                  href="https://www.facebook.com/profile.php?id=61576563387778"
-                  aria-label="Facebook"
-                  target="_blank"
-                  rel="noopener"
-                  sx={{ color: '#fff' }}
-                >
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22.675 0h-21.35C.595 0 0 .592 0 1.326v21.348C0 23.408.595 24 1.325 24h11.495v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.797.143v3.24l-1.918.001c-1.504 0-1.797.715-1.797 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116C23.406 24 24 23.408 24 22.674V1.326C24 .592 23.406 0 22.675 0" fill="#fff"/></svg>
-                </IconButton>
-                <IconButton
-                  size="small"
-                  component="a"
-                  href="https://www.instagram.com/minicon.clothing?igsh=MTczMjFsNXU1bXpkYQ=="
-                  aria-label="Instagram"
-                  target="_blank"
-                  rel="noopener"
-                  sx={{ color: '#fff' }}
-                >
-                  <InstagramIcon fontSize="large" />
-                </IconButton>
-              </Stack>
-            </Stack>
-          </Stack>
-
-          <Divider sx={{ my: { xs: 3, sm: 4 }, borderColor: '#222' }} />
-
-          {/* Country/region dropdown */}
-          <Box sx={{ 
-            display: 'flex', 
-            flexDirection: { xs: 'column', sm: 'row' },
-            alignItems: { xs: 'center', sm: 'flex-start' },
-            gap: 1
-          }}>
-            <Typography sx={{ color: '#fff' }}>Country/region</Typography>
-            <Box sx={{ 
-              border: '1px solid #fff', 
-              width: { xs: '100%', sm: 180 }, 
-              borderRadius: 1,
-              maxWidth: 180
-            }}>
-              <Select
-                value="India | INR ₹"
-                variant="standard"
-                disableUnderline
-                fullWidth
-                sx={{ 
-                  color: '#fff', 
-                  '& .MuiSelect-icon': { color: '#fff' },
-                  px: 1
-                }}
-              >
-                <MenuItem value="India | INR ₹" sx={{ color: '#000' }}>India | INR ₹</MenuItem>
-                <MenuItem value="US | USD $" sx={{ color: '#000' }}>US | USD $</MenuItem>
-              </Select>
-            </Box>
-          </Box>
+            </Grid>
+          </Grid>
+          
         </Box>
       </Container>
     </Box>

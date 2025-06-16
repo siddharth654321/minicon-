@@ -31,6 +31,7 @@ export default function Header() {
   const [activeMenu, setActiveMenu] = useState<number | null>(null);
   const [search, setSearch] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [expandedAccordion, setExpandedAccordion] = useState<string | false>(false);
 
   const handleOpen =
     (index: number) =>
@@ -210,10 +211,11 @@ export default function Header() {
             maxWidth: '300px',
             bgcolor: '#fff',
             color: '#000',
+            padding: 0,
           },
         }}
       >
-        <Box sx={{ p: 2 }}>
+        <Box sx={{ p: 0 }}>
           {isMobile && (
             <TextField
               fullWidth
@@ -254,40 +256,42 @@ export default function Header() {
               }}
             />
           )}
-          <Box sx={{ 
-            display: 'flex', 
-            flexDirection: 'column',
-            gap: 1
-          }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
             {MENUS.map(({ label, items }) => (
               <Accordion
                 key={label}
+                expanded={expandedAccordion === label}
+                onChange={() => setExpandedAccordion(expandedAccordion === label ? false : label)}
                 sx={{
                   bgcolor: '#fff',
                   color: '#000',
-                  '&:before': {
-                    display: 'none',
-                  },
-                  border: '1px solid #ddd',
+                  '&:before': { display: 'none' },
+                  border: 'none',
+                  boxShadow: 'none',
+                  margin: 0,
                 }}
               >
                 <AccordionSummary
-                  expandIcon={<ExpandMore sx={{ color: '#000' }} />}
+                  expandIcon={
+                    <span style={{ fontSize: 24, width: 24, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      {expandedAccordion === label ? '-' : '+'}
+                    </span>
+                  }
                   sx={{
+                    minHeight: 0,
+                    padding: '0 16px',
                     '& .MuiAccordionSummary-content': {
-                      margin: '12px 0',
+                      margin: 0,
+                      padding: '12px 0 12px 8px',
+                      alignItems: 'center',
                     },
                   }}
                 >
-                  <Typography sx={{ 
-                    fontFamily: "'Bagel Fat One', system-ui",
-                    fontSize: '1.1rem',
-                    color: '#000'
-                  }}>
+                  <Typography sx={{ fontFamily: "'Bagel Fat One', system-ui", fontSize: '1.1rem', color: '#000', pl: 1 }}>
                     {label}
                   </Typography>
                 </AccordionSummary>
-                <AccordionDetails sx={{ p: 0 }}>
+                <AccordionDetails sx={{ p: 0, m: 0 }}>
                   {items.map((item) => (
                     <Box
                       key={item}
@@ -296,19 +300,14 @@ export default function Header() {
                         setMobileMenuOpen(false);
                       }}
                       sx={{
-                        p: 2,
-                        borderTop: '1px solid #ddd',
+                        p: '10px 0 10px 24px',
+                        borderTop: '1px solid #eee',
                         cursor: 'pointer',
-                        '&:hover': {
-                          bgcolor: '#f5f5f5',
-                        },
+                        '&:hover': { bgcolor: '#f5f5f5' },
+                        margin: 0,
                       }}
                     >
-                      <Typography sx={{ 
-                        color: '#000', 
-                        fontFamily: "'Bagel Fat One', system-ui",
-                        fontSize: '1rem'
-                      }}>
+                      <Typography sx={{ color: '#000', fontFamily: "'Bagel Fat One', system-ui", fontSize: '1rem' }}>
                         {item}
                       </Typography>
                     </Box>
