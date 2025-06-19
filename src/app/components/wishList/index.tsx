@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Product, PRODUCTS } from '@/app/dummyData';
+import { Product } from '@/app/dummyData';
 import { GridLegacy as Grid } from '@mui/material';
 import {
   Box,
@@ -15,14 +15,34 @@ import {
   IconButton,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { supabase } from '@/lib/supabaseClient';
 
 export default function WishlistPage() {
-  // Dummy: pre-populated with a few items (IDs 1, 2, 3)
-  const [wishlist, setWishlist] = useState(PRODUCTS.slice(0, 3));
+  const [wishlist, setWishlist] = useState<Product[]>([]);
   const router = useRouter();
 
-  const removeFromWishlist = (id: number) => {
-    setWishlist((curr) => curr.filter((item) => item.id !== id));
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      const headers: Record<string, string> = {};
+      if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
+      fetch('/api/wishlist', { headers })
+        .then(res => res.ok ? res.json() : [])
+        .then(data => setWishlist(data.map((w: any) => w.product)));
+    });
+  }, []);
+
+  const removeFromWishlist = async (id: number) => {
+    const { data: { session } } = await supabase.auth.getSession();
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
+    const res = await fetch('/api/wishlist', {
+      method: 'DELETE',
+      headers,
+      body: JSON.stringify({ product_id: id })
+    });
+    if (res.ok) {
+      setWishlist((curr) => curr.filter((item) => item.id !== id));
+    }
   };
 
   const addToCart = (product: Product) => {
@@ -31,10 +51,8 @@ export default function WishlistPage() {
   };
 
   const buyNow = (product: Product) => {
-    // TODO: Connect to buy now flow, pass single product in URL or context
     router.push(`/checkout?product=${encodeURIComponent(JSON.stringify(product))}`);
   };
-    console.log("PRODUCTS", PRODUCTS);
 
   return (
     <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: 1200, mx: 'auto', backgroundColor:'#fff'}}>

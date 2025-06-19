@@ -5,7 +5,9 @@ import { Box, Typography, Button, IconButton } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabaseClient';
+import { useAuth } from '../AuthProvider';
 
 export interface Product {
   id: number;
@@ -17,13 +19,38 @@ export interface Product {
 
 export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   const router = useRouter();
+  const { user } = useAuth();
   const [isWished, setIsWished] = useState(false);
   const [addCart, setAddCart] = useState(false);
 
+  useEffect(() => {
+    if (!user) return;
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      const headers: Record<string, string> = {};
+      if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
+      fetch(`/api/wishlist?productId=${product.id}`, { headers })
+        .then(res => res.ok ? res.json() : null)
+        .then(data => setIsWished(!!data));
+    });
+  }, [user, product.id]);
+
   // Handlers
-  const handleWishlistToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleWishlistToggle = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    setIsWished((prev) => !prev);
+    if (!user) {
+      router.push('/login');
+      return;
+    }
+    const { data: { session } } = await supabase.auth.getSession();
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
+    if (isWished) {
+      await fetch('/api/wishlist', { method: 'DELETE', headers, body: JSON.stringify({ product_id: product.id }) });
+      setIsWished(false);
+    } else {
+      await fetch('/api/wishlist', { method: 'POST', headers, body: JSON.stringify({ product_id: product.id }) });
+      setIsWished(true);
+    }
   };
 
   const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
