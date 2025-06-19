@@ -22,6 +22,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import styles from './index.module.css';          // <-- your CSS file
 import { MENUS } from '@/app/dummyData';
 import { Typography } from '@mui/material'
+import CartDrawer from '../cartDrawer'
 import { useAuth } from '../AuthProvider'
 
 export default function Header() {
@@ -34,6 +35,7 @@ export default function Header() {
   const [search, setSearch] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [expandedAccordion, setExpandedAccordion] = useState<string | false>(false);
+  const [cartOpen, setCartOpen] = useState(false);
 
   const handleOpen =
     (index: number) =>
@@ -197,7 +199,13 @@ export default function Header() {
         />
         <ShoppingCartIcon
           className={styles.icon}
-          onClick={() => router.push(user ? '/cart' : '/login')}
+          onClick={() => {
+            if (!user) {
+              router.push('/login');
+            } else {
+              setCartOpen(true);
+            }
+          }}
           style={{ cursor: 'pointer' }}
         />
       </div>
@@ -320,6 +328,7 @@ export default function Header() {
           </Box>
         </Box>
       </Drawer>
+      <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
     </header>
   );
 }
