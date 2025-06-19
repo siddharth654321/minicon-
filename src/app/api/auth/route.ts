@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabaseClient'
+import { createSupabaseServerClient } from '@/lib/supabaseServer'
 
 // Create a new user and sign them in (Auth only)
 export async function POST(request: NextRequest) {
   const { email, password, name } = await request.json()
 
   // Sign up user with Supabase Auth only
+  const supabase = createSupabaseServerClient()
   const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
     email,
     password
@@ -15,14 +16,18 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: signUpError?.message }, { status: 400 })
   }
 
-  // Insert into profiles table
-  const { error: profileError } = await supabase.from('profiles').insert([
-    {
-      user_id: signUpData.user.id,
-      name,
-      email
-    }
-  ])
+  let profileError = null
+  if (signUpData.session) {
+    const supabaseProfile = createSupabaseServerClient(signUpData.session.access_token)
+    const { error } = await supabaseProfile.from('profiles').insert([
+      {
+        user_id: signUpData.user.id,
+        name,
+        email
+      }
+    ])
+    profileError = error
+  }
 
   if (profileError) {
     return NextResponse.json({ error: profileError.message }, { status: 500 })
@@ -32,8 +37,12 @@ export async function POST(request: NextRequest) {
 }
 
 // Return the currently authenticated user's Auth data
-export async function GET() {
-  // Get user from Supabase Auth session
+export async function GET(request: NextRequest) {
+  const token = request.headers.get('authorization')?.replace('Bearer ', '')
+  if (!token) {
+    return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
+  }
+  const supabase = createSupabaseServerClient(token)
   const { data: { user }, error } = await supabase.auth.getUser()
 
   if (error || !user) {
@@ -45,7 +54,11 @@ export async function GET() {
 
 // Update the authenticated user's Auth profile (email/password)
 export async function PUT(request: NextRequest) {
-  // Get user from Supabase Auth session
+  const token = request.headers.get('authorization')?.replace('Bearer ', '')
+  if (!token) {
+    return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
+  }
+  const supabase = createSupabaseServerClient(token)
   const { data: { user }, error } = await supabase.auth.getUser()
 
   if (error || !user) {
