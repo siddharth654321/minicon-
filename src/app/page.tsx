@@ -7,6 +7,8 @@ import { Typography } from '@mui/material';
 import { useMediaQuery } from '@mui/material';
 import { ProductCard } from './components/productCard';
 import { useEffect, useState } from 'react';
+import { useAuth } from './components/AuthProvider';
+import { supabase } from '@/lib/supabaseClient';
 import { GridLegacy as Grid } from '@mui/material';  
 import { Product } from './dummyData';
 
@@ -30,6 +32,9 @@ const scroll = keyframes`
 export default function Home() {
   const isMobile = useMediaQuery('(max-width:600px)');
   const [products, setProducts] = useState<Product[]>([]);
+  const { user } = useAuth();
+  const [wishedIds, setWishedIds] = useState<Set<number>>(new Set());
+  const [cartMap, setCartMap] = useState<Map<number, number>>(new Map());
 
   useEffect(() => {
     async function fetchProducts() {
@@ -44,6 +49,28 @@ export default function Home() {
     }
     fetchProducts();
   }, []);
+
+  useEffect(() => {
+    if (!user) {
+      setWishedIds(new Set());
+      setCartMap(new Map());
+      return;
+    }
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      const headers: Record<string, string> = {};
+      if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
+      fetch('/api/wishlist', { headers })
+        .then(res => res.ok ? res.json() : [])
+        .then(data => setWishedIds(new Set(data.map((w: any) => w.product.id))));
+      fetch('/api/cart', { headers })
+        .then(res => res.ok ? res.json() : [])
+        .then(data => {
+          const map = new Map<number, number>();
+          data.forEach((c: any) => map.set(c.product.id, c.quantity));
+          setCartMap(map);
+        });
+    });
+  }, [user]);
 
   return (
     <Box
@@ -192,7 +219,11 @@ export default function Home() {
         <Grid container spacing={{ xs: 1, sm: 2, md: 3 }}>
           {products.map((p) => (
             <Grid item xs={6} sm={4} md={3} key={p.id}>
-              <ProductCard product={p} />
+              <ProductCard
+                product={p}
+                initialIsWished={wishedIds.has(p.id)}
+                initialCartQty={cartMap.get(p.id) ?? 0}
+              />
             </Grid>
           ))}
         </Grid>

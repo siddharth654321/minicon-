@@ -19,14 +19,19 @@ export interface Product {
   image: string;
 }
 
-export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
+export const ProductCard: React.FC<{
+  product: Product;
+  initialIsWished?: boolean;
+  initialCartQty?: number;
+}> = ({ product, initialIsWished, initialCartQty }) => {
   const router = useRouter();
   const { user } = useAuth();
-  const [isWished, setIsWished] = useState(false);
-  const [cartQty, setCartQty] = useState(0);
+  const [isWished, setIsWished] = useState(initialIsWished ?? false);
+  const [cartQty, setCartQty] = useState(initialCartQty ?? 0);
 
   useEffect(() => {
     if (!user) return;
+    if (initialIsWished !== undefined && initialCartQty !== undefined) return;
     supabase.auth.getSession().then(({ data: { session } }) => {
       const headers: Record<string, string> = {};
       if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
@@ -37,7 +42,15 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
         .then(res => res.ok ? res.json() : null)
         .then(data => setCartQty(data?.quantity ?? 0));
     });
-  }, [user, product.id]);
+  }, [user, product.id, initialIsWished, initialCartQty]);
+
+  useEffect(() => {
+    if (initialIsWished !== undefined) setIsWished(initialIsWished);
+  }, [initialIsWished]);
+
+  useEffect(() => {
+    if (initialCartQty !== undefined) setCartQty(initialCartQty);
+  }, [initialCartQty]);
 
   // Handlers
   const handleWishlistToggle = async (e: React.MouseEvent<HTMLButtonElement>) => {

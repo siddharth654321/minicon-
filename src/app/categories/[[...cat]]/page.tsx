@@ -26,12 +26,17 @@ import MenuIcon from '@mui/icons-material/Menu';
 /* -------------------------------------------------------------------------- */
 import { Product } from '@/app/dummyData';
 import { ProductCard } from '@/app/components/productCard';
+import { useAuth } from '@/app/components/AuthProvider';
+import { supabase } from '@/lib/supabaseClient';
 
 export default function CataloguePage() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [mobileOpen, setMobileOpen] = useState(false);
   const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const { user } = useAuth();
+  const [wishedIds, setWishedIds] = useState<Set<number>>(new Set());
+  const [cartMap, setCartMap] = useState<Map<number, number>>(new Map());
   const pathname = usePathname();
   const catSegments = useMemo(() => pathname.split('/').slice(2), [pathname]);
   const [sortOpt, setSortOpt] = useState<string>('');
@@ -48,6 +53,28 @@ export default function CataloguePage() {
     }
     fetchProducts();
   }, []);
+
+  useEffect(() => {
+    if (!user) {
+      setWishedIds(new Set());
+      setCartMap(new Map());
+      return;
+    }
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      const headers: Record<string, string> = {};
+      if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
+      fetch('/api/wishlist', { headers })
+        .then(res => res.ok ? res.json() : [])
+        .then(data => setWishedIds(new Set(data.map((w: any) => w.product.id))));
+      fetch('/api/cart', { headers })
+        .then(res => res.ok ? res.json() : [])
+        .then(data => {
+          const map = new Map<number, number>();
+          data.forEach((c: any) => map.set(c.product.id, c.quantity));
+          setCartMap(map);
+        });
+    });
+  }, [user]);
 
   const filters = useMemo(() => ({
     categories: Array.from(new Set(allProducts.map(p => p.subtitle))).sort(),
@@ -385,7 +412,11 @@ export default function CataloguePage() {
         <Grid container spacing={{ xs: 1, sm: 2, md: 3 }}>
           {products.map((p) => (
             <Grid item xs={6} sm={4} md={3} key={p.id}>
-              <ProductCard product={p} />
+              <ProductCard
+                product={p}
+                initialIsWished={wishedIds.has(p.id)}
+                initialCartQty={cartMap.get(p.id) ?? 0}
+              />
             </Grid>
           ))}
         </Grid>
