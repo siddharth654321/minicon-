@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import {
   Box,
@@ -22,34 +22,47 @@ import { GridLegacy as Grid } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
 /* -------------------------------------------------------------------------- */
-/*                        Main dummy catalogue data                           */
+/*                             Product utilities                              */
 /* -------------------------------------------------------------------------- */
-import { PRODUCTS as ALL_PRODUCTS } from '@/app/dummyData'; // from src/app/dummuData.ts
+import { Product } from '@/app/dummyData';
 import { ProductCard } from '@/app/components/productCard';
-
-/* Derive category & size lists straight from the data */
-const ALL_FILTERS = {
-  categories: Array.from(new Set(ALL_PRODUCTS.map((p) => p.subtitle))).sort(),
-  size: Array.from(new Set(ALL_PRODUCTS.map((p) => p.size))).sort(), // ['S','M',…]
-};
 
 export default function CataloguePage() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
   const pathname = usePathname();
   const catSegments = useMemo(() => pathname.split('/').slice(2), [pathname]);
   const [sortOpt, setSortOpt] = useState<string>('');
 
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const res = await fetch('/api/products');
+        const data = await res.json();
+        setAllProducts(data);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    }
+    fetchProducts();
+  }, []);
+
+  const filters = useMemo(() => ({
+    categories: Array.from(new Set(allProducts.map(p => p.subtitle))).sort(),
+    size: Array.from(new Set(allProducts.map(p => p.size))).sort(),
+  }), [allProducts]);
+
   /* ---------------- Filter products by label / item ----------------------- */
   const filteredProducts = useMemo(() => {
-    if (catSegments.length === 0) return ALL_PRODUCTS;     // /categories → all
-    const [labelSlug, itemSlug] = catSegments;            // itemSlug may be undefined
-    if (!itemSlug) return ALL_PRODUCTS.filter(p => p.label === labelSlug);
-    return ALL_PRODUCTS.filter(
+    if (catSegments.length === 0) return allProducts;
+    const [labelSlug, itemSlug] = catSegments;
+    if (!itemSlug) return allProducts.filter(p => p.label === labelSlug);
+    return allProducts.filter(
       p => p.label === labelSlug && p.item === itemSlug
     );
-  }, [catSegments]);
+  }, [catSegments, allProducts]);
 
   /* ---------------- Optional client-side sorting -------------------------- */
   const products = useMemo(() => {
@@ -81,7 +94,7 @@ export default function CataloguePage() {
       </Typography>
 
       <List dense sx={{ maxHeight: 320, overflowY: 'auto', color: 'black' }}>
-        {ALL_FILTERS.categories.map((c) => (
+        {filters.categories.map((c) => (
           <ListItem key={c} disableGutters>
             <FormControlLabel
               control={<Checkbox size="small" sx={{ color: 'black' }} />}
@@ -98,7 +111,7 @@ export default function CataloguePage() {
         SIZE
       </Typography>
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-        {ALL_FILTERS.size.map((s) => (
+        {filters.size.map((s) => (
           <Button
             key={s}
             sx={{
