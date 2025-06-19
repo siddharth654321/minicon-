@@ -2,20 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import { Product } from '@/app/dummyData';
 import { GridLegacy as Grid } from '@mui/material';
-import {
-  Box,
-  Card,
-  CardContent,
-  CardActions,
-  Typography,
-  Button,
-  IconButton,
-} from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Box, Typography } from '@mui/material';
 import { supabase } from '@/lib/supabaseClient';
+import { ProductCard } from '../productCard';
 
 export default function WishlistPage() {
   const [wishlist, setWishlist] = useState<Product[]>([]);
@@ -66,52 +57,8 @@ export default function WishlistPage() {
       ) : (
         <Grid container spacing={3} justifyContent="center">
           {wishlist.map((item) => (
-            <Grid item xs={12} sm={6} md={4} key={item.id}>
-              <Card variant="outlined" sx={{ position: 'relative', backgroundColor:'#fff' }}>
-                <IconButton
-                  aria-label="Remove from wishlist"
-                  sx={{ position: 'absolute', top: 8, right: 8, zIndex: 1 }}
-                  onClick={() => removeFromWishlist(item.id)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-                <Box sx={{ position: 'relative', height: 220 }}>
-                  <Image
-                    src={item.image}
-                    alt={item.title}
-                    fill
-                    style={{ objectFit: 'cover', borderTopLeftRadius: 4, borderTopRightRadius: 4 }}
-                    sizes="(max-width:600px) 100vw, (max-width:1200px) 50vw, 33vw"
-                  />
-                </Box>
-                <CardContent>
-                  <Typography variant="subtitle1" fontWeight={600} noWrap fontFamily="sans-serif">
-                    {item.title}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" fontFamily="sans-serif">
-                    {item.subtitle}
-                  </Typography>
-                  <Typography variant="subtitle2" fontWeight={700} mt={1} fontFamily="sans-serif">
-                    ₹ {item.price}
-                  </Typography>
-                </CardContent>
-                <CardActions sx={{ display: 'flex', justifyContent: 'space-between', px: 2, pb: 2 }}>
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    onClick={() => addToCart(item)}
-                  >
-                    Add to Cart
-                  </Button>
-                  <Button
-                    variant="contained"
-                    size="small"
-                    onClick={() => buyNow(item)}
-                  >
-                    Buy Now
-                  </Button>
-                </CardActions>
-              </Card>
+            <Grid item xs={12} sm={6} md={4} key={item.id} display="flex" justifyContent="center">
+              <ProductCard product={item} />
             </Grid>
           ))}
         </Grid>

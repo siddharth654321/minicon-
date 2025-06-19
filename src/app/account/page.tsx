@@ -1,21 +1,13 @@
 'use client'
-import React, { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import React from 'react'
 import { Button } from '@mui/material'
 import AccountPage from '../components/account'
 import { useAuth } from '../components/AuthProvider'
 
 const Account = () => {
-  const { user, signOut } = useAuth()
-  const router = useRouter()
+  const {  signOut } = useAuth()
 
-  useEffect(() => {
-    if (user === null) {
-      router.replace('/login')
-    }
-  }, [user, router])
-
-  if (!user) return null
+ 
 
   return (
     <div style={{ backgroundColor: '#fff', minHeight: '100vh' }}>
