@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabaseClient'
 import {
   Card,
   CardContent,
@@ -23,15 +24,19 @@ export default function ProfileSection() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch('/api/profile')
-      .then(res => res.ok ? res.json() : null)
-      .then(data => {
-        if (data) {
-          setProfile({ name: data.name ?? '', email: data.email ?? '', phone: data.phone ?? '' })
-          setForm({ name: data.name ?? '', email: data.email ?? '', phone: data.phone ?? '' })
-        }
-        setLoading(false)
-      })
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      const headers: Record<string, string> = {}
+      if (session) headers['Authorization'] = `Bearer ${session.access_token}`
+      fetch('/api/profile', { headers })
+        .then(res => res.ok ? res.json() : null)
+        .then(data => {
+          if (data) {
+            setProfile({ name: data.name ?? '', email: data.email ?? '', phone: data.phone ?? '' })
+            setForm({ name: data.name ?? '', email: data.email ?? '', phone: data.phone ?? '' })
+          }
+          setLoading(false)
+        })
+    })
   }, [])
 
   // State for modal open/close
@@ -55,9 +60,12 @@ export default function ProfileSection() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const method = profile ? 'PUT' : 'POST'
+    const { data: { session } } = await supabase.auth.getSession()
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+    if (session) headers['Authorization'] = `Bearer ${session.access_token}`
     const res = await fetch('/api/profile', {
       method,
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify(form)
     })
     if (res.ok) {
