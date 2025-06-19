@@ -4,6 +4,8 @@ import Image from 'next/image';
 import { Box, Typography, Button, IconButton } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
@@ -21,7 +23,7 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   const router = useRouter();
   const { user } = useAuth();
   const [isWished, setIsWished] = useState(false);
-  const [addCart, setAddCart] = useState(false);
+  const [cartQty, setCartQty] = useState(0);
 
   useEffect(() => {
     if (!user) return;
@@ -31,6 +33,9 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
       fetch(`/api/wishlist?productId=${product.id}`, { headers })
         .then(res => res.ok ? res.json() : null)
         .then(data => setIsWished(!!data));
+      fetch(`/api/cart?productId=${product.id}`, { headers })
+        .then(res => res.ok ? res.json() : null)
+        .then(data => setCartQty(data?.quantity ?? 0));
     });
   }, [user, product.id]);
 
@@ -53,9 +58,54 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
     }
   };
 
-  const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleAddToCart = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-   setAddCart((prev) => !prev);
+    if (!user) {
+      router.push('/login');
+      return;
+    }
+    const { data: { session } } = await supabase.auth.getSession();
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
+    const res = await fetch('/api/cart', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ product_id: product.id, quantity: 1 })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      setCartQty(data.quantity);
+    }
+  };
+
+  const handleIncrease = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    handleAddToCart(e);
+  };
+
+  const handleDecrease = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    if (!user) {
+      router.push('/login');
+      return;
+    }
+    const { data: { session } } = await supabase.auth.getSession();
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
+    if (cartQty <= 1) {
+      await fetch('/api/cart', { method: 'DELETE', headers, body: JSON.stringify({ product_id: product.id }) });
+      setCartQty(0);
+    } else {
+      const res = await fetch('/api/cart', {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify({ product_id: product.id, quantity: cartQty - 1 })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setCartQty(data.quantity);
+      }
+    }
   };
 
   const handleBuyNow = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -162,16 +212,27 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
           >
             <FavoriteIcon sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }} />
           </IconButton>
-          <IconButton
-            aria-label="add to cart"
-            onClick={handleAddToCart}
-            sx={{ 
-              color: addCart ? '#3399ff' : 'grey.600',
-              padding: { xs: 0.5, sm: 1 }
-            }}
-          >
-            <ShoppingCartIcon sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }} />
-          </IconButton>
+          {cartQty === 0 ? (
+            <IconButton
+              aria-label="add to cart"
+              onClick={handleAddToCart}
+              sx={{ color: 'grey.600', padding: { xs: 0.5, sm: 1 } }}
+            >
+              <ShoppingCartIcon sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }} />
+            </IconButton>
+          ) : (
+            <Box sx={{ display: 'flex', alignItems: 'center', bgcolor: '#f5f5f5', borderRadius: 1 }}>
+              <IconButton onClick={handleDecrease} size="small" sx={{ p: 0.5 }}>
+                <RemoveIcon fontSize="inherit" />
+              </IconButton>
+              <Typography sx={{ mx: 0.5, fontSize: { xs: '0.8rem', sm: '0.875rem' }, fontFamily: 'sans-serif' }}>
+                {cartQty}
+              </Typography>
+              <IconButton onClick={handleIncrease} size="small" sx={{ p: 0.5 }}>
+                <AddIcon fontSize="inherit" />
+              </IconButton>
+            </Box>
+          )}
           <Button
             onClick={handleBuyNow}
             size="small"

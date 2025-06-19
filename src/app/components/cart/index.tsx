@@ -1,5 +1,5 @@
 'use client';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import Image from 'next/image';
 import {
     Box,
@@ -18,31 +18,14 @@ import {
     Container,
     Divider,
 } from '@mui/material';
+import { supabase } from '@/lib/supabaseClient';
+import { useAuth } from '../AuthProvider';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import PaymentOutlinedIcon from '@mui/icons-material/PaymentOutlined';
 
-const DUMMY_CART = [
-    {
-        id: 1,
-        title: 'Punisher: Classic Logo',
-        subtitle: 'Super Oversized T‑Shirt',
-        img: '/images/M-12.png',
-        price: 1199,
-        size: 'L',
-        qty: 1,
-    },
-    {
-        id: 2,
-        title: 'Star Wars: Vader Tee',
-        subtitle: 'Oversized Tee',
-        img: '/images/M-15.png',
-        price: 899,
-        size: 'M',
-        qty: 2,
-    },
-];
+const DUMMY_CART: any[] = [];
 
 const INITIAL_ADDRESSES = [
     {
@@ -68,6 +51,7 @@ const INITIAL_ADDRESSES = [
 const formatINR = (v:number) => `₹${v.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
 
 export default function CartPage() {
+    const { user } = useAuth();
     const [cart, setCart] = useState(DUMMY_CART);
     const [addresses, setAddresses] = useState(INITIAL_ADDRESSES);
     const [selectedAddress, setSelectedAddress] = useState(INITIAL_ADDRESSES[0].id);
@@ -81,6 +65,25 @@ export default function CartPage() {
         pincode: '',
         phone: '',
     });
+
+    useEffect(() => {
+        if (!user) return;
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            const headers: Record<string, string> = {};
+            if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
+            fetch('/api/cart', { headers })
+                .then(res => res.ok ? res.json() : [])
+                .then(data => setCart(data.map((item: any) => ({
+                    id: item.product.id,
+                    title: item.product.title,
+                    subtitle: item.product.subtitle,
+                    img: item.product.image,
+                    price: item.product.price,
+                    size: item.product.size,
+                    qty: item.quantity,
+                })));
+        });
+    }, [user]);
 
     const subtotal = useMemo(
         () => cart.reduce((sum, item) => sum + item.price * item.qty, 0),
@@ -295,7 +298,13 @@ export default function CartPage() {
                                                         </Typography>
                                                     </Box>
                                                     <IconButton
-                                                        onClick={() => setCart(cart.filter((i) => i.id !== item.id))}
+                                                        onClick={async () => {
+                                                            const { data: { session } } = await supabase.auth.getSession();
+                                                            const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+                                                            if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
+                                                            await fetch('/api/cart', { method: 'DELETE', headers, body: JSON.stringify({ product_id: item.id }) });
+                                                            setCart(cart.filter((i) => i.id !== item.id));
+                                                        }}
                                                         sx={{
                                                             color: '#666',
                                                             '&:hover': { color: '#fe5000' }
