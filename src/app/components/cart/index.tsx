@@ -81,7 +81,7 @@ export default function CartPage() {
                     price: item.product.price,
                     size: item.product.size,
                     qty: item.quantity,
-                })));
+                }))))
         });
     }, [user]);
 
