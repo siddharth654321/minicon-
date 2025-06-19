@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabaseClient'
 import {
   Card,
   CardContent,
@@ -45,9 +46,13 @@ export default function AddressesSection() {
   const [addresses, setAddresses] = useState<Address[]>(INITIAL_ADDRESSES);
 
   useEffect(() => {
-    fetch('/api/addresses')
-      .then(res => res.ok ? res.json() : [])
-      .then(data => setAddresses(data))
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      const headers: Record<string, string> = {}
+      if (session) headers['Authorization'] = `Bearer ${session.access_token}`
+      fetch('/api/addresses', { headers })
+        .then(res => res.ok ? res.json() : [])
+        .then(data => setAddresses(data))
+    })
   }, [])
 
   // Modal control and form state
@@ -81,10 +86,13 @@ export default function AddressesSection() {
   // Add or update address
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    const { data: { session } } = await supabase.auth.getSession()
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+    if (session) headers['Authorization'] = `Bearer ${session.access_token}`
     if (editId) {
       const res = await fetch('/api/addresses', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({ id: editId, ...form })
       })
       if (res.ok) {
@@ -94,7 +102,7 @@ export default function AddressesSection() {
     } else {
       const res = await fetch('/api/addresses', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify(form)
       })
       if (res.ok) {
@@ -107,9 +115,12 @@ export default function AddressesSection() {
 
   // Delete address
   const handleDelete = async (id: string) => {
+    const { data: { session } } = await supabase.auth.getSession()
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+    if (session) headers['Authorization'] = `Bearer ${session.access_token}`
     const res = await fetch('/api/addresses', {
       method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify({ id })
     })
     if (res.ok) {
