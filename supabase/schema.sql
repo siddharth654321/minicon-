@@ -4,6 +4,8 @@
 create table if not exists profiles (
   user_id uuid primary key references auth.users(id) on delete cascade,
   name text,
+  email text,
+  phone text,
   address text,
   created_at timestamp with time zone default current_timestamp
 );
@@ -65,4 +67,32 @@ WITH CHECK (auth.uid() = user_id);
 CREATE POLICY "Allow authenticated user to update own profile"
 ON public.profiles
 FOR UPDATE
+USING (auth.uid() = user_id);
+
+-- Allow authenticated users to view their own profile
+CREATE POLICY "Allow authenticated user to view own profile"
+ON public.profiles
+FOR SELECT
+USING (auth.uid() = user_id);
+
+-- Addresses table for multiple addresses per user
+create table if not exists addresses (
+  id bigint generated always as identity primary key,
+  user_id uuid references auth.users(id) on delete cascade,
+  name text,
+  line1 text,
+  city text,
+  state text,
+  pincode text,
+  phone text,
+  created_at timestamp with time zone default current_timestamp
+);
+
+-- Enable RLS for addresses
+ALTER TABLE public.addresses ENABLE ROW LEVEL SECURITY;
+
+-- Policies for addresses
+CREATE POLICY "Allow authenticated user to manage own addresses"
+ON public.addresses
+FOR ALL
 USING (auth.uid() = user_id);
