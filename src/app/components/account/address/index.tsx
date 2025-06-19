@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Card,
   CardContent,
@@ -26,26 +26,7 @@ interface Address {
   phone: string;
 }
 
-const INITIAL_ADDRESSES: Address[] = [
-  {
-    id: 'ADDR‑01',
-    name: 'John Doe',
-    line1: '221B Baker Street',
-    city: 'London',
-    state: 'Greater London',
-    pincode: 'NW1 6XE',
-    phone: '+44 20 7946 0958',
-  },
-  {
-    id: 'ADDR‑02',
-    name: 'John Doe',
-    line1: '742 Evergreen Terrace',
-    city: 'Springfield',
-    state: 'IL',
-    pincode: '62704',
-    phone: '+1 217 555 0113',
-  },
-];
+const INITIAL_ADDRESSES: Address[] = [];
 
 const emptyAddress: Address = {
   id: '',
@@ -60,8 +41,14 @@ const emptyAddress: Address = {
 export default function AddressesSection() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  
+
   const [addresses, setAddresses] = useState<Address[]>(INITIAL_ADDRESSES);
+
+  useEffect(() => {
+    fetch('/api/addresses')
+      .then(res => res.ok ? res.json() : [])
+      .then(data => setAddresses(data))
+  }, [])
 
   // Modal control and form state
   const [open, setOpen] = useState(false);
@@ -92,23 +79,43 @@ export default function AddressesSection() {
   };
 
   // Add or update address
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
     if (editId) {
-      // Update
-      setAddresses(addresses.map(addr => addr.id === editId ? { ...form, id: editId } : addr));
+      const res = await fetch('/api/addresses', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: editId, ...form })
+      })
+      if (res.ok) {
+        const data = await res.json()
+        setAddresses(addresses.map(addr => addr.id === editId ? data : addr))
+      }
     } else {
-      // Add new
-      const newAddress: Address = { ...form, id: `ADDR-${Date.now()}` };
-      setAddresses([newAddress, ...addresses]);
+      const res = await fetch('/api/addresses', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form)
+      })
+      if (res.ok) {
+        const data = await res.json()
+        setAddresses([data, ...addresses])
+      }
     }
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
   // Delete address
-  const handleDelete = (id: string) => {
-    setAddresses(addresses.filter(addr => addr.id !== id));
-  };
+  const handleDelete = async (id: string) => {
+    const res = await fetch('/api/addresses', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id })
+    })
+    if (res.ok) {
+      setAddresses(addresses.filter(addr => addr.id !== id))
+    }
+  }
 
   return (
     <>

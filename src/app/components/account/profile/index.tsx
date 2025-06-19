@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Card,
   CardContent,
@@ -18,23 +18,31 @@ export default function ProfileSection() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   
-  // State for profile info
-  const [profile, setProfile] = useState({
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    phone: '+1 217 555 0113'
-  });
+  const [profile, setProfile] = useState<{ name: string; email: string; phone: string } | null>(null)
+
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch('/api/profile')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data) {
+          setProfile({ name: data.name ?? '', email: data.email ?? '', phone: data.phone ?? '' })
+          setForm({ name: data.name ?? '', email: data.email ?? '', phone: data.phone ?? '' })
+        }
+        setLoading(false)
+      })
+  }, [])
 
   // State for modal open/close
   const [open, setOpen] = useState(false);
 
-  // State for edit form
-  const [form, setForm] = useState(profile);
+  const [form, setForm] = useState({ name: '', email: '', phone: '' })
 
   const handleOpen = () => {
-    setForm(profile); // Reset form to current profile
-    setOpen(true);
-  };
+    setForm(profile ?? { name: '', email: '', phone: '' })
+    setOpen(true)
+  }
 
   const handleClose = () => setOpen(false);
 
@@ -44,11 +52,22 @@ export default function ProfileSection() {
   };
 
   // Submit form: update main profile state
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setProfile(form);
-    setOpen(false);
-  };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    const method = profile ? 'PUT' : 'POST'
+    const res = await fetch('/api/profile', {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form)
+    })
+    if (res.ok) {
+      const data = await res.json()
+      setProfile({ name: data.name, email: data.email, phone: data.phone })
+    }
+    setOpen(false)
+  }
+
+  if (loading) return null
 
   return (
     <>
@@ -69,9 +88,9 @@ export default function ProfileSection() {
             Personal Information
           </Typography>
           <Stack spacing={1}>
-            <Typography color="black" sx={{ fontFamily: 'sans-serif' }}>Name: {profile.name}</Typography>
-            <Typography color="black" sx={{ fontFamily: 'sans-serif' }}>Email: {profile.email}</Typography>
-            <Typography color="black" sx={{ fontFamily: 'sans-serif' }}>Phone: {profile.phone}</Typography>
+            <Typography color="black" sx={{ fontFamily: 'sans-serif' }}>Name: {profile?.name || ''}</Typography>
+            <Typography color="black" sx={{ fontFamily: 'sans-serif' }}>Email: {profile?.email || ''}</Typography>
+            <Typography color="black" sx={{ fontFamily: 'sans-serif' }}>Phone: {profile?.phone || ''}</Typography>
           </Stack>
           <Button 
             variant="contained" 
