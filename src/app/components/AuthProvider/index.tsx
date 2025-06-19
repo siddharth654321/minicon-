@@ -22,7 +22,15 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   const pathname = usePathname()
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
+    supabase.auth.getUser().then(({ data, error }) => {
+      if (error && error.message.includes('user_not_found')) {
+        supabase.auth.signOut()
+        setUser(null)
+        if (pathname !== '/login' && pathname !== '/signup') {
+          router.replace('/login')
+        }
+        return
+      }
       setUser(data.user)
       // If authenticated and on /login or /signup, redirect to home
       if (data.user && (pathname === '/login' || pathname === '/signup')) {
@@ -34,14 +42,17 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       }
     })
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
-      // If authenticated and on /login or /signup, redirect to home
-      if (session?.user && (pathname === '/login' || pathname === '/signup')) {
-        router.replace('/')
+      if (!session?.user) {
+        setUser(null)
+        if (pathname !== '/login' && pathname !== '/signup') {
+          router.replace('/login')
+        }
+        return
       }
-      // If not authenticated and not on /login or /signup, redirect to login
-      if (!session?.user && pathname !== '/login' && pathname !== '/signup') {
-        router.replace('/login')
+      setUser(session.user)
+      // If authenticated and on /login or /signup, redirect to home
+      if (session.user && (pathname === '/login' || pathname === '/signup')) {
+        router.replace('/')
       }
     })
     return () => {

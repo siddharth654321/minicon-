@@ -3,7 +3,7 @@ import { supabase } from '@/lib/supabaseClient'
 
 // Create a new user and sign them in (Auth only)
 export async function POST(request: NextRequest) {
-  const { email, password} = await request.json()
+  const { email, password, name } = await request.json()
 
   // Sign up user with Supabase Auth only
   const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
@@ -13,6 +13,19 @@ export async function POST(request: NextRequest) {
 
   if (signUpError || !signUpData.user) {
     return NextResponse.json({ error: signUpError?.message }, { status: 400 })
+  }
+
+  // Insert into profiles table
+  const { error: profileError } = await supabase.from('profiles').insert([
+    {
+      user_id: signUpData.user.id,
+      name,
+      email
+    }
+  ])
+
+  if (profileError) {
+    return NextResponse.json({ error: profileError.message }, { status: 500 })
   }
 
   return NextResponse.json({ user: signUpData.user })
