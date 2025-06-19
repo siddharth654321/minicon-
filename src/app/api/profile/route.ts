@@ -24,12 +24,12 @@ export async function GET(request: NextRequest) {
     .from('profiles')
     .select('*')
     .eq('user_id', user.id)
-    .single()
+    .maybeSingle()
 
   if (dbError) {
     return NextResponse.json({ error: dbError.message }, { status: 500 })
   }
-  return NextResponse.json(data)
+  return NextResponse.json(data ?? null)
 }
 
 export async function POST(request: NextRequest) {

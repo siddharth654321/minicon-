@@ -23,6 +23,9 @@ export default function ProfileSection() {
 
   const [loading, setLoading] = useState(true)
 
+  // State for modal open/close
+  const [open, setOpen] = useState(false);
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       const headers: Record<string, string> = {}
@@ -33,14 +36,13 @@ export default function ProfileSection() {
           if (data) {
             setProfile({ name: data.name ?? '', email: data.email ?? '', phone: data.phone ?? '' })
             setForm({ name: data.name ?? '', email: data.email ?? '', phone: data.phone ?? '' })
+          } else {
+            setOpen(true)
           }
           setLoading(false)
         })
     })
   }, [])
-
-  // State for modal open/close
-  const [open, setOpen] = useState(false);
 
   const [form, setForm] = useState({ name: '', email: '', phone: '' })
 
