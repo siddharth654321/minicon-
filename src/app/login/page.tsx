@@ -9,6 +9,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [resetSent, setResetSent] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -16,8 +17,14 @@ export default function LoginPage() {
     if (error) {
       setError(error.message)
     } else {
-      router.push('/account')
+      router.push('/')
     }
+  }
+
+  const handleForgotPassword = async () => {
+    const { error } = await supabase.auth.resetPasswordForEmail(email)
+    if (error) setError(error.message)
+    else setResetSent(true)
   }
 
   return (
@@ -30,6 +37,8 @@ export default function LoginPage() {
         <Button type='submit' variant='contained'>Login</Button>
       </form>
       <Button sx={{ mt: 2 }} onClick={() => router.push('/signup')}>Create Account</Button>
+      <Button sx={{ mt: 2 }} onClick={handleForgotPassword} disabled={!email}>Forgot your password?</Button>
+      {resetSent && <Typography color='primary' variant='body2'>Password reset email sent!</Typography>}
     </Box>
   )
 }

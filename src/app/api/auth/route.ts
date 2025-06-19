@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabaseClient'
 
-// Create a new user and sign them in
+// Create a new user and sign them in (Auth only)
 export async function POST(request: NextRequest) {
-  const { email, password, name, address } = await request.json()
+  const { email, password} = await request.json()
 
+  // Sign up user with Supabase Auth only
   const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
     email,
     password
@@ -14,61 +15,51 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: signUpError?.message }, { status: 400 })
   }
 
-  const { error: insertError } = await supabase.from('users').insert({
-    id: signUpData.user.id,
-    email,
-    name,
-    address
-  })
-
-  if (insertError) {
-    return NextResponse.json({ error: insertError.message }, { status: 500 })
-  }
-
   return NextResponse.json({ user: signUpData.user })
 }
 
-// Return the currently authenticated user's profile data
+// Return the currently authenticated user's Auth data
 export async function GET() {
+  // Get user from Supabase Auth session
   const { data: { user }, error } = await supabase.auth.getUser()
 
   if (error || !user) {
     return NextResponse.json({ error: error?.message ?? 'Not authenticated' }, { status: 401 })
   }
 
-  const { data, error: fetchError } = await supabase
-    .from('users')
-    .select('*')
-    .eq('id', user.id)
-    .single()
-
-  if (fetchError) {
-    return NextResponse.json({ error: fetchError.message }, { status: 500 })
-  }
-
-  return NextResponse.json(data)
+  return NextResponse.json(user)
 }
 
-// Update the authenticated user's profile
+// Update the authenticated user's Auth profile (email/password)
 export async function PUT(request: NextRequest) {
+  // Get user from Supabase Auth session
   const { data: { user }, error } = await supabase.auth.getUser()
 
   if (error || !user) {
     return NextResponse.json({ error: error?.message ?? 'Not authenticated' }, { status: 401 })
   }
 
-  const { name, address } = await request.json()
+  const { email, password } = await request.json()
+  let updateError = null
+  let updatedUser = user
 
-  const { data, error: updateError } = await supabase
-    .from('users')
-    .update({ name, address })
-    .eq('id', user.id)
-    .select()
-    .single()
+  // Update email if provided
+  if (email && email !== user.email) {
+    const { data, error: emailError } = await supabase.auth.updateUser({ email })
+    if (emailError) updateError = emailError
+    else updatedUser = data.user
+  }
+
+  // Update password if provided
+  if (password) {
+    const { data, error: passError } = await supabase.auth.updateUser({ password })
+    if (passError) updateError = passError
+    else updatedUser = data.user
+  }
 
   if (updateError) {
     return NextResponse.json({ error: updateError.message }, { status: 500 })
   }
 
-  return NextResponse.json(data)
+  return NextResponse.json(updatedUser)
 }
