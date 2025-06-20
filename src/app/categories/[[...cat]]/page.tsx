@@ -218,29 +218,7 @@ export default function CataloguePage() {
 
   const drawer = (
     <Box sx={{ width: { xs: '100%', sm: 260 }, p: 2, overflowX: 'hidden' }}>
-      {/* Clear filters button */}
-      {(selectedCategories.size > 0 || selectedSizes.size > 0 || selectedColors.size > 0) && (
-        <Box sx={{ mb: 2 }}>
-          <Button
-            onClick={clearAllFilters}
-            sx={{
-              border: '1px solid #000',
-              borderRadius: 1,
-              px: 2,
-              py: 0.5,
-              fontSize: 12,
-              color: 'black',
-              backgroundColor: '#fff',
-              '&:hover': { backgroundColor: '#f5f5f5' },
-              fontFamily: 'sans-serif',
-              textTransform: 'none'
-            }}
-          >
-            Clear All Filters
-          </Button>
-        </Box>
-      )}
-
+    
       {/* Category filter */}
       <Typography color='black' variant="subtitle1" fontWeight={700} mb={1} sx={{ fontFamily: 'sans-serif' }}>
         CATEGORIES
@@ -343,6 +321,30 @@ export default function CataloguePage() {
           </Button>
         ))}
       </Box>
+      <Divider sx={{ my: 2, color: 'black' }} />
+        {/* Clear filters button */}
+        {(selectedCategories.size > 0 || selectedSizes.size > 0 || selectedColors.size > 0) && (
+        <Box sx={{ mb: 2 }}>
+          <Button
+            onClick={clearAllFilters}
+            sx={{
+              border: '1px solid #000',
+              borderRadius: 1,
+              px: 2,
+              py: 0.5,
+              fontSize: 12,
+              color: 'black',
+              backgroundColor: '#fff',
+              '&:hover': { backgroundColor: '#f5f5f5' },
+              fontFamily: 'sans-serif',
+              textTransform: 'none'
+            }}
+          >
+            Clear All Filters
+          </Button>
+        </Box>
+      )}
+
     </Box>
   );
 

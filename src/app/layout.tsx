@@ -55,7 +55,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <main style={{ flex: 1 }}>
             <MuiTheme>
               <Box sx={{
-                margin: { xs: '8vh 0 6vh 0', sm: '10vh 0 8vh 0' },
+                margin: { xs: '8vh 0 6vh 0', sm: '8vh 0 8vh 0',md: '8vh 0 8vh 0'},
               }}>
                 {children}
               </Box>

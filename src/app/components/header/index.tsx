@@ -2,7 +2,6 @@
 
 import { useState, MouseEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import Link from 'next/link';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -127,17 +126,18 @@ export default function Header() {
       {/* Center group: logo, search bar, menus */}
       <div className={styles.centerGroup}>
         <Link href="/" scroll={false} className={styles.logo}>
-          <Image
-            src="/images/logoGif.gif"
-            alt="Logo"
-            width={150}
-            height={50}
+          <video
+            src="/images/logomp4.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
             style={{
               height: 'auto',
-              width: isMobile ? '120px' : '8vw',
+              width: isMobile ? '100px' : '8vw',
               maxWidth: '150px',
+              minWidth: '80px',
             }}
-            priority
           />
         </Link>
 
