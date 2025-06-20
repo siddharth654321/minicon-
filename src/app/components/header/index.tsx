@@ -183,31 +183,31 @@ export default function Header() {
         )}
 
         {!isMobile && renderMenus()}
-      </div>
 
-      {/* Right actions */}
-      <div className={styles.actions}>
-        <FavoriteBorderOutlined
-          className={styles.icon}
-          onClick={() => router.push(user ? '/wishlist' : '/login')}
-          style={{ cursor: 'pointer' }}
-        />
-        <AccountCircleIcon
-          className={styles.icon}
-          onClick={() => router.push(user ? '/account' : '/login')}
-          style={{ cursor: 'pointer' }}
-        />
-        <ShoppingCartIcon
-          className={styles.icon}
-          onClick={() => {
-            if (!user) {
-              router.push('/login');
-            } else {
-              setCartOpen(true);
-            }
-          }}
-          style={{ cursor: 'pointer' }}
-        />
+        {/* Right actions */}
+        <div className={styles.actions}>
+          <FavoriteBorderOutlined
+            className={styles.icon}
+            onClick={() => router.push(user ? '/wishlist' : '/login')}
+            style={{ cursor: 'pointer' }}
+          />
+          <AccountCircleIcon
+            className={styles.icon}
+            onClick={() => router.push(user ? '/account' : '/login')}
+            style={{ cursor: 'pointer' }}
+          />
+          <ShoppingCartIcon
+            className={styles.icon}
+            onClick={() => {
+              if (!user) {
+                router.push('/login');
+              } else {
+                setCartOpen(true);
+              }
+            }}
+            style={{ cursor: 'pointer' }}
+          />
+        </div>
       </div>
 
       {/* Mobile menu drawer */}
