@@ -215,8 +215,8 @@ export default function Home() {
         New Arrivals
       </Typography>
 
-      <Box component="section" sx={{ px: { xs: 1, sm: 2 }, py: 4 }}>
-        <Grid container spacing={{ xs: 1, sm: 2, md: 3 }}>
+      <Box component="section" sx={{ px: { xs: 1, sm: 2 , md: 10}, py: 4}}>
+        <Grid container spacing={{ xs: 1, sm: 2, md: 1 }} justifyContent="center">
           {products.map((p) => (
             <Grid item xs={6} sm={4} md={3} key={p.id}>
               <ProductCard

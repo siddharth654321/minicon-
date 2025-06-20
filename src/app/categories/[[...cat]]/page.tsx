@@ -17,9 +17,16 @@ import {
   Drawer,
   useMediaQuery,
   useTheme,
+  Paper,
+  ListItemButton,
+  ListItemText,
+  Chip,
 } from '@mui/material';
 import { GridLegacy as Grid } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import SortIcon from '@mui/icons-material/Sort';
+import FilterListIcon from '@mui/icons-material/FilterList';
 
 /* -------------------------------------------------------------------------- */
 /*                             Product utilities                              */
@@ -40,6 +47,12 @@ export default function CataloguePage() {
   const pathname = usePathname();
   const catSegments = useMemo(() => pathname.split('/').slice(2), [pathname]);
   const [sortOpt, setSortOpt] = useState<string>('');
+  const [sortDrawerOpen, setSortDrawerOpen] = useState(false);
+  
+  // Filter states
+  const [selectedCategories, setSelectedCategories] = useState<Set<string>>(new Set());
+  const [selectedSizes, setSelectedSizes] = useState<Set<string>>(new Set());
+  const [selectedColors, setSelectedColors] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     async function fetchProducts() {
@@ -78,18 +91,41 @@ export default function CataloguePage() {
 
   const filters = useMemo(() => ({
     categories: Array.from(new Set(allProducts.map(p => p.subtitle))).sort(),
-    size: Array.from(new Set(allProducts.map(p => p.size))).sort(),
+    size: ['S', 'M', 'L', 'XL', 'XXL'],
+    colors: Array.from(new Set(allProducts.map(p => p.color))).sort(),
   }), [allProducts]);
 
   /* ---------------- Filter products by label / item ----------------------- */
   const filteredProducts = useMemo(() => {
-    if (catSegments.length === 0) return allProducts;
-    const [labelSlug, itemSlug] = catSegments;
-    if (!itemSlug) return allProducts.filter(p => p.label === labelSlug);
-    return allProducts.filter(
-      p => p.label === labelSlug && p.item === itemSlug
-    );
-  }, [catSegments, allProducts]);
+    let filtered = allProducts;
+    
+    // First apply URL-based filtering
+    if (catSegments.length > 0) {
+      const [labelSlug, itemSlug] = catSegments;
+      if (!itemSlug) {
+        filtered = filtered.filter(p => p.label === labelSlug);
+      } else {
+        filtered = filtered.filter(p => p.label === labelSlug && p.item === itemSlug);
+      }
+    }
+    
+    // Apply category filters
+    if (selectedCategories.size > 0) {
+      filtered = filtered.filter(p => selectedCategories.has(p.subtitle));
+    }
+    
+    // Apply size filters
+    if (selectedSizes.size > 0) {
+      filtered = filtered.filter(p => selectedSizes.has(p.size));
+    }
+    
+    // Apply color filters
+    if (selectedColors.size > 0) {
+      filtered = filtered.filter(p => selectedColors.has(p.color));
+    }
+    
+    return filtered;
+  }, [catSegments, allProducts, selectedCategories, selectedSizes, selectedColors]);
 
   /* ---------------- Optional client-side sorting -------------------------- */
   const products = useMemo(() => {
@@ -103,28 +139,125 @@ export default function CataloguePage() {
   }, [filteredProducts, sortOpt]);
 
   /* ---------------- Human-readable heading -------------------------------- */
-  const heading = useMemo(() => (
-    catSegments.length === 0
+  const heading = useMemo(() => {
+    const baseHeading = catSegments.length === 0
       ? 'All Products'
-      : catSegments.join(' • ').replace(/-/g, ' ')
-  ), [catSegments]);
+      : catSegments.join(' • ').replace(/-/g, ' ');
+    
+    const activeFiltersCount = selectedCategories.size + selectedSizes.size + selectedColors.size;
+    
+    if (activeFiltersCount > 0) {
+      return `${baseHeading} (${activeFiltersCount} filter${activeFiltersCount > 1 ? 's' : ''} applied)`;
+    }
+    
+    return baseHeading;
+  }, [catSegments, selectedCategories, selectedSizes, selectedColors]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
+  // Filter handlers
+  const handleCategoryChange = (category: string, checked: boolean) => {
+    const newCategories = new Set(selectedCategories);
+    if (checked) {
+      newCategories.add(category);
+    } else {
+      newCategories.delete(category);
+    }
+    setSelectedCategories(newCategories);
+  };
+
+  const handleSizeChange = (size: string) => {
+    const newSizes = new Set(selectedSizes);
+    if (newSizes.has(size)) {
+      newSizes.delete(size);
+    } else {
+      newSizes.add(size);
+    }
+    setSelectedSizes(newSizes);
+  };
+
+  const handleColorChange = (color: string) => {
+    const newColors = new Set(selectedColors);
+    if (newColors.has(color)) {
+      newColors.delete(color);
+    } else {
+      newColors.add(color);
+    }
+    setSelectedColors(newColors);
+  };
+
+  const clearAllFilters = () => {
+    setSelectedCategories(new Set());
+    setSelectedSizes(new Set());
+    setSelectedColors(new Set());
+  };
+
+  const handleSortChange = (value: string) => {
+    setSortOpt(value);
+    if (isMobile) {
+      setSortDrawerOpen(false);
+    }
+  };
+
+  const getSortLabel = (value: string) => {
+    switch (value) {
+      case 'new': return 'Newest First';
+      case 'price_low': return 'Price — Low to High';
+      case 'price_high': return 'Price — High to Low';
+      default: return 'Sort by';
+    }
+  };
+
+  const sortOptions = [
+    { value: 'new', label: 'Newest First', icon: '🆕' },
+    { value: 'price_low', label: 'Price — Low to High', icon: '💰' },
+    { value: 'price_high', label: 'Price — High to Low', icon: '💎' },
+  ];
+
   const drawer = (
-    <Box sx={{ width: { xs: '100%', sm: 260 }, p: 2 }}>
+    <Box sx={{ width: { xs: '100%', sm: 260 }, p: 2, overflowX: 'hidden' }}>
+      {/* Clear filters button */}
+      {(selectedCategories.size > 0 || selectedSizes.size > 0 || selectedColors.size > 0) && (
+        <Box sx={{ mb: 2 }}>
+          <Button
+            onClick={clearAllFilters}
+            sx={{
+              border: '1px solid #000',
+              borderRadius: 1,
+              px: 2,
+              py: 0.5,
+              fontSize: 12,
+              color: 'black',
+              backgroundColor: '#fff',
+              '&:hover': { backgroundColor: '#f5f5f5' },
+              fontFamily: 'sans-serif',
+              textTransform: 'none'
+            }}
+          >
+            Clear All Filters
+          </Button>
+        </Box>
+      )}
+
       {/* Category filter */}
       <Typography color='black' variant="subtitle1" fontWeight={700} mb={1} sx={{ fontFamily: 'sans-serif' }}>
         CATEGORIES
       </Typography>
 
-      <List dense sx={{ maxHeight: 320, overflowY: 'auto', color: 'black' }}>
+      <List dense sx={{ maxHeight: 180, overflowY: 'auto', color: 'black' }}>
         {filters.categories.map((c) => (
           <ListItem key={c} disableGutters>
             <FormControlLabel
-              control={<Checkbox size="small" sx={{ color: 'black' }} />}
+              control={
+                <Checkbox 
+                  size="small" 
+                  sx={{ color: 'black' }}
+                  checked={selectedCategories.has(c)}
+                  onChange={(e) => handleCategoryChange(c, e.target.checked)}
+                />
+              }
               label={<Typography variant="body2" style={{color:'black',fontFamily: 'sans-serif'}}>{c}</Typography>}
             />
           </ListItem>
@@ -137,10 +270,17 @@ export default function CataloguePage() {
       <Typography color='black' variant="subtitle1" fontWeight={700} mb={1} sx={{ fontFamily: 'sans-serif' }}>
         SIZE
       </Typography>
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+      <Box sx={{ 
+        display: 'flex', 
+        flexWrap: 'wrap', 
+        gap: 1,
+        maxWidth: '100%',
+        overflowX: 'hidden'
+      }}>
         {filters.size.map((s) => (
           <Button
             key={s}
+            onClick={() => handleSizeChange(s)}
             sx={{
               border: '1px solid #000',
               borderRadius: 1,
@@ -148,21 +288,145 @@ export default function CataloguePage() {
               py: 0.5,
               fontSize: 14,
               cursor: 'pointer',
-              color: 'black',
-              backgroundColor: '#fff',
-              '&:hover': { backgroundColor: '#f5f5f5' },
-              fontFamily: 'sans-serif'
+              color: selectedSizes.has(s) ? 'white' : 'black',
+              backgroundColor: selectedSizes.has(s) ? 'black' : '#fff',
+              '&:hover': { 
+                backgroundColor: selectedSizes.has(s) ? '#333' : '#f5f5f5' 
+              },
+              fontFamily: 'sans-serif',
+              textTransform: 'none',
+              minWidth: 'auto',
+              flexShrink: 0
             }}
           >
             {s}
           </Button>
         ))}
       </Box>
+
+      <Divider sx={{ my: 2, color: 'black' }} />
+
+      {/* Color filter */}
+      <Typography color='black' variant="subtitle1" fontWeight={700} mb={1} sx={{ fontFamily: 'sans-serif' }}>
+        COLORS
+      </Typography>
+      <Box sx={{ 
+        display: 'flex', 
+        flexWrap: 'wrap', 
+        gap: 1,
+        maxWidth: '100%',
+        overflowX: 'hidden'
+      }}>
+        {filters.colors.map((color) => (
+          <Button
+            key={color}
+            onClick={() => handleColorChange(color)}
+            sx={{
+              border: '1px solid #000',
+              borderRadius: 1,
+              px: 1.5,
+              py: 0.5,
+              fontSize: 12,
+              cursor: 'pointer',
+              color: selectedColors.has(color) ? 'white' : 'black',
+              backgroundColor: selectedColors.has(color) ? 'black' : '#fff',
+              '&:hover': { 
+                backgroundColor: selectedColors.has(color) ? '#333' : '#f5f5f5' 
+              },
+              fontFamily: 'sans-serif',
+              textTransform: 'none',
+              minWidth: 'auto',
+              flexShrink: 0
+            }}
+          >
+            {color}
+          </Button>
+        ))}
+      </Box>
+    </Box>
+  );
+
+  // Mobile sort drawer
+  const mobileSortDrawer = (
+    <Box sx={{ p: 3 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3 }}>
+        <Typography variant="h6" fontWeight={600} sx={{ fontFamily: 'sans-serif', color: 'black' }}>
+          Sort Products
+        </Typography>
+        <IconButton onClick={() => setSortDrawerOpen(false)}>
+          <Typography sx={{ fontSize: 24, color: 'black' }}>×</Typography>
+        </IconButton>
+      </Box>
+      
+      <List>
+        <ListItem disablePadding sx={{ mb: 1 }}>
+          <ListItemButton
+            onClick={() => handleSortChange('')}
+            sx={{
+              borderRadius: 2,
+              border: sortOpt === '' ? '2px solid #000' : '1px solid #e0e0e0',
+              backgroundColor: sortOpt === '' ? '#f8f8f8' : 'transparent',
+              '&:hover': {
+                backgroundColor: '#f5f5f5',
+                border: '2px solid #000',
+              },
+            }}
+          >
+            <ListItemText
+              primary={
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Typography variant="body1" sx={{ fontFamily: 'sans-serif', fontWeight: sortOpt === '' ? 600 : 400 }}>
+                    Sort by
+                  </Typography>
+                  {sortOpt === '' && <Chip label="Default" size="small" sx={{ fontSize: 10, height: 20 }} />}
+                </Box>
+              }
+            />
+          </ListItemButton>
+        </ListItem>
+        
+        {sortOptions.map((option) => (
+          <ListItem key={option.value} disablePadding sx={{ mb: 1 }}>
+            <ListItemButton
+              onClick={() => handleSortChange(option.value)}
+              sx={{
+                borderRadius: 2,
+                border: sortOpt === option.value ? '2px solid #000' : '1px solid #e0e0e0',
+                backgroundColor: sortOpt === option.value ? '#f8f8f8' : 'transparent',
+                '&:hover': {
+                  backgroundColor: '#f5f5f5',
+                  border: '2px solid #000',
+                },
+              }}
+            >
+              <ListItemText
+                primary={
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Typography variant="body1" sx={{ fontFamily: 'sans-serif', fontWeight: sortOpt === option.value ? 600 : 400 }}>
+                      {option.label}
+                    </Typography>
+                    {sortOpt === option.value && <Chip label="Selected" size="small" sx={{ fontSize: 10, height: 20 }} />}
+                  </Box>
+                }
+              />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
     </Box>
   );
 
   return (
-    <Box component="section" sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, px: { xs: 1, sm: 2 }, py: 4, gap: 4, backgroundColor: '#fff' }}>
+    <Box component="section" sx={{ 
+      display: 'flex', 
+      flexDirection: { xs: 'column', md: 'row' }, 
+      px: { xs: 1, sm: 2 }, 
+      py: 4, 
+      gap: 4, 
+      backgroundColor: '#fff',
+      overflowX: 'hidden',
+      maxWidth: '100vw'
+    }}>
       {/* Mobile drawer toggle */}
       {isMobile && (
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -173,7 +437,7 @@ export default function CataloguePage() {
             onClick={handleDrawerToggle}
             sx={{ mr: 2, color: 'black' }}
           >
-            <MenuIcon />
+            <FilterListIcon />
           </IconButton>
           <Typography color='black' variant="h6" fontWeight={600} sx={{ fontFamily: 'sans-serif' }}>
             {heading} — {products.length} items
@@ -199,13 +463,21 @@ export default function CataloguePage() {
           {drawer}
         </Drawer>
       ) : (
-        <Box sx={{ width: 260, flexShrink: 0, overflowY: 'auto', backgroundColor: '#fff', color: 'black', borderRight: '1px solid #eee' }}>
+        <Box sx={{ 
+          width: 260, 
+          flexShrink: 0, 
+          overflowY: 'auto', 
+          overflowX: 'hidden',
+          backgroundColor: '#fff', 
+          color: 'black', 
+          borderRight: '1px solid #eee' 
+        }}>
           {drawer}
         </Box>
       )}
 
       {/* Main content */}
-      <Box sx={{ flex: 1, minWidth: 0 }}>
+      <Box sx={{ flex: 1, minWidth: 0, overflowX: 'hidden' }}>
         {/* Top bar - only show on desktop */}
         {!isMobile && (
           <Box
@@ -220,191 +492,150 @@ export default function CataloguePage() {
               {heading} — {products.length} items
             </Typography>
 
-            <Select
-              size="small"
-              displayEmpty
-              value={sortOpt}
-              onChange={(e) => setSortOpt(e.target.value)}
+            {/* Premium Desktop Sort Select */}
+            <Paper
+              elevation={0}
               sx={{
-                border: '1px solid black',
-                color: 'black',
-                '.MuiSelect-icon': { color: 'black' },
-                backgroundColor: 'transparent',
-                fontFamily: 'sans-serif'
-              }}
-              MenuProps={{
-                PaperProps: {
-                  sx: {
-                    backgroundColor: '#fff',
-                    color: 'black',
-                    border: '1px solid black',
-                    fontFamily: 'sans-serif'
-                  },
+                border: '1px solid #e0e0e0',
+                borderRadius: 2,
+                overflow: 'hidden',
+                '&:hover': {
+                  border: '1px solid #000',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
                 },
+                transition: 'all 0.2s ease-in-out',
               }}
             >
-              <MenuItem
-                value=""
+              <Select
+                size="small"
+                displayEmpty
+                value={sortOpt}
+                onChange={(e) => setSortOpt(e.target.value)}
+                IconComponent={KeyboardArrowDownIcon}
                 sx={{
-                backgroundColor: '#fff',
-                color: 'black',
-                border: '1px solid black',
-                '&.Mui-selected': {
-                  backgroundColor: '#f5f5f5',
-                },
-                '&:hover': {
-                  backgroundColor: '#f5f5f5',
-                },
-                fontFamily: 'sans-serif'
+                  minWidth: 200,
+                  color: 'black',
+                  backgroundColor: 'transparent',
+                  fontFamily: 'sans-serif',
+                  fontWeight: 500,
+                  '& .MuiSelect-select': {
+                    py: 1.5,
+                    px: 2,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1,
+                  },
+                  '& .MuiSelect-icon': { 
+                    color: 'black',
+                    transition: 'transform 0.2s ease-in-out',
+                  },
+                  '&.Mui-focused .MuiSelect-icon': {
+                    transform: 'rotate(180deg)',
+                  },
+                  '& fieldset': { border: 'none' },
+                }}
+                MenuProps={{
+                  PaperProps: {
+                    sx: {
+                      mt: 1,
+                      borderRadius: 2,
+                      boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
+                      border: '1px solid #e0e0e0',
+                      overflow: 'hidden',
+                    },
+                  },
                 }}
               >
-                Select Sorting Options
-              </MenuItem>
-              <MenuItem
-                value="new"
-                sx={{
-                backgroundColor: '#fff',
-                color: 'black',
-                border: '1px solid black',
-                '&.Mui-selected': {
-                  backgroundColor: '#f5f5f5',
-                },
-                '&:hover': {
-                  backgroundColor: '#f5f5f5',
-                },fontFamily: 'sans-serif'
-                }}
-              >
-                Newest First
-              </MenuItem>
-              <MenuItem
-                value="price_low"
-                sx={{
-                backgroundColor: '#fff',
-                color: 'black',
-                border: '1px solid black',
-                '&.Mui-selected': {
-                  backgroundColor: '#f5f5f5',
-                },
-                '&:hover': {
-                  backgroundColor: '#f5f5f5',
-                },fontFamily: 'sans-serif'
-                }}
-              >
-                Price — Low to High
-              </MenuItem>
-              <MenuItem
-                value="price_high"
-                sx={{
-                backgroundColor: '#fff',
-                color: 'black',
-                border: '1px solid black',
-                '&.Mui-selected': {
-                  backgroundColor: '#f5f5f5',
-                },
-                '&:hover': {
-                  backgroundColor: '#f5f5f5',
-                },fontFamily: 'sans-serif'
-                }}
-              >
-                Price — High to Low
-              </MenuItem>
-            </Select>
+                <MenuItem
+                  value=""
+                  sx={{
+                    py: 1.5,
+                    px: 2,
+                    fontFamily: 'sans-serif',
+                    '&.Mui-selected': {
+                      backgroundColor: '#f8f8f8',
+                      fontWeight: 600,
+                    },
+                    '&:hover': {
+                      backgroundColor: '#f5f5f5',
+                    },
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <SortIcon sx={{ fontSize: 18, color: '#666' }} />
+                    <Typography>Sort by</Typography>
+                  </Box>
+                </MenuItem>
+                {sortOptions.map((option) => (
+                  <MenuItem
+                    key={option.value}
+                    value={option.value}
+                    sx={{
+                      py: 1.5,
+                      px: 2,
+                      fontFamily: 'sans-serif',
+                      '&.Mui-selected': {
+                        backgroundColor: '#f8f8f8',
+                        fontWeight: 600,
+                      },
+                      '&:hover': {
+                        backgroundColor: '#f5f5f5',
+                      },
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <Typography>{option.label}</Typography>
+                    </Box>
+                  </MenuItem>
+                ))}
+              </Select>
+            </Paper>
           </Box>
         )}
 
         {/* Mobile sorting - show below the header */}
         {isMobile && (
           <Box sx={{ mb: 2 }}>
-            <Select
-              fullWidth
-              size="small"
-              displayEmpty
-              value={sortOpt}
-              onChange={(e) => setSortOpt(e.target.value)}
+            <Paper
+              elevation={0}
               sx={{
-                border: '1px solid black',
-                color: 'black',
-                '.MuiSelect-icon': { color: 'black' },
-                backgroundColor: 'transparent',
-                fontFamily: 'sans-serif'
-              }}
-              MenuProps={{
-                PaperProps: {
-                  sx: {
-                    backgroundColor: '#fff',
-                    color: 'black',
-                    border: '1px solid black',
-                    fontFamily: 'sans-serif'
-                  },
+                border: '1px solid #e0e0e0',
+                borderRadius: 2,
+                overflow: 'hidden',
+                '&:hover': {
+                  border: '1px solid #000',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
                 },
+                transition: 'all 0.2s ease-in-out',
               }}
             >
-              <MenuItem
-                value=""
+              <Button
+                fullWidth
+                onClick={() => setSortDrawerOpen(true)}
                 sx={{
-                backgroundColor: '#fff',
-                color: 'black',
-                border: '1px solid black',
-                '&.Mui-selected': {
-                  backgroundColor: '#f5f5f5',
-                },
-                '&:hover': {
-                  backgroundColor: '#f5f5f5',
-                },
-                fontFamily: 'sans-serif'
+                  py: 1.5,
+                  px: 2,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  color: 'black',
+                  backgroundColor: 'transparent',
+                  fontFamily: 'sans-serif',
+                  fontWeight: 500,
+                  textTransform: 'none',
+                  border: 'none',
+                  '&:hover': {
+                    backgroundColor: '#f5f5f5',
+                  },
                 }}
               >
-                Select Sorting Options
-              </MenuItem>
-              <MenuItem
-                value="new"
-                sx={{
-                backgroundColor: '#fff',
-                color: 'black',
-                border: '1px solid black',
-                '&.Mui-selected': {
-                  backgroundColor: '#f5f5f5',
-                },
-                '&:hover': {
-                  backgroundColor: '#f5f5f5',
-                },fontFamily: 'sans-serif'
-                }}
-              >
-                Newest First
-              </MenuItem>
-              <MenuItem
-                value="price_low"
-                sx={{
-                backgroundColor: '#fff',
-                color: 'black',
-                border: '1px solid black',
-                '&.Mui-selected': {
-                  backgroundColor: '#f5f5f5',
-                },
-                '&:hover': {
-                  backgroundColor: '#f5f5f5',
-                },fontFamily: 'sans-serif'
-                }}
-              >
-                Price — Low to High
-              </MenuItem>
-              <MenuItem
-                value="price_high"
-                sx={{
-                backgroundColor: '#fff',
-                color: 'black',
-                border: '1px solid black',
-                '&.Mui-selected': {
-                  backgroundColor: '#f5f5f5',
-                },
-                '&:hover': {
-                  backgroundColor: '#f5f5f5',
-                },fontFamily: 'sans-serif'
-                }}
-              >
-                Price — High to Low
-              </MenuItem>
-            </Select>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <SortIcon sx={{ fontSize: 18, color: '#666' }} />
+                  <Typography>{getSortLabel(sortOpt)}</Typography>
+                </Box>
+                <KeyboardArrowDownIcon sx={{ color: '#666' }} />
+              </Button>
+            </Paper>
           </Box>
         )}
 
@@ -421,6 +652,22 @@ export default function CataloguePage() {
           ))}
         </Grid>
       </Box>
+
+      {/* Mobile Sort Drawer */}
+      <Drawer
+        anchor="bottom"
+        open={sortDrawerOpen}
+        onClose={() => setSortDrawerOpen(false)}
+        PaperProps={{
+          sx: {
+            borderTopLeftRadius: 16,
+            borderTopRightRadius: 16,
+            maxHeight: '70vh',
+          },
+        }}
+      >
+        {mobileSortDrawer}
+      </Drawer>
     </Box>
   );
 }

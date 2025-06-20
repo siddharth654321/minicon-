@@ -497,7 +497,7 @@ export default function CartPage() {
                                 fontFamily: 'sans-serif'
                             }}
                         >
-                            Proceed to Checkout ({formatINR(total)})
+                            Proceed to Payment ({formatINR(total)})
                         </Button>
                     </Box>
                 </Stack>

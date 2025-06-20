@@ -124,7 +124,9 @@ export const ProductCard: React.FC<{
   const handleBuyNow = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     // Go to checkout/buy page
-    router.push(`/checkout?product=${encodeURIComponent(JSON.stringify(product))}`);
+  //  router.push(`/checkout?product=${encodeURIComponent(JSON.stringify(product))}`);
+  router.push(`/cart`);
+
   };
 
   return (
@@ -146,7 +148,7 @@ export const ProductCard: React.FC<{
         position: 'relative',
         cursor: 'pointer',
         overflow: 'hidden',
-        mx: { xs: 'auto', sm: 0 },
+        m: { xs: 1, sm: 1.5, md: 2 }
       }}
     >
       {/* --- Product Image --- */}
@@ -212,6 +214,20 @@ export const ProductCard: React.FC<{
           }}
         >
           ₹{product.price}
+          <Typography
+          variant="subtitle2"
+          fontWeight={400}
+          color="text.secondary"
+          sx={{
+            textDecoration: 'line-through',
+            fontFamily: 'sans-serif',
+            fontSize: { xs: '0.8rem', sm: '0.95rem' },
+            display: 'inline',
+            ml: 1,
+          }}
+        >
+            ₹{product.price + 200}
+        </Typography>
         </Typography>
         {/* Actions */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0.5, sm: 1 } }}>

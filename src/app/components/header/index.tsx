@@ -235,7 +235,7 @@ export default function Header() {
               size="small"
               variant="outlined"
               sx={{
-                mb: 2,
+                
                 background: '#f5f5f5',
                 borderRadius: 1,
                 color: '#000',
@@ -276,9 +276,12 @@ export default function Header() {
                   bgcolor: '#fff',
                   color: '#000',
                   '&:before': { display: 'none' },
-                  border: 'none',
+                  border: '1.5px solid #adacac',
                   boxShadow: 'none',
                   margin: 0,
+                  '&:not(:last-child)': {
+                    borderBottom: 'none',
+                  },
                 }}
               >
                 <AccordionSummary
@@ -302,7 +305,7 @@ export default function Header() {
                   </Typography>
                 </AccordionSummary>
                 <AccordionDetails sx={{ p: 0, m: 0 }}>
-                  {items.map((item) => (
+                  {items.map((item, index) => (
                     <Box
                       key={item}
                       onClick={() => {
@@ -311,7 +314,7 @@ export default function Header() {
                       }}
                       sx={{
                         p: '10px 0 10px 24px',
-                        borderTop: '1px solid #eee',
+                        borderTop: index === 0 ? 'none' : '1px solid #adacac',
                         cursor: 'pointer',
                         '&:hover': { bgcolor: '#f5f5f5' },
                         margin: 0,
