@@ -1,13 +1,26 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { keyframes } from '@mui/system';
-import Box from '@mui/material/Box';
-import { Typography } from '@mui/material';
-import { useMediaQuery } from '@mui/material';
-import { PRODUCTS } from './dummyData';
+import { Box, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { GridLegacy as Grid } from '@mui/material';
 import { ProductCard } from './components/productCard';
-import { GridLegacy as Grid } from '@mui/material';  
+import { useAuth } from './components/AuthProvider';
+import { supabase } from '@/lib/supabaseClient';
+import { Product } from './dummyData';
+
+// Define types for API responses
+interface WishlistItem {
+  product: Product;
+}
+
+interface CartItem {
+  product: Product;
+  quantity: number;
+}
 
 const marqueeImages = [
   '/images/mockup 3.png',
@@ -27,7 +40,48 @@ const scroll = keyframes`
 `;
 
 export default function Home() {
-  const isMobile = useMediaQuery('(max-width:600px)');
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [products, setProducts] = useState<Product[]>([]);
+  const { user } = useAuth();
+  const [wishedIds, setWishedIds] = useState<Set<number>>(new Set());
+  const [cartMap, setCartMap] = useState<Map<number, number>>(new Map());
+
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const res = await fetch('/api/products');
+        const data = await res.json();
+        console.log('Products from Supabase:', data);
+        setProducts(data);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    }
+    fetchProducts();
+  }, []);
+
+  useEffect(() => {
+    if (!user) {
+      setWishedIds(new Set());
+      setCartMap(new Map());
+      return;
+    }
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      const headers: Record<string, string> = {};
+      if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
+      fetch('/api/wishlist', { headers })
+        .then(res => res.ok ? res.json() : [])
+        .then((data: WishlistItem[]) => setWishedIds(new Set(data.map((w) => w.product.id))));
+      fetch('/api/cart', { headers })
+        .then(res => res.ok ? res.json() : [])
+        .then((data: CartItem[]) => {
+          const map = new Map<number, number>();
+          data.forEach((c) => map.set(c.product.id, c.quantity));
+          setCartMap(map);
+        });
+    });
+  }, [user]);
 
   return (
     <Box
@@ -112,8 +166,6 @@ export default function Home() {
             WebkitOverflowScrolling: 'touch',
             userSelect: 'none',
             touchAction: 'pan-x',
-            '-webkit-overflow-scrolling': 'touch',
-            '-ms-overflow-style': 'none',
           }}
         >
           {[...marqueeImages, ...marqueeImages].map((src, i) => (
@@ -172,11 +224,15 @@ export default function Home() {
         New Arrivals
       </Typography>
 
-      <Box component="section" sx={{ px: { xs: 1, sm: 2 }, py: 4 }}>
-        <Grid container spacing={{ xs: 1, sm: 2, md: 3 }}>
-          {PRODUCTS.map((p) => (
+      <Box component="section" sx={{ px: { xs: 1, sm: 2 , md: 10}, py: 4}}>
+        <Grid container spacing={{ xs: 1, sm: 2, md: 1 }} justifyContent="center">
+          {products.map((p) => (
             <Grid item xs={6} sm={4} md={3} key={p.id}>
-              <ProductCard product={p} />
+              <ProductCard
+                product={p}
+                initialIsWished={wishedIds.has(p.id)}
+                initialCartQty={cartMap.get(p.id) ?? 0}
+              />
             </Grid>
           ))}
         </Grid>

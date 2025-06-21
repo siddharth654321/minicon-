@@ -30,7 +30,7 @@ const PreCheckout = () => {
   const value = PRODUCTS.filter((product) => product.id === Number(id));
   const ALL_FILTERS = {
     categories: Array.from(new Set(PRODUCTS.map((p) => p.subtitle))).sort(),
-    size: Array.from(new Set(PRODUCTS.map((p) => p.size))).sort(),
+    size: ['S', 'M', 'L', 'XL', 'XXL'],
   };
   const [selectedSize, setSelectedSize] = React.useState(ALL_FILTERS.size[0] || "");
   const [quantity, setQuantity] = React.useState(1);
