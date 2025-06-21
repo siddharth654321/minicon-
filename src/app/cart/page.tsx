@@ -1,7 +1,10 @@
+'use client'
 import React from 'react'
 import CartPage from '../components/cart'
 
 const Cart = () => {
+
+
   return (
     <div style={{
       backgroundColor: '#fff',
@@ -9,7 +12,7 @@ const Cart = () => {
       display: 'flex',
       flexDirection: 'column',
     }}>
-        <CartPage />
+      <CartPage />
     </div>
   )
 }

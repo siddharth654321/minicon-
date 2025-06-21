@@ -2,7 +2,6 @@
 
 import { useState, MouseEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import Link from 'next/link';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -21,17 +20,21 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import styles from './index.module.css';          // <-- your CSS file
 import { MENUS } from '@/app/dummyData';
-import { Typography } from '@mui/material';
+import { Typography } from '@mui/material'
+import CartDrawer from '../cartDrawer'
+import { useAuth } from '../AuthProvider'
 
 export default function Header() {
   const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const { user } = useAuth();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [activeMenu, setActiveMenu] = useState<number | null>(null);
   const [search, setSearch] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [expandedAccordion, setExpandedAccordion] = useState<string | false>(false);
+  const [cartOpen, setCartOpen] = useState(false);
 
   const handleOpen =
     (index: number) =>
@@ -123,17 +126,18 @@ export default function Header() {
       {/* Center group: logo, search bar, menus */}
       <div className={styles.centerGroup}>
         <Link href="/" scroll={false} className={styles.logo}>
-          <Image
-            src="/images/logoGif.gif"
-            alt="Logo"
-            width={150}
-            height={50}
+          <video
+            src="/images/logomp4.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
             style={{
               height: 'auto',
-              width: isMobile ? '120px' : '8vw',
+              width: isMobile ? '100px' : '8vw',
               maxWidth: '150px',
+              minWidth: '80px',
             }}
-            priority
           />
         </Link>
 
@@ -179,25 +183,31 @@ export default function Header() {
         )}
 
         {!isMobile && renderMenus()}
-      </div>
 
-      {/* Right actions */}
-      <div className={styles.actions}>
-        <FavoriteBorderOutlined
-          className={styles.icon}
-          onClick={() => router.push('/wishlist')}
-          style={{ cursor: 'pointer' }}
-        />
-        <AccountCircleIcon
-          className={styles.icon}
-          onClick={() => router.push('/account')}
-          style={{ cursor: 'pointer' }}
-        />
-        <ShoppingCartIcon
-          className={styles.icon}
-          onClick={() => router.push('/cart')}
-          style={{ cursor: 'pointer' }}
-        />
+        {/* Right actions */}
+        <div className={styles.actions}>
+          <FavoriteBorderOutlined
+            className={styles.icon}
+            onClick={() => router.push(user ? '/wishlist' : '/login')}
+            style={{ cursor: 'pointer' }}
+          />
+          <AccountCircleIcon
+            className={styles.icon}
+            onClick={() => router.push(user ? '/account' : '/login')}
+            style={{ cursor: 'pointer' }}
+          />
+          <ShoppingCartIcon
+            className={styles.icon}
+            onClick={() => {
+              if (!user) {
+                router.push('/login');
+              } else {
+                setCartOpen(true);
+              }
+            }}
+            style={{ cursor: 'pointer' }}
+          />
+        </div>
       </div>
 
       {/* Mobile menu drawer */}
@@ -225,7 +235,7 @@ export default function Header() {
               size="small"
               variant="outlined"
               sx={{
-                mb: 2,
+                
                 background: '#f5f5f5',
                 borderRadius: 1,
                 color: '#000',
@@ -266,9 +276,12 @@ export default function Header() {
                   bgcolor: '#fff',
                   color: '#000',
                   '&:before': { display: 'none' },
-                  border: 'none',
+                  border: '1.5px solid #adacac',
                   boxShadow: 'none',
                   margin: 0,
+                  '&:not(:last-child)': {
+                    borderBottom: 'none',
+                  },
                 }}
               >
                 <AccordionSummary
@@ -292,7 +305,7 @@ export default function Header() {
                   </Typography>
                 </AccordionSummary>
                 <AccordionDetails sx={{ p: 0, m: 0 }}>
-                  {items.map((item) => (
+                  {items.map((item, index) => (
                     <Box
                       key={item}
                       onClick={() => {
@@ -301,7 +314,7 @@ export default function Header() {
                       }}
                       sx={{
                         p: '10px 0 10px 24px',
-                        borderTop: '1px solid #eee',
+                        borderTop: index === 0 ? 'none' : '1px solid #adacac',
                         cursor: 'pointer',
                         '&:hover': { bgcolor: '#f5f5f5' },
                         margin: 0,
@@ -318,6 +331,7 @@ export default function Header() {
           </Box>
         </Box>
       </Drawer>
+      <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
     </header>
   );
 }

@@ -19,35 +19,26 @@ export default function Footer() {
       <Container maxWidth="lg">
         <Box sx={{ px: { xs: 2, sm: 3 }, py: { xs: 3, sm: 4 } }}>
           <Grid container spacing={4}>
-            {/* Left Column: About Us & Policies */}
-            <Grid size={6}>
+            {/* Left Column: Policies */}
+            <Grid size={{ xs: 12, sm: 6 }}>
               <Stack spacing={3}>
-                {/* About Us */}
-                <Box>
-                  <Link href="/about" underline="hover" sx={{ fontWeight: 700, mb: 1, letterSpacing: 1, fontSize: '0.875rem', color: 'inherit', display: 'inline-block' }}>ABOUT US</Link>
-                  <Typography variant="body2" sx={{ mb: 0.5 }}>Minicon</Typography>
-                  <Typography variant="body2" sx={{ mb: 0.5 }}>
-                    Contact Us<br />
-                    8777073645<br />
-                    <Link href="mailto:miniconclothing@gmail.com" underline="hover" sx={{ color: 'primary.main', fontWeight: 500 }}>miniconclothing@gmail.com</Link>
-                  </Typography>
-                </Box>
                 {/* Policies */}
                 <Box>
                   <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1, letterSpacing: 1 }}>POLICIES</Typography>
                   <Stack spacing={0.5}>
-                    <Link href="#" underline="hover" sx={{ color: 'inherit', fontSize: 14 }}>Return Your Order</Link>
-                    <Link href="#" underline="hover" sx={{ color: 'inherit', fontSize: 14 }}>Shipping Policy</Link>
-                    <Link href="/help" underline="hover" sx={{ color: 'inherit', fontSize: 14 }}>Return, Refund, and Cancellation</Link>
-                    <Link href="/terms" underline="hover" sx={{ color: 'inherit', fontSize: 14 }}>Terms and Conditions</Link>
+                    <Link href="/about" underline="hover" sx={{ color: 'inherit', fontSize: 14 }}>ABOUT US</Link>
+                    <Link href="/returnPolicy" underline="hover" sx={{ color: 'inherit', fontSize: 14 }}>Return Your Order</Link>
+                    <Link href="/shipping" underline="hover" sx={{ color: 'inherit', fontSize: 14 }}>Shipping Policy</Link>
+                    <Link href="/cancelRefund" underline="hover" sx={{ color: 'inherit', fontSize: 14 }}>Cancel and refund</Link>
+                    <Link href="/disclaimer" underline="hover" sx={{ color: 'inherit', fontSize: 14 }}>Disclaimer</Link>
                     <Link href="/privacy" underline="hover" sx={{ color: 'inherit', fontSize: 14 }}>Privacy Policy</Link>
-                    <Link href="#" underline="hover" sx={{ color: 'inherit', fontSize: 14 }}>Contact Us</Link>
+                    <Link href="/contact" underline="hover" sx={{ color: 'inherit', fontSize: 14 }}>Contact Us</Link>
                   </Stack>
                 </Box>
               </Stack>
             </Grid>
             {/* Right Column: Newsletter & Follow Us */}
-            <Grid size={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <Stack spacing={3}>
                 {/* Newsletter */}
                 <Box>

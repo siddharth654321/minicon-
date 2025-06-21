@@ -4,8 +4,12 @@ import Image from 'next/image';
 import { Box, Typography, Button, IconButton } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabaseClient';
+import { useAuth } from '../AuthProvider';
 
 export interface Product {
   id: number;
@@ -15,26 +19,114 @@ export interface Product {
   image: string;
 }
 
-export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
+export const ProductCard: React.FC<{
+  product: Product;
+  initialIsWished?: boolean;
+  initialCartQty?: number;
+}> = ({ product, initialIsWished, initialCartQty }) => {
   const router = useRouter();
-  const [isWished, setIsWished] = useState(false);
-  const [addCart, setAddCart] = useState(false);
+  const { user } = useAuth();
+  const [isWished, setIsWished] = useState(initialIsWished ?? false);
+  const [cartQty, setCartQty] = useState(initialCartQty ?? 0);
+
+  useEffect(() => {
+    if (!user) return;
+    if (initialIsWished !== undefined && initialCartQty !== undefined) return;
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      const headers: Record<string, string> = {};
+      if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
+      fetch(`/api/wishlist?productId=${product.id}`, { headers })
+        .then(res => res.ok ? res.json() : null)
+        .then(data => setIsWished(!!data));
+      fetch(`/api/cart?productId=${product.id}`, { headers })
+        .then(res => res.ok ? res.json() : null)
+        .then(data => setCartQty(data?.quantity ?? 0));
+    });
+  }, [user, product.id, initialIsWished, initialCartQty]);
+
+  useEffect(() => {
+    if (initialIsWished !== undefined) setIsWished(initialIsWished);
+  }, [initialIsWished]);
+
+  useEffect(() => {
+    if (initialCartQty !== undefined) setCartQty(initialCartQty);
+  }, [initialCartQty]);
 
   // Handlers
-  const handleWishlistToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleWishlistToggle = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    setIsWished((prev) => !prev);
+    if (!user) {
+      router.push('/login');
+      return;
+    }
+    const { data: { session } } = await supabase.auth.getSession();
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
+    if (isWished) {
+      await fetch('/api/wishlist', { method: 'DELETE', headers, body: JSON.stringify({ product_id: product.id }) });
+      setIsWished(false);
+    } else {
+      await fetch('/api/wishlist', { method: 'POST', headers, body: JSON.stringify({ product_id: product.id }) });
+      setIsWished(true);
+    }
   };
 
-  const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleAddToCart = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-   setAddCart((prev) => !prev);
+    if (!user) {
+      router.push('/login');
+      return;
+    }
+    const { data: { session } } = await supabase.auth.getSession();
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
+    const res = await fetch('/api/cart', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ product_id: product.id, quantity: 1 })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      setCartQty(data.quantity);
+    }
+  };
+
+  const handleIncrease = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    handleAddToCart(e);
+  };
+
+  const handleDecrease = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    if (!user) {
+      router.push('/login');
+      return;
+    }
+    const { data: { session } } = await supabase.auth.getSession();
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
+    if (cartQty <= 1) {
+      await fetch('/api/cart', { method: 'DELETE', headers, body: JSON.stringify({ product_id: product.id }) });
+      setCartQty(0);
+    } else {
+      const res = await fetch('/api/cart', {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify({ product_id: product.id, quantity: cartQty - 1 })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setCartQty(data.quantity);
+      }
+    }
   };
 
   const handleBuyNow = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     // Go to checkout/buy page
-    router.push(`/checkout?product=${encodeURIComponent(JSON.stringify(product))}`);
+  //  router.push(`/checkout?product=${encodeURIComponent(JSON.stringify(product))}`);
+  router.push(`/cart`);
+
   };
 
   return (
@@ -56,7 +148,7 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
         position: 'relative',
         cursor: 'pointer',
         overflow: 'hidden',
-        mx: { xs: 'auto', sm: 0 },
+        m: { xs: 1, sm: 1.5, md: 2 }
       }}
     >
       {/* --- Product Image --- */}
@@ -122,6 +214,20 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
           }}
         >
           ₹{product.price}
+          <Typography
+          variant="body2"
+          fontWeight={400}
+          color="text.secondary"
+          sx={{
+            textDecoration: 'line-through',
+            fontFamily: 'sans-serif',
+            fontSize: { xs: '0.8rem', sm: '0.95rem' },
+            display: 'inline',
+            ml: 1,
+          }}
+        >
+            ₹{product.price + 200}
+        </Typography>
         </Typography>
         {/* Actions */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0.5, sm: 1 } }}>
@@ -135,16 +241,27 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
           >
             <FavoriteIcon sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }} />
           </IconButton>
-          <IconButton
-            aria-label="add to cart"
-            onClick={handleAddToCart}
-            sx={{ 
-              color: addCart ? '#3399ff' : 'grey.600',
-              padding: { xs: 0.5, sm: 1 }
-            }}
-          >
-            <ShoppingCartIcon sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }} />
-          </IconButton>
+          {cartQty === 0 ? (
+            <IconButton
+              aria-label="add to cart"
+              onClick={handleAddToCart}
+              sx={{ color: 'grey.600', padding: { xs: 0.5, sm: 1 } }}
+            >
+              <ShoppingCartIcon sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }} />
+            </IconButton>
+          ) : (
+            <Box sx={{ display: 'flex', alignItems: 'center', bgcolor: '#f5f5f5', borderRadius: 1 }}>
+              <IconButton onClick={handleDecrease} size="small" sx={{ p: 0.5 }}>
+                <RemoveIcon fontSize="inherit" />
+              </IconButton>
+              <Typography sx={{ mx: 0.5, fontSize: { xs: '0.8rem', sm: '0.875rem' }, fontFamily: 'sans-serif' }}>
+                {cartQty}
+              </Typography>
+              <IconButton onClick={handleIncrease} size="small" sx={{ p: 0.5 }}>
+                <AddIcon fontSize="inherit" />
+              </IconButton>
+            </Box>
+          )}
           <Button
             onClick={handleBuyNow}
             size="small"
