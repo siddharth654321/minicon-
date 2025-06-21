@@ -4,8 +4,6 @@ import { Box, Typography, Container, Paper, Stack, Divider, Accordion, Accordion
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import EmailIcon from '@mui/icons-material/Email';
 import HelpIcon from '@mui/icons-material/Help';
-import CancelIcon from '@mui/icons-material/Cancel';
-import PaymentIcon from '@mui/icons-material/Payment';
 
 export default function CancelRefundPage() {
   const faqs = [
@@ -23,7 +21,7 @@ export default function CancelRefundPage() {
     },
     {
       question: "When am I eligible for a refund?",
-      answer: "You're eligible for a full refund if:\n• You received the wrong product\n• Your product was damaged or misprinted\n• The order was lost in transit and confirmed undeliverable\n• A return claim is approved but cannot be reprinted\n\n📦 Unboxing video + clear images are required for all refund claims."
+      answer: "You&apos;re eligible for a full refund if:\n• You received the wrong product\n• Your product was damaged or misprinted\n• The order was lost in transit and confirmed undeliverable\n• A return claim is approved but cannot be reprinted\n\n📦 Unboxing video + clear images are required for all refund claims."
     },
     {
       question: "Can I cancel a COD (Cash on Delivery) order?",
@@ -123,7 +121,7 @@ export default function CancelRefundPage() {
             ❓ Still Need Help?
           </Typography>
           <Typography variant="h6" sx={{ color: 'text.secondary' }}>
-            We're always here to help.
+            We&apos;re always here to help.
           </Typography>
           
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>

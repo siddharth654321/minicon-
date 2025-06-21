@@ -1,7 +1,6 @@
 'use client';
 
 import { Box, Typography, Container, Paper, Stack, Divider } from '@mui/material';
-import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
@@ -28,8 +27,8 @@ export default function ContactPage() {
           mx: 'auto',
           lineHeight: 1.6
         }}>
-          We'd love to hear from you! Whether you have a question about your order, 
-          need styling advice, or just want to say hello — we're here to help.
+          We&apos;d love to hear from you! Whether you have a question about your order, 
+          need styling advice, or just want to say hello — we&apos;re here to help.
         </Typography>
       </Box>
 

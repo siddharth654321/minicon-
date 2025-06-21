@@ -10,11 +10,11 @@ const Disclaimer = () => {
       </Typography>
       
       <Typography fontSize={{ xs: '1rem', md: '1.1rem' }} mb={3} color="#222" lineHeight={1.7}>
-        This Disclaimer ("Disclaimer", "Policy") governs the use of the website www.minicon.in ("Website") and all related services, products, and content provided by MINICON & TRX TRNDS ("Company", "we", "us", or "our").
+        This Disclaimer (&quot;Disclaimer&quot;, &quot;Policy&quot;) governs the use of the website www.minicon.in (&quot;Website&quot;) and all related services, products, and content provided by MINICON & TRX TRNDS (&quot;Company&quot;, &quot;we&quot;, &quot;us&quot;, or &quot;our&quot;).
       </Typography>
       
       <Typography fontSize={{ xs: '1rem', md: '1.1rem' }} mb={4} color="#222" lineHeight={1.7}>
-        By accessing, browsing, or using this Website, you ("User", "you") agree to be bound by this Disclaimer. If you do not agree with any part of this Disclaimer, you must refrain from using our website or services.
+        By accessing, browsing, or using this Website, you (&quot;User&quot;, &quot;you&quot;) agree to be bound by this Disclaimer. If you do not agree with any part of this Disclaimer, you must refrain from using our website or services.
       </Typography>
 
       <Box sx={{ borderBottom: '1px solid #ccc', mb: 3 }}></Box>
@@ -56,7 +56,7 @@ const Disclaimer = () => {
 
       <Typography variant="h5" fontWeight={500} mb={2} fontSize={{ xs: '1.3rem', md: '1.5rem' }}>4. Sizing and Fit</Typography>
       <Typography fontSize={{ xs: '1rem', md: '1.1rem' }} mb={2} color="#222" lineHeight={1.7}>
-        Each product includes a detailed size chart. It is the customer's responsibility to review and select the correct size prior to placing an order. Returns or refunds will not be accepted for sizing issues unless:
+        Each product includes a detailed size chart. It is the customer&apos;s responsibility to review and select the correct size prior to placing an order. Returns or refunds will not be accepted for sizing issues unless:
       </Typography>
       <Box component="ul" sx={{ fontSize: { xs: '1rem', md: '1.1rem' }, color: '#222', ml: 3, mb: 2, lineHeight: 1.7 }}>
         <li>The product differs from the ordered size.</li>

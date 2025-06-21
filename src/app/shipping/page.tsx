@@ -149,7 +149,7 @@ export default function ShippingPage() {
       {/* Additional Info */}
       <Box sx={{ mt: 6, textAlign: 'center' }}>
         <Typography variant="body1" sx={{ color: 'text.secondary', mb: 2 }}>
-          We're committed to providing you with the best shipping experience possible.
+          We&apos;re committed to providing you with the best shipping experience possible.
         </Typography>
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
           For the most up-to-date shipping information, please check your order confirmation email.

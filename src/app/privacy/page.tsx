@@ -109,7 +109,7 @@ const Privacy = () => {
 
       <Box sx={{ borderBottom: '1px solid #ddd', mb: 3 }} />
 
-      <Typography variant="h4" fontWeight={600} mt={3} mb={2} fontSize={{ xs: '1.3rem', md: '1.3rem' }}>8. Children's Privacy</Typography>
+      <Typography variant="h4" fontWeight={600} mt={3} mb={2} fontSize={{ xs: '1.3rem', md: '1.3rem' }}>8. Children&apos;s Privacy</Typography>
       <Typography fontSize={{ xs: '1rem', md: '1.1rem' }} mb={3} color="#222" lineHeight={1.7}>
         Our website and services are not directed at children under 13 years of age. We do not knowingly collect data from children under this age.
       </Typography>
