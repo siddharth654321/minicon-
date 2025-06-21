@@ -1,16 +1,19 @@
 "use client";
-import React, { Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import React, { Suspense, useEffect, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { PRODUCTS } from "../dummyData";
 import Image from "next/image";
-import { Typography, Button, Box, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
+import { Typography, Button, Box, Accordion, AccordionSummary, AccordionDetails, IconButton } from "@mui/material";
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import Input from '@mui/material/Input';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { supabase } from '@/lib/supabaseClient';
+import { useAuth } from '../components/AuthProvider';
 
 const PRODUCT_DESCRIPTION = [
   "100% Super Combed Cotton",
@@ -26,6 +29,8 @@ const PRODUCT_DESCRIPTION = [
 
 const PreCheckout = () => {
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const { user } = useAuth();
   const id = searchParams.get("id");
   const value = PRODUCTS.filter((product) => product.id === Number(id));
   const ALL_FILTERS = {
@@ -35,11 +40,81 @@ const PreCheckout = () => {
   const [selectedSize, setSelectedSize] = React.useState(ALL_FILTERS.size[0] || "");
   const [quantity, setQuantity] = React.useState(1);
   const [pincode, setPincode] = React.useState("");
+  const [isWished, setIsWished] = useState(false);
+
+  // Check initial wishlist and cart status
+  useEffect(() => {
+    if (!value.length || !user) return;
+    const product = value[0];
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      const headers: Record<string, string> = {};
+      if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
+      fetch(`/api/wishlist?productId=${product.id}`, { headers })
+        .then(res => res.ok ? res.json() : null)
+        .then(data => setIsWished(!!data));
+    });
+  }, [user, value]);
 
   if (!value.length) {
     return <Typography color="error">Product not found</Typography>;
   }
   const product = value[0];
+
+  // Handlers
+  const handleWishlistToggle = async () => {
+    if (!user) {
+      router.push('/login');
+      return;
+    }
+    const { data: { session } } = await supabase.auth.getSession();
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
+    if (isWished) {
+      await fetch('/api/wishlist', { method: 'DELETE', headers, body: JSON.stringify({ product_id: product.id }) });
+      setIsWished(false);
+    } else {
+      await fetch('/api/wishlist', { method: 'POST', headers, body: JSON.stringify({ product_id: product.id }) });
+      setIsWished(true);
+    }
+  };
+
+  const handleAddToCart = async () => {
+    if (!user) {
+      router.push('/login');
+      return;
+    }
+    const { data: { session } } = await supabase.auth.getSession();
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
+    const res = await fetch('/api/cart', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ product_id: product.id, quantity: quantity })
+    });
+    if (res.ok) {
+      await res.json();
+    }
+  };
+
+  const handleBuyNow = async () => {
+    if (!user) {
+      router.push('/login');
+      return;
+    }
+    const { data: { session } } = await supabase.auth.getSession();
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
+    
+    // Add product to cart with buyNow parameter to ensure quantity is set correctly
+    await fetch('/api/cart?buyNow=true', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ product_id: product.id, quantity: quantity })
+    });
+    
+    // Redirect to cart page with buyNow parameter
+    router.push(`/cart?buyNow=${product.id}`);
+  };
 
   return (
     <Box
@@ -92,9 +167,22 @@ const PreCheckout = () => {
           pl: { md: 2 },
         }}
       >
-        <Typography sx={{ fontSize: "2.1rem", fontWeight: 700, fontFamily: 'sans-serif', mb: 0.5 }}>
-          {product.title}
-        </Typography>
+        {/* Title with Favorite Icon */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 0.5 }}>
+          <Typography sx={{ fontSize: "2.1rem", fontWeight: 700, fontFamily: 'sans-serif' }}>
+            {product.title}
+          </Typography>
+          <IconButton
+            aria-label="add to wishlist"
+            onClick={handleWishlistToggle}
+            sx={{ 
+              color: isWished ? 'red' : 'grey.600',
+              padding: 1
+            }}
+          >
+            <FavoriteIcon sx={{ fontSize: '1.8rem' }} />
+          </IconButton>
+        </Box>
         <Typography sx={{ fontSize: "1.2rem", mb: 1, fontFamily: 'sans-serif', color: '#555' }}>
           {product.subtitle}
         </Typography>
@@ -156,27 +244,45 @@ const PreCheckout = () => {
           <Button
             variant="contained"
             color="error"
+            onClick={handleAddToCart}
             sx={{
               width: { xs: '100%', sm: 140 },
+              height: 48,
               fontWeight: 700,
               fontFamily: 'sans-serif',
               mb: { xs: 1, sm: 0 },
               fontSize: 16,
+              textTransform: 'none',
+              borderRadius: 2,
+              boxShadow: 'none',
+              '&:hover': {
+                boxShadow: 'none',
+              }
             }}
           >
             Add to Cart
           </Button>
           <Button
-            variant="outlined"
-            color="secondary"
+            variant="contained"
+            onClick={handleBuyNow}
             sx={{
               width: { xs: '100%', sm: 140 },
+              height: 48,
               fontWeight: 700,
               fontFamily: 'sans-serif',
               fontSize: 16,
+              textTransform: 'none',
+              borderRadius: 2,
+              boxShadow: 'none',
+              backgroundColor: 'black',
+              color: 'white',
+              '&:hover': {
+                backgroundColor: 'black',
+                boxShadow: 'none',
+              }
             }}
           >
-            Add to Wishlist
+            Buy Now
           </Button>
         </Box>
         {/* Social Share Icons */}

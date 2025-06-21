@@ -17,6 +17,10 @@ import {
     IconButton,
     Container,
     Divider,
+    Card,
+    CardContent,
+    useTheme,
+    useMediaQuery,
 } from '@mui/material';
 import { supabase } from '@/lib/supabaseClient';
 import { useAuth } from '../AuthProvider';
@@ -24,7 +28,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import PaymentOutlinedIcon from '@mui/icons-material/PaymentOutlined';
-import { Product } from '@/app/dummyData';
+import { Product, preProduct } from '@/app/dummyData';
 
 interface CartItem {
     id: number;
@@ -41,65 +45,121 @@ interface CartApiItem {
     quantity: number;
 }
 
+interface Address {
+    id: string;
+    name: string;
+    line1: string;
+    city: string;
+    state: string;
+    pincode: string;
+    phone: string;
+}
+
 const DUMMY_CART: CartItem[] = [];
 
-const INITIAL_ADDRESSES = [
-    {
-        id: 'ADDR-01',
-        name: 'Siddharth',
-        line1: '221B Baker Street',
-        city: 'London',
-        state: 'Greater London',
-        pincode: 'NW1 6XE',
-        phone: '+44 20 7946 0958',
-    },
-    {
-        id: 'ADDR-02',
-        name: 'Shivam',
-        line1: '742 Evergreen Terrace',
-        city: 'Springfield',
-        state: 'IL',
-        pincode: '62704',
-        phone: '+1 217 555 0113',
-    },
-];
+const emptyAddress: Address = {
+    id: '',
+    name: '',
+    line1: '',
+    city: '',
+    state: '',
+    pincode: '',
+    phone: '',
+};
 
 const formatINR = (v:number) => `₹${v.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
 
-export default function CartPage() {
+export default function CartPage({ buyNowProductId }: { buyNowProductId?: string | null }) {
     const { user } = useAuth();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    
     const [cart, setCart] = useState(DUMMY_CART);
-    const [addresses, setAddresses] = useState(INITIAL_ADDRESSES);
-    const [selectedAddress, setSelectedAddress] = useState(INITIAL_ADDRESSES[0].id);
+    const [addresses, setAddresses] = useState<Address[]>([]);
+    const [selectedAddress, setSelectedAddress] = useState<string>('');
     const [paymentMode, setPaymentMode] = useState('card');
+    
+    // Address management state
     const [openAddModal, setOpenAddModal] = useState(false);
-    const [newAddr, setNewAddr] = useState({
-        name: '',
-        line1: '',
-        city: '',
-        state: '',
-        pincode: '',
-        phone: '',
-    });
+    const [editId, setEditId] = useState<string | null>(null);
+    const [newAddr, setNewAddr] = useState(emptyAddress);
 
     useEffect(() => {
         if (!user) return;
         supabase.auth.getSession().then(({ data: { session } }) => {
             const headers: Record<string, string> = {};
             if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
-            fetch('/api/cart', { headers })
+            
+            // Fetch addresses
+            fetch('/api/addresses', { headers })
                 .then(res => res.ok ? res.json() : [])
-                .then((data: CartApiItem[]) => setCart(data.map((item) => ({
-                    id: item.product.id,
-                    title: item.product.title,
-                    subtitle: item.product.subtitle,
-                    img: item.product.image,
-                    price: item.product.price,
-                    size: item.product.size,
-                    qty: item.quantity,
-                }))))
+                .then((data: Address[]) => {
+                    setAddresses(data);
+                    if (data.length > 0 && !selectedAddress) {
+                        setSelectedAddress(data[0].id);
+                    }
+                });
+            
+            if (buyNowProductId) {
+                // For "Buy Now" - fetch only the specific product
+                fetch(`/api/cart?productId=${buyNowProductId}`, { headers })
+                    .then(res => res.ok ? res.json() : null)
+                    .then(async (data) => {
+                        if (data) {
+                            // Product is already in cart, use the existing quantity
+                            setCart([{
+                                id: data.product.id,
+                                title: data.product.title,
+                                subtitle: data.product.subtitle,
+                                img: data.product.image,
+                                price: data.product.price,
+                                size: data.product.size,
+                                qty: data.quantity,
+                            }]);
+                        } else {
+                            // Product not in cart, add it with quantity 1
+                            const product = preProduct.find(p => p.id === Number(buyNowProductId));
+                            if (product) {
+                                // Add product to cart with quantity 1 using buyNow parameter
+                                await fetch('/api/cart?buyNow=true', {
+                                    method: 'POST',
+                                    headers: { ...headers, 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ product_id: product.id, quantity: 1 })
+                                });
+                                
+                                // Now fetch the cart item
+                                const cartRes = await fetch(`/api/cart?productId=${buyNowProductId}`, { headers });
+                                const cartData = await cartRes.json();
+                                if (cartData) {
+                                    setCart([{
+                                        id: cartData.product.id,
+                                        title: cartData.product.title,
+                                        subtitle: cartData.product.subtitle,
+                                        img: cartData.product.image,
+                                        price: cartData.product.price,
+                                        size: cartData.product.size,
+                                        qty: cartData.quantity,
+                                    }]);
+                                }
+                            }
+                        }
+                    });
+            } else {
+                // For regular cart - fetch all cart items
+                fetch('/api/cart', { headers })
+                    .then(res => res.ok ? res.json() : [])
+                    .then((data: CartApiItem[]) => setCart(data.map((item) => ({
+                        id: item.product.id,
+                        title: item.product.title,
+                        subtitle: item.product.subtitle,
+                        img: item.product.image,
+                        price: item.product.price,
+                        size: item.product.size,
+                        qty: item.quantity,
+                    }))))
+            }
         });
-    }, [user]);
+    }, [user, buyNowProductId, selectedAddress]);
 
     const subtotal = useMemo(
         () => cart.reduce((sum, item) => sum + item.price * item.qty, 0),
@@ -109,26 +169,86 @@ export default function CartPage() {
     const taxes = Math.round(subtotal * 0.05);
     const total = subtotal + shipping + taxes;
 
+    // Address management functions
     function handleAddrChange(e: React.ChangeEvent<HTMLInputElement>) {
         setNewAddr({ ...newAddr, [e.target.name]: e.target.value });
     }
 
-    function handleAddAddress() {
-        const newId = `ADDR-${Date.now()}`;
-        const fullNewAddr = { ...newAddr, id: newId };
-        setAddresses(prev => [...prev, fullNewAddr]);
-        setSelectedAddress(newId);
-        setNewAddr({ name: '', line1: '', city: '', state: '', pincode: '', phone: '' });
-        setOpenAddModal(false);
+    function handleOpenAddressModal(address?: Address) {
+        if (address) {
+            setNewAddr(address);
+            setEditId(address.id);
+        } else {
+            setNewAddr(emptyAddress);
+            setEditId(null);
+        }
+        setOpenAddModal(true);
     }
 
-    const canAdd =
-        newAddr.name.trim() &&
-        newAddr.line1.trim() &&
-        newAddr.city.trim() &&
-        newAddr.state.trim() &&
-        newAddr.pincode.trim() &&
-        newAddr.phone.trim();
+    function handleCloseAddressModal() {
+        setOpenAddModal(false);
+        setEditId(null);
+        setNewAddr(emptyAddress);
+    }
+
+    async function handleAddAddress() {
+        const { data: { session } } = await supabase.auth.getSession();
+        const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+        if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
+        
+        if (editId) {
+            // Update existing address
+            const res = await fetch('/api/addresses', {
+                method: 'PUT',
+                headers,
+                body: JSON.stringify({ ...newAddr, id: editId })
+            });
+            if (res.ok) {
+                const data = await res.json();
+                setAddresses(addresses.map(addr => addr.id === editId ? data : addr));
+                if (selectedAddress === editId) {
+                    setSelectedAddress(data.id);
+                }
+            }
+        } else {
+            // Add new address
+            const res = await fetch('/api/addresses', {
+                method: 'POST',
+                headers,
+                body: JSON.stringify(newAddr)
+            });
+            if (res.ok) {
+                const data = await res.json();
+                setAddresses([data, ...addresses]);
+                if (!selectedAddress) {
+                    setSelectedAddress(data.id);
+                }
+            }
+        }
+        handleCloseAddressModal();
+    }
+
+    async function handleDeleteAddress(id: string) {
+        const { data: { session } } = await supabase.auth.getSession();
+        const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+        if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
+        
+        const res = await fetch('/api/addresses', {
+            method: 'DELETE',
+            headers,
+            body: JSON.stringify({ id })
+        });
+        if (res.ok) {
+            setAddresses(addresses.filter(addr => addr.id !== id));
+            if (selectedAddress === id) {
+                const remainingAddresses = addresses.filter(addr => addr.id !== id);
+                setSelectedAddress(remainingAddresses.length > 0 ? remainingAddresses[0].id : '');
+            }
+        }
+    }
+
+    const canAdd = newAddr.name.trim() && newAddr.line1.trim() && newAddr.city.trim() && 
+                   newAddr.state.trim() && newAddr.pincode.trim() && newAddr.phone.trim();
 
     return (
         // 1. FLEX COLUMN LAYOUT - GROWS AS NEEDED
@@ -164,7 +284,7 @@ export default function CartPage() {
                         wordBreak: 'break-word',
                     }}
                 >
-                    Shopping Cart
+                    {buyNowProductId ? 'Buy Now' : 'Shopping Cart'}
                 </Typography>
 
                 <Stack
@@ -230,7 +350,7 @@ export default function CartPage() {
                                             fontFamily: 'sans-serif'
                                         }}
                                     >
-                                        Cart Items ({cart.length})
+                                        {buyNowProductId ? 'Product' : `Cart Items (${cart.length})`}
                                     </Typography>
 
                                     {cart.map((item) => (
@@ -424,7 +544,7 @@ export default function CartPage() {
                                 </Typography>
                                 <Button
                                     startIcon={<LocationOnOutlinedIcon />}
-                                    onClick={() => setOpenAddModal(true)}
+                                    onClick={() => handleOpenAddressModal()}
                                     sx={{
                                         color: '#fe5000',
                                         '&:hover': { bgcolor: 'rgba(254, 80, 0, 0.04)' },
@@ -435,27 +555,87 @@ export default function CartPage() {
                                 </Button>
                             </Box>
 
-                            <Select
-                                value={selectedAddress}
-                                onChange={(e) => setSelectedAddress(e.target.value)}
-                                fullWidth
-                                size="small"
-                                sx={{ mb: 2 }}
-                            >
-                                {addresses.map((addr) => (
-                                    <MenuItem key={addr.id} value={addr.id}>
-                                        <Box>
-                                            <Typography variant="subtitle2" sx={{ fontFamily: 'sans-serif' }}>{addr.name}</Typography>
-                                            <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'sans-serif' }}>
-                                                {addr.line1}, {addr.city}, {addr.state} - {addr.pincode}
-                                            </Typography>
-                                            <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'sans-serif' }}>
-                                                {addr.phone}
-                                            </Typography>
-                                        </Box>
-                                    </MenuItem>
-                                ))}
-                            </Select>
+                            {addresses.length === 0 ? (
+                                <Box sx={{ textAlign: 'center', py: 3 }}>
+                                    <Typography color="text.secondary" sx={{ fontFamily: 'sans-serif', mb: 2 }}>
+                                        No addresses found. Add your first delivery address.
+                                    </Typography>
+                                    <Button
+                                        variant="outlined"
+                                        onClick={() => handleOpenAddressModal()}
+                                        sx={{ fontFamily: 'sans-serif' }}
+                                    >
+                                        Add Address
+                                    </Button>
+                                </Box>
+                            ) : (
+                                <Stack spacing={2}>
+                                    {addresses.map((addr) => (
+                                        <Card 
+                                            key={addr.id} 
+                                            variant="outlined" 
+                                            sx={{ 
+                                                backgroundColor: selectedAddress === addr.id ? 'rgba(254, 80, 0, 0.04)' : '#fff',
+                                                border: selectedAddress === addr.id ? '2px solid #fe5000' : '1px solid #e0e0e0',
+                                                fontFamily: 'sans-serif',
+                                                cursor: 'pointer',
+                                                '&:hover': {
+                                                    borderColor: '#fe5000',
+                                                    backgroundColor: 'rgba(254, 80, 0, 0.02)'
+                                                }
+                                            }}
+                                            onClick={() => setSelectedAddress(addr.id)}
+                                        >
+                                            <CardContent sx={{ p: 2 }}>
+                                                <Typography 
+                                                    fontWeight={600} 
+                                                    color="black" 
+                                                    gutterBottom
+                                                    variant={isMobile ? "subtitle1" : "h6"}
+                                                    sx={{ fontFamily: 'sans-serif' }}
+                                                >
+                                                    {addr.name}
+                                                </Typography>
+                                                <Typography color="black" sx={{ fontFamily: 'sans-serif' }}>{addr.line1}</Typography>
+                                                <Typography color="black" sx={{ fontFamily: 'sans-serif' }}>
+                                                    {addr.city}, {addr.state} – {addr.pincode}
+                                                </Typography>
+                                                <Typography color="black" sx={{ fontFamily: 'sans-serif' }}>Phone: {addr.phone}</Typography>
+                                                <Divider sx={{ my: 1 }} />
+                                                <Stack 
+                                                    direction={{ xs: 'column', sm: 'row' }} 
+                                                    spacing={1}
+                                                    sx={{ width: { xs: '100%', sm: 'auto' } }}
+                                                >
+                                                    <Button 
+                                                        size="small" 
+                                                        variant="outlined" 
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleOpenAddressModal(addr);
+                                                        }}
+                                                        sx={{ fontFamily: 'sans-serif' }}
+                                                    >
+                                                        Edit
+                                                    </Button>
+                                                    <Button
+                                                        size="small"
+                                                        color="error"
+                                                        variant="outlined"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleDeleteAddress(addr.id);
+                                                        }}
+                                                        sx={{ fontFamily: 'sans-serif' }}
+                                                    >
+                                                        Delete
+                                                    </Button>
+                                                </Stack>
+                                            </CardContent>
+                                        </Card>
+                                    ))}
+                                </Stack>
+                            )}
                         </Paper>
 
                         {/* Payment Method */}
@@ -501,7 +681,7 @@ export default function CartPage() {
                             variant="contained"
                             fullWidth
                             size="large"
-                            disabled={cart.length === 0}
+                            disabled={cart.length === 0 || !selectedAddress}
                             sx={{
                                 py: 1.5,
                                 bgcolor: '#fe5000',
@@ -519,12 +699,10 @@ export default function CartPage() {
                 </Stack>
             </Container>
 
-           
-
-            {/* Add Address Modal */}
+            {/* Add/Edit Address Modal */}
             <Dialog
                 open={openAddModal}
-                onClose={() => setOpenAddModal(false)}
+                onClose={handleCloseAddressModal}
                 maxWidth="sm"
                 fullWidth
                 PaperProps={{
@@ -537,16 +715,19 @@ export default function CartPage() {
                     }
                 }}
             >
-                <DialogTitle sx={{ fontWeight: 600, fontFamily: 'sans-serif' }}>Add New Address</DialogTitle>
+                <DialogTitle sx={{ fontWeight: 600, fontFamily: 'sans-serif' }}>
+                    {editId ? 'Edit Address' : 'Add New Address'}
+                </DialogTitle>
                 <DialogContent>
                     <Stack spacing={2} sx={{ mt: 1 }}>
                         <TextField
-                            label="Name"
+                            label="Full Name"
                             name="name"
                             value={newAddr.name}
                             onChange={handleAddrChange}
+                            required
                             fullWidth
-                            size="small"
+                            autoFocus
                             InputProps={{
                                 sx: { fontFamily: 'sans-serif' }
                             }}
@@ -559,8 +740,8 @@ export default function CartPage() {
                             name="line1"
                             value={newAddr.line1}
                             onChange={handleAddrChange}
+                            required
                             fullWidth
-                            size="small"
                             InputProps={{
                                 sx: { fontFamily: 'sans-serif' }
                             }}
@@ -573,8 +754,8 @@ export default function CartPage() {
                             name="city"
                             value={newAddr.city}
                             onChange={handleAddrChange}
+                            required
                             fullWidth
-                            size="small"
                             InputProps={{
                                 sx: { fontFamily: 'sans-serif' }
                             }}
@@ -587,8 +768,8 @@ export default function CartPage() {
                             name="state"
                             value={newAddr.state}
                             onChange={handleAddrChange}
+                            required
                             fullWidth
-                            size="small"
                             InputProps={{
                                 sx: { fontFamily: 'sans-serif' }
                             }}
@@ -601,8 +782,8 @@ export default function CartPage() {
                             name="pincode"
                             value={newAddr.pincode}
                             onChange={handleAddrChange}
+                            required
                             fullWidth
-                            size="small"
                             InputProps={{
                                 sx: { fontFamily: 'sans-serif' }
                             }}
@@ -615,8 +796,8 @@ export default function CartPage() {
                             name="phone"
                             value={newAddr.phone}
                             onChange={handleAddrChange}
+                            required
                             fullWidth
-                            size="small"
                             InputProps={{
                                 sx: { fontFamily: 'sans-serif' }
                             }}
@@ -628,7 +809,7 @@ export default function CartPage() {
                 </DialogContent>
                 <DialogActions sx={{ p: 2, pt: 0 }}>
                     <Button
-                        onClick={() => setOpenAddModal(false)}
+                        onClick={handleCloseAddressModal}
                         sx={{
                             color: '#666',
                             fontFamily: 'sans-serif'
@@ -647,7 +828,7 @@ export default function CartPage() {
                             fontFamily: 'sans-serif'
                         }}
                     >
-                        Add Address
+                        {editId ? 'Update Address' : 'Add Address'}
                     </Button>
                 </DialogActions>
             </Dialog>

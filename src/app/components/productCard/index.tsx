@@ -123,10 +123,9 @@ export const ProductCard: React.FC<{
 
   const handleBuyNow = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    // Go to checkout/buy page
-  //  router.push(`/checkout?product=${encodeURIComponent(JSON.stringify(product))}`);
-  router.push(`/cart`);
-
+    // Go to cart page with this specific product for "buy now"
+    // The cart component will handle adding the product with quantity 1
+    router.push(`/cart?buyNow=${product.id}`);
   };
 
   return (

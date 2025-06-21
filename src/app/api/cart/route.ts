@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
   if (productId) {
     const { data, error: dbError } = await supabase
       .from('cart')
-      .select('id, quantity')
+      .select('id, quantity, product:products(*)')
       .eq('user_id', user.id)
       .eq('product_id', Number(productId))
       .maybeSingle()
@@ -52,6 +52,7 @@ export async function POST(request: NextRequest) {
   }
 
   const { product_id, quantity = 1 } = await request.json()
+  const buyNow = request.nextUrl.searchParams.get('buyNow') === 'true'
 
   const { data: existing, error: fetchError } = await supabase
     .from('cart')
@@ -66,12 +67,23 @@ export async function POST(request: NextRequest) {
 
   let data, dbError
   if (existing) {
-    ;({ data, error: dbError } = await supabase
-      .from('cart')
-      .update({ quantity: existing.quantity + quantity })
-      .eq('id', existing.id)
-      .select()
-      .single())
+    if (buyNow) {
+      // For "Buy Now" - set quantity to the passed quantity (not always 1)
+      ;({ data, error: dbError } = await supabase
+        .from('cart')
+        .update({ quantity: quantity })
+        .eq('id', existing.id)
+        .select()
+        .single())
+    } else {
+      // Regular add to cart - add to existing quantity
+      ;({ data, error: dbError } = await supabase
+        .from('cart')
+        .update({ quantity: existing.quantity + quantity })
+        .eq('id', existing.id)
+        .select()
+        .single())
+    }
   } else {
     ;({ data, error: dbError } = await supabase
       .from('cart')
