@@ -93,7 +93,7 @@ export default function AddressesSection() {
       const res = await fetch('/api/addresses', {
         method: 'PUT',
         headers,
-        body: JSON.stringify({ id: editId, ...form })
+        body: JSON.stringify({ ...form, id: editId })
       })
       if (res.ok) {
         const data = await res.json()

@@ -215,7 +215,7 @@ export const ProductCard: React.FC<{
         >
           ₹{product.price}
           <Typography
-          variant="subtitle2"
+          variant="body2"
           fontWeight={400}
           color="text.secondary"
           sx={{

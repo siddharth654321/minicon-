@@ -1,16 +1,20 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import { Product } from '@/app/dummyData';
 import { GridLegacy as Grid } from '@mui/material';
 import { Box, Typography } from '@mui/material';
 import { supabase } from '@/lib/supabaseClient';
 import { ProductCard } from '../productCard';
 
+interface WishlistApiItem {
+  product: Product;
+}
+
 export default function WishlistPage() {
   const [wishlist, setWishlist] = useState<Product[]>([]);
-  const router = useRouter();
+  // const router = useRouter();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -18,32 +22,33 @@ export default function WishlistPage() {
       if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
       fetch('/api/wishlist', { headers })
         .then(res => res.ok ? res.json() : [])
-        .then(data => setWishlist(data.map((w: any) => w.product)));
+        .then((data: WishlistApiItem[]) => setWishlist(data.map((w) => w.product)));
     });
   }, []);
 
-  const removeFromWishlist = async (id: number) => {
-    const { data: { session } } = await supabase.auth.getSession();
-    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-    if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
-    const res = await fetch('/api/wishlist', {
-      method: 'DELETE',
-      headers,
-      body: JSON.stringify({ product_id: id })
-    });
-    if (res.ok) {
-      setWishlist((curr) => curr.filter((item) => item.id !== id));
-    }
-  };
+  // TODO: Implement these functions when needed
+  // const removeFromWishlist = async (id: number) => {
+  //   const { data: { session } } = await supabase.auth.getSession();
+  //   const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  //   if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
+  //   const res = await fetch('/api/wishlist', {
+  //     method: 'DELETE',
+  //     headers,
+  //     body: JSON.stringify({ product_id: id })
+  //   });
+  //   if (res.ok) {
+  //     setWishlist((curr) => curr.filter((item) => item.id !== id));
+  //   }
+  // };
 
-  const addToCart = (product: Product) => {
-    // TODO: Connect to cart state/api
-    alert(`Added "${product.title}" to cart!`);
-  };
+  // const addToCart = (product: Product) => {
+  //   // TODO: Connect to cart state/api
+  //   alert(`Added "${product.title}" to cart!`);
+  // };
 
-  const buyNow = (product: Product) => {
-    router.push(`/checkout?product=${encodeURIComponent(JSON.stringify(product))}`);
-  };
+  // const buyNow = (product: Product) => {
+  //   router.push(`/checkout?product=${encodeURIComponent(JSON.stringify(product))}`);
+  // };
 
   return (
     <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: 1200, mx: 'auto', backgroundColor:'#fff'}}>

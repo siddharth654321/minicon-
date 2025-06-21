@@ -9,6 +9,7 @@ import RemoveIcon from '@mui/icons-material/Remove'
 import { supabase } from '@/lib/supabaseClient'
 import { useAuth } from '../AuthProvider'
 import { useRouter } from 'next/navigation'
+import { Product } from '@/app/dummyData'
 
 interface CartItem {
   id: number
@@ -18,6 +19,11 @@ interface CartItem {
   price: number
   size: string
   qty: number
+}
+
+interface CartApiItem {
+  product: Product
+  quantity: number
 }
 
 const formatINR = (v:number) => `₹${v.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`
@@ -34,7 +40,7 @@ export default function CartDrawer({ open, onClose }:{ open:boolean; onClose:()=
       if (session) headers['Authorization'] = `Bearer ${session.access_token}`
       fetch('/api/cart', { headers })
         .then(res => res.ok ? res.json() : [])
-        .then(data => setCart(data.map((item: any) => ({
+        .then((data: CartApiItem[]) => setCart(data.map((item) => ({
           id: item.product.id,
           title: item.product.title,
           subtitle: item.product.subtitle,

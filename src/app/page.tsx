@@ -1,16 +1,26 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { keyframes } from '@mui/system';
-import Box from '@mui/material/Box';
-import { Typography } from '@mui/material';
-import { useMediaQuery } from '@mui/material';
+import { Box, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { GridLegacy as Grid } from '@mui/material';
 import { ProductCard } from './components/productCard';
-import { useEffect, useState } from 'react';
 import { useAuth } from './components/AuthProvider';
 import { supabase } from '@/lib/supabaseClient';
-import { GridLegacy as Grid } from '@mui/material';  
 import { Product } from './dummyData';
+
+// Define types for API responses
+interface WishlistItem {
+  product: Product;
+}
+
+interface CartItem {
+  product: Product;
+  quantity: number;
+}
 
 const marqueeImages = [
   '/images/mockup 3.png',
@@ -30,7 +40,8 @@ const scroll = keyframes`
 `;
 
 export default function Home() {
-  const isMobile = useMediaQuery('(max-width:600px)');
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [products, setProducts] = useState<Product[]>([]);
   const { user } = useAuth();
   const [wishedIds, setWishedIds] = useState<Set<number>>(new Set());
@@ -61,12 +72,12 @@ export default function Home() {
       if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
       fetch('/api/wishlist', { headers })
         .then(res => res.ok ? res.json() : [])
-        .then(data => setWishedIds(new Set(data.map((w: any) => w.product.id))));
+        .then((data: WishlistItem[]) => setWishedIds(new Set(data.map((w) => w.product.id))));
       fetch('/api/cart', { headers })
         .then(res => res.ok ? res.json() : [])
-        .then(data => {
+        .then((data: CartItem[]) => {
           const map = new Map<number, number>();
-          data.forEach((c: any) => map.set(c.product.id, c.quantity));
+          data.forEach((c) => map.set(c.product.id, c.quantity));
           setCartMap(map);
         });
     });
@@ -155,8 +166,6 @@ export default function Home() {
             WebkitOverflowScrolling: 'touch',
             userSelect: 'none',
             touchAction: 'pan-x',
-            '-webkit-overflow-scrolling': 'touch',
-            '-ms-overflow-style': 'none',
           }}
         >
           {[...marqueeImages, ...marqueeImages].map((src, i) => (

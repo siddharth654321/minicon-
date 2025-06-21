@@ -23,7 +23,6 @@ import {
   Chip,
 } from '@mui/material';
 import { GridLegacy as Grid } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import SortIcon from '@mui/icons-material/Sort';
 import FilterListIcon from '@mui/icons-material/FilterList';
@@ -35,6 +34,16 @@ import { Product } from '@/app/dummyData';
 import { ProductCard } from '@/app/components/productCard';
 import { useAuth } from '@/app/components/AuthProvider';
 import { supabase } from '@/lib/supabaseClient';
+
+// Define types for API responses
+interface WishlistItem {
+  product: Product;
+}
+
+interface CartItem {
+  product: Product;
+  quantity: number;
+}
 
 export default function CataloguePage() {
   const theme = useTheme();
@@ -78,12 +87,12 @@ export default function CataloguePage() {
       if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
       fetch('/api/wishlist', { headers })
         .then(res => res.ok ? res.json() : [])
-        .then(data => setWishedIds(new Set(data.map((w: any) => w.product.id))));
+        .then((data: WishlistItem[]) => setWishedIds(new Set(data.map((w) => w.product.id))));
       fetch('/api/cart', { headers })
         .then(res => res.ok ? res.json() : [])
-        .then(data => {
+        .then((data: CartItem[]) => {
           const map = new Map<number, number>();
-          data.forEach((c: any) => map.set(c.product.id, c.quantity));
+          data.forEach((c) => map.set(c.product.id, c.quantity));
           setCartMap(map);
         });
     });

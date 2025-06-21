@@ -24,8 +24,24 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import PaymentOutlinedIcon from '@mui/icons-material/PaymentOutlined';
+import { Product } from '@/app/dummyData';
 
-const DUMMY_CART: any[] = [];
+interface CartItem {
+    id: number;
+    title: string;
+    subtitle: string;
+    img: string;
+    price: number;
+    size: string;
+    qty: number;
+}
+
+interface CartApiItem {
+    product: Product;
+    quantity: number;
+}
+
+const DUMMY_CART: CartItem[] = [];
 
 const INITIAL_ADDRESSES = [
     {
@@ -73,7 +89,7 @@ export default function CartPage() {
             if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
             fetch('/api/cart', { headers })
                 .then(res => res.ok ? res.json() : [])
-                .then(data => setCart(data.map((item: any) => ({
+                .then((data: CartApiItem[]) => setCart(data.map((item) => ({
                     id: item.product.id,
                     title: item.product.title,
                     subtitle: item.product.subtitle,
