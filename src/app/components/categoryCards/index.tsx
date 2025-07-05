@@ -33,7 +33,7 @@ export default function CategoryCards() {
             key={idx}
             sx={{
               position: 'relative',
-              aspectRatio: '16/9',
+              aspectRatio: '9/16',
               width: '100%',
               overflow: 'hidden',
               borderRadius: 2,
