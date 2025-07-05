@@ -1,160 +1,249 @@
 'use client';
 
-import { Box, Typography, Container, Paper, Stack, Divider, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Typography, Container, Accordion, AccordionSummary, AccordionDetails, Chip } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import LocalShippingIcon from '@mui/icons-material/LocalShipping';
-import EmailIcon from '@mui/icons-material/Email';
-import HelpIcon from '@mui/icons-material/Help';
 
 export default function ShippingPage() {
+  const [expanded, setExpanded] = useState<string | false>(false);
+
+  const handleChange = (panel:any) => ( isExpanded:any) => {
+    setExpanded(isExpanded ? panel : false);
+  };
+
   const faqs = [
     {
+      id: 'panel1',
       question: "When will my order be shipped?",
       answer: "All Minicon orders are processed within 2–3 business days. Once ready, your order is shipped immediately."
     },
     {
+      id: 'panel2',
       question: "How long does delivery take?",
       answer: "After dispatch, delivery usually takes:\n• 5–7 days for metro cities\n• 7–10 days for non-metro or remote areas\n\nYou'll receive a tracking link once your order is shipped."
     },
     {
+      id: 'panel3',
       question: "Do you offer express shipping?",
       answer: "Currently, we offer standard shipping across India to maintain fair pricing. Express shipping options may be added in the future."
     },
     {
+      id: 'panel4',
       question: "Is Cash on Delivery (COD) available?",
       answer: "Yes, COD is available in most serviceable pin codes. If COD is not available in your area, you'll be notified at checkout."
     },
     {
+      id: 'panel5',
       question: "How can I track my order?",
       answer: "Once your order ships, you'll receive an email or SMS with a tracking link. You can click the link to follow your order in real-time."
     },
     {
+      id: 'panel6',
       question: "What should I do if I haven't received my order?",
       answer: "If it's been more than 7 business days since dispatch and your tracking hasn't updated, reach out to us at:\n📧 miniconclothing@gmail.com"
     },
     {
+      id: 'panel7',
       question: "Do you ship internationally?",
       answer: "We currently ship only within India. International shipping will be announced soon—stay tuned on our Instagram and website!"
     },
     {
+      id: 'panel8',
       question: "What if my package is delayed?",
       answer: "While we aim for timely delivery, occasional delays may occur due to:\n• Weather disruptions\n• Courier issues\n• Festival seasons or strikes\n\nWe'll keep you informed via email/SMS in such cases."
     }
   ];
 
   return (
-    <Container maxWidth="md" sx={{ py: 6 }}>
-      <Box sx={{ textAlign: 'center', mb: 6 }}>
-        <Typography variant="h3" component="h1" sx={{ 
-          fontWeight: 700, 
-          mb: 2,
-          background: 'linear-gradient(45deg, #1976d2, #42a5f5)',
-          backgroundClip: 'text',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent'
-        }}>
-          📦 SHIPPING – FREQUENTLY ASKED QUESTIONS (FAQS)
-        </Typography>
-        <Typography variant="h6" sx={{ 
-          color: 'text.secondary', 
-          maxWidth: 800, 
-          mx: 'auto',
-          lineHeight: 1.6
-        }}>
-          Everything you need to know about our shipping process, delivery times, and tracking your orders.
-        </Typography>
-      </Box>
+    <Box 
+      sx={{ 
+        minHeight: '100vh', 
+        bgcolor: '#ffffff',
+        py: { xs: 4, md: 8 }
+      }}
+    >
+      <Container maxWidth="md">
+        {/* Header Section */}
+        <Box textAlign="center" mb={6}>
+          <Chip 
+            label="Shipping Policy"
+            sx={{ 
+              mb: 3,
+              bgcolor: '#000',
+              color: 'white',
+              fontSize: '0.875rem',
+              fontWeight: 500,
+              px: 3,
+              py: 2.5,
+              height: 'auto',
+              fontFamily: 'sans-serif'
+            }}
+          />
+          
+          <Typography 
+            variant="h1" 
+            sx={{
+              fontSize: { xs: '2rem', md: '2.5rem' },
+              fontWeight: 700,
+              mb: 3,
+              color: '#000',
+              fontFamily: 'sans-serif'
+            }}
+          >
+            📦 SHIPPING – FREQUENTLY ASKED QUESTIONS (FAQS)
+          </Typography>
+          
+          <Typography 
+            sx={{
+              fontSize: { xs: '1rem', md: '1.125rem' },
+              lineHeight: 1.8,
+              color: '#000',
+              fontFamily: 'sans-serif'
+            }}
+          >
+            Everything you need to know about our shipping process, delivery times, and tracking your orders.
+          </Typography>
+        </Box>
 
-      <Divider sx={{ mb: 6 }} />
-
-      {/* FAQ Section */}
-      <Paper elevation={3} sx={{ p: { xs: 3, md: 6, lg: 6 }, borderRadius: 3, mb: 6 }}>
-        <Stack spacing={3}>
-          {faqs.map((faq, index) => (
-            <Accordion key={index} sx={{ 
-              boxShadow: 'none', 
-              border: '1px solid #e0e0e0',
-              borderRadius: 2,
-              '&:before': { display: 'none' }
-            }}>
+        {/* FAQ Accordion Section */}
+        <Box>
+          {faqs.map((item) => (
+            <Accordion
+              key={item.id}
+              expanded={expanded === item.id}
+              onChange={handleChange(item.id)}
+              sx={{
+                mb: 2,
+                bgcolor: '#fff',
+                border: '1px solid #000',
+                borderRadius: '4px !important',
+                '&:before': {
+                  display: 'none',
+                },
+                boxShadow: 'none',
+              }}
+            >
               <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
+                expandIcon={<ExpandMoreIcon sx={{ color: '#000' }} />}
                 sx={{
+                  '&.MuiAccordionSummary-root': {
+                    minHeight: 64,
+                    px: 3,
+                  },
                   '& .MuiAccordionSummary-content': {
-                    alignItems: 'center',
-                    gap: 1
-                  }
+                    margin: '12px 0',
+                  },
                 }}
               >
-                <Typography variant="h6" sx={{ fontWeight: 600, color: 'primary.main' }}>
-                  🔻 {faq.question}
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails>
                 <Typography 
-                  variant="body1" 
                   sx={{ 
-                    lineHeight: 1.8,
-                    whiteSpace: 'pre-line'
+                    fontWeight: 600, 
+                    fontSize: '1.125rem',
+                    color: '#000',
+                    fontFamily: 'sans-serif'
                   }}
                 >
-                  {faq.answer}
+                  {item.question}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails sx={{ px: 3, pb: 3 }}>
+                <Typography sx={{ 
+                  fontSize: '1rem', 
+                  lineHeight: 1.8, 
+                  color: '#000', 
+                  fontFamily: 'sans-serif',
+                  whiteSpace: 'pre-line'
+                }}>
+                  {item.answer}
                 </Typography>
               </AccordionDetails>
             </Accordion>
           ))}
-        </Stack>
-      </Paper>
+        </Box>
 
-      {/* Contact Section */}
-      <Paper elevation={3} sx={{ p: { xs: 3, md: 6, lg: 6 }, borderRadius: 3, textAlign: 'center' }}>
-        <Stack spacing={3} alignItems="center">
-          <HelpIcon sx={{ fontSize: 48, color: 'primary.main' }} />
-          <Typography variant="h4" sx={{ fontWeight: 700, color: 'primary.main' }}>
-            ❓ Still need help?
-          </Typography>
-          <Typography variant="h6" sx={{ color: 'text.secondary' }}>
-            Reach out anytime.
+        {/* Contact Section */}
+        <Box 
+          textAlign="center"
+          sx={{ 
+            mt: 8,
+            p: 4,
+            bgcolor: '#f8f8f8',
+            borderRadius: 2
+          }}
+        >
+          <Typography 
+            variant="h3" 
+            sx={{
+              fontSize: { xs: '1.5rem', md: '2rem' },
+              fontWeight: 700,
+              mb: 3,
+              color: '#000',
+              fontFamily: 'sans-serif'
+            }}
+          >
+            Still Need Help?
           </Typography>
           
-          <Stack direction={{ xs: 'column', sm: 'row', md: 'row', lg: 'row' }} spacing={3} sx={{ mt: 2 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <EmailIcon sx={{ color: 'primary.main' }} />
-              <Typography 
-                variant="body1" 
-                component="a" 
-                href="mailto:miniconclothing@gmail.com"
-                sx={{ 
-                  color: 'primary.main', 
-                  textDecoration: 'none',
-                  fontWeight: 500,
-                  '&:hover': {
-                    textDecoration: 'underline'
-                  }
-                }}
-              >
-                📩 Email: miniconclothing@gmail.com
-              </Typography>
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <LocalShippingIcon sx={{ color: 'primary.main' }} />
-              <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                📞 Or contact us via our social channels.
-              </Typography>
-            </Box>
-          </Stack>
-        </Stack>
-      </Paper>
+          <Typography 
+            sx={{
+              fontSize: { xs: '1rem', md: '1.125rem' },
+              lineHeight: 1.8,
+              mb: 3,
+              color: '#000',
+              fontFamily: 'sans-serif'
+            }}
+          >
+            Reach out anytime at:
+          </Typography>
+          
+          <Box 
+            sx={{ 
+              display: 'inline-block',
+              bgcolor: '#000',
+              color: 'white',
+              px: 4,
+              py: 2,
+              borderRadius: 1,
+              fontWeight: 600,
+              fontSize: '1rem',
+              fontFamily: 'sans-serif'
+            }}
+          >
+            📧 miniconclothing@gmail.com
+          </Box>
+          
+          <Typography 
+            sx={{
+              fontSize: '1rem',
+              lineHeight: 1.8,
+              color: '#666',
+              mt: 2,
+              fontFamily: 'sans-serif'
+            }}
+          >
+            We'll respond within 24–48 hours.
+          </Typography>
+        </Box>
 
-      {/* Additional Info */}
-      <Box sx={{ mt: 6, textAlign: 'center' }}>
-        <Typography variant="body1" sx={{ color: 'text.secondary', mb: 2 }}>
-          We&apos;re committed to providing you with the best shipping experience possible.
-        </Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          For the most up-to-date shipping information, please check your order confirmation email.
-        </Typography>
-      </Box>
-    </Container>
+        {/* Additional Info */}
+        <Box sx={{ mt: 6, textAlign: 'center' }}>
+          <Typography sx={{ 
+            color: '#666', 
+            mb: 2,
+            fontSize: '1rem',
+            fontFamily: 'sans-serif'
+          }}>
+            We're committed to providing you with the best shipping experience possible.
+          </Typography>
+          <Typography sx={{ 
+            color: '#666',
+            fontSize: '0.875rem',
+            fontFamily: 'sans-serif'
+          }}>
+            For the most up-to-date shipping information, please check your order confirmation email.
+          </Typography>
+        </Box>
+      </Container>
+    </Box>
   );
-} 
+}
