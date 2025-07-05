@@ -43,7 +43,7 @@ export default function ShippingPage() {
   ];
 
   return (
-    <Container maxWidth="lg" sx={{ py: 6 }}>
+    <Container maxWidth="md" sx={{ py: 6 }}>
       <Box sx={{ textAlign: 'center', mb: 6 }}>
         <Typography variant="h3" component="h1" sx={{ 
           fontWeight: 700, 
@@ -68,7 +68,7 @@ export default function ShippingPage() {
       <Divider sx={{ mb: 6 }} />
 
       {/* FAQ Section */}
-      <Paper elevation={3} sx={{ p: { xs: 3, md: 6 }, borderRadius: 3, mb: 6 }}>
+      <Paper elevation={3} sx={{ p: { xs: 3, md: 6, lg: 6 }, borderRadius: 3, mb: 6 }}>
         <Stack spacing={3}>
           {faqs.map((faq, index) => (
             <Accordion key={index} sx={{ 
@@ -107,7 +107,7 @@ export default function ShippingPage() {
       </Paper>
 
       {/* Contact Section */}
-      <Paper elevation={3} sx={{ p: { xs: 3, md: 6 }, borderRadius: 3, textAlign: 'center' }}>
+      <Paper elevation={3} sx={{ p: { xs: 3, md: 6, lg: 6 }, borderRadius: 3, textAlign: 'center' }}>
         <Stack spacing={3} alignItems="center">
           <HelpIcon sx={{ fontSize: 48, color: 'primary.main' }} />
           <Typography variant="h4" sx={{ fontWeight: 700, color: 'primary.main' }}>
@@ -117,7 +117,7 @@ export default function ShippingPage() {
             Reach out anytime.
           </Typography>
           
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3} sx={{ mt: 2 }}>
+          <Stack direction={{ xs: 'column', sm: 'row', md: 'row', lg: 'row' }} spacing={3} sx={{ mt: 2 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <EmailIcon sx={{ color: 'primary.main' }} />
               <Typography 
