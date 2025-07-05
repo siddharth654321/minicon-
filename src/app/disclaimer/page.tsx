@@ -6,7 +6,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 const Disclaimer = () => {
   const [expanded, setExpanded] = useState<string | false>(false);
 
-  const handleChange = (panel:any) => (isExpanded:any) => {
+  const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
     setExpanded(isExpanded ? panel : false);
   };
 
@@ -62,7 +62,7 @@ const Disclaimer = () => {
       content: (
         <>
           <Typography sx={{ fontSize: '1rem', mb: 2, color: '#000', lineHeight: 1.7, fontFamily: 'sans-serif' }}>
-            Each product includes a detailed size chart. It is the customer's responsibility to review and select the correct size prior to placing an order. Returns or refunds will not be accepted for sizing issues unless:
+            Each product includes a detailed size chart. It is the customer&apos;s responsibility to review and select the correct size prior to placing an order. Returns or refunds will not be accepted for sizing issues unless:
           </Typography>
           <Box component="ul" sx={{ fontSize: '1rem', color: '#000', ml: 3, lineHeight: 1.7, fontFamily: 'sans-serif' }}>
             <li>The product differs from the ordered size.</li>
@@ -162,7 +162,7 @@ const Disclaimer = () => {
             lineHeight: 1.7,
             fontFamily: 'sans-serif'
           }}>
-            This Disclaimer ("Disclaimer", "Policy") governs the use of the website www.minicon.in ("Website") and all related services, products, and content provided by MINICON & TRX TRNDS ("Company", "we", "us", or "our").
+            This Disclaimer (&quot;Disclaimer&quot;, &quot;Policy&quot;) governs the use of the website www.minicon.in (&quot;Website&quot;) and all related services, products, and content provided by MINICON & TRX TRNDS (&quot;Company&quot;, &quot;we&quot;, &quot;us&quot;, or &quot;our&quot;).
           </Typography>
           
           <Typography sx={{ 
@@ -172,7 +172,7 @@ const Disclaimer = () => {
             lineHeight: 1.7,
             fontFamily: 'sans-serif'
           }}>
-            By accessing, browsing, or using this Website, you ("User", "you") agree to be bound by this Disclaimer. If you do not agree with any part of this Disclaimer, you must refrain from using our website or services.
+            By accessing, browsing, or using this Website, you (&quot;User&quot;, &quot;you&quot;) agree to be bound by this Disclaimer. If you do not agree with any part of this Disclaimer, you must refrain from using our website or services.
           </Typography>
         </Box>
 

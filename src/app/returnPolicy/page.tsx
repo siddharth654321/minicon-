@@ -6,7 +6,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 const ReturnPolicy = () => {
   const [expanded, setExpanded] = useState<string | false>(false);
 
-  const handleChange = (panel:any) => ( isExpanded:any) => {
+  const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
     setExpanded(isExpanded ? panel : false);
   };
 
@@ -45,7 +45,7 @@ const ReturnPolicy = () => {
               • Returns will not be accepted if the brand tag or labels is removed from the product.
             </Typography>
             <Typography sx={{ fontSize: '0.95rem', lineHeight: 1.7, color: '#000', fontWeight: 600, fontFamily: 'sans-serif' }}>
-              📌 Change of mind or wrong size orders are not eligible for free return/exchange. You'll need to place a new order at your cost.
+              📌 Change of mind or wrong size orders are not eligible for free return/exchange. You&apos;ll need to place a new order at your cost.
             </Typography>
           </Box>
         </>
@@ -107,7 +107,7 @@ const ReturnPolicy = () => {
             Unfortunately, we do not offer returns or exchanges for incorrect size selection.
           </Typography>
           <Typography sx={{ fontSize: '1rem', lineHeight: 1.8, mb: 2, color: '#000', fontFamily: 'sans-serif' }}>
-            However, you may place a new order at your own expense if you'd like to get a different size.
+            However, you may place a new order at your own expense if you&apos;d like to get a different size.
           </Typography>
           <Typography sx={{ fontSize: '1rem', lineHeight: 1.8, color: '#000', fontFamily: 'sans-serif' }}>
             <strong>Tip:</strong> Always refer to our size chart before placing your order.
@@ -128,7 +128,7 @@ const ReturnPolicy = () => {
               A clear unboxing video shows the condition before damage
             </Typography>
             <Typography component="li" sx={{ fontSize: '1rem', lineHeight: 1.8, color: '#000', mb: 1, fontFamily: 'sans-serif' }}>
-              The damage wasn't caused during unpacking
+              The damage wasn&apos;t caused during unpacking
             </Typography>
           </Box>
           <Typography sx={{ fontSize: '1rem', lineHeight: 1.8, color: '#000', fontWeight: 600, fontFamily: 'sans-serif' }}>
@@ -361,7 +361,7 @@ const ReturnPolicy = () => {
               fontFamily: 'sans-serif'
             }}
           >
-            We'll respond within 24–48 hours.
+            We&apos;ll respond within 24–48 hours.
           </Typography>
         </Box>
       </Container>

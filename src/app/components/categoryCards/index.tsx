@@ -23,7 +23,7 @@ const categories: CategoryCardProps[] = [
 export default function CategoryCards() {
 
   return (
-    <Box sx={{ padding: { xs: 1, sm: 2, md: 3 }, mb: 4 }}>
+    <Box sx={{  mb: 4 }}>
       <Grid container spacing={2}>
         {categories.map((category, idx) => (
           <Grid
@@ -45,14 +45,26 @@ export default function CategoryCards() {
               fill
               style={{ objectFit: 'cover' }}
             />
+            {/* Dark to transparent vignette overlay */}
             <Box
               sx={{
                 position: 'absolute',
                 bottom: 0,
                 left: 0,
-                bgcolor: 'rgba(0,0,0,0.4)',
+                right: 0,
+                height: '40%',
+                background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 10%, transparent 20%)',
+                pointerEvents: 'none',
+              }}
+            />
+            <Box
+              sx={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
                 px: 1,
                 py: 0.5,
+                zIndex: 1,
               }}
             >
               <Typography

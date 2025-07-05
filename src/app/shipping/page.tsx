@@ -7,7 +7,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 export default function ShippingPage() {
   const [expanded, setExpanded] = useState<string | false>(false);
 
-  const handleChange = (panel:any) => ( isExpanded:any) => {
+  const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
     setExpanded(isExpanded ? panel : false);
   };
 
@@ -221,7 +221,7 @@ export default function ShippingPage() {
               fontFamily: 'sans-serif'
             }}
           >
-            We'll respond within 24–48 hours.
+            We&apos;ll respond within 24–48 hours.
           </Typography>
         </Box>
 
@@ -233,7 +233,7 @@ export default function ShippingPage() {
             fontSize: '1rem',
             fontFamily: 'sans-serif'
           }}>
-            We're committed to providing you with the best shipping experience possible.
+            We&apos;re committed to providing you with the best shipping experience possible.
           </Typography>
           <Typography sx={{ 
             color: '#666',

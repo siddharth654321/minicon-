@@ -7,7 +7,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 export default function CancelRefundPage() {
   const [expanded, setExpanded] = useState<string | false>(false);
 
-  const handleChange = (panel:any) => (isExpanded:any) => {
+  const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
     setExpanded(isExpanded ? panel : false);
   };
 
@@ -203,7 +203,7 @@ export default function CancelRefundPage() {
               fontFamily: 'sans-serif'
             }}
           >
-            We're always here to help.
+            We&apos;re always here to help.
           </Typography>
           
           <Typography 

@@ -215,6 +215,20 @@ export default function Home() {
           ))}
         </Box>
       </Box>
+      <Typography variant="h4" 
+          align="center" 
+          sx={{ 
+            mb: { 
+              xs: 1,  // Reduced margin bottom
+              sm: 1,
+              md: 3,
+              lg: 3
+            },
+            fontWeight: 600
+          }}
+          color="black">
+          Trending
+        </Typography>
           <CategoryCards/>
       {/* Product grid section with minimal spacing */}
       <Box sx={{ 
