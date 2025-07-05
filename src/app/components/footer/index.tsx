@@ -16,11 +16,11 @@ export default function Footer() {
         color: '#fff',
       }}
     >
-      <Container maxWidth="lg">
-        <Box sx={{ px: { xs: 2, sm: 3 }, py: { xs: 3, sm: 4 } }}>
+      <Container maxWidth="md">
+        <Box sx={{ px: { xs: 2, sm: 3, md: 3, lg: 3 }, py: { xs: 3, sm: 4, md: 4, lg: 4 } }}>
           <Grid container spacing={4}>
             {/* Left Column: Policies */}
-            <Grid size={{ xs: 12, sm: 6 }}>
+            <Grid size={{ xs: 12, sm: 6, md: 6, lg: 6 }}>
               <Stack spacing={3}>
                 {/* Policies */}
                 <Box>
@@ -38,7 +38,7 @@ export default function Footer() {
               </Stack>
             </Grid>
             {/* Right Column: Newsletter & Follow Us */}
-            <Grid size={{ xs: 12, sm: 6 }}>
+            <Grid size={{ xs: 12, sm: 6, md: 6, lg: 6 }}>
               <Stack spacing={3}>
                 {/* Newsletter */}
                 <Box>
