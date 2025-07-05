@@ -11,6 +11,7 @@ import { ProductCard } from './components/productCard';
 import { useAuth } from './components/AuthProvider';
 import { supabase } from '@/lib/supabaseClient';
 import { Product } from './dummyData';
+import CategoryCards from './components/categoryCards';
 
 // Define types for API responses
 interface WishlistItem {
@@ -214,7 +215,7 @@ export default function Home() {
           ))}
         </Box>
       </Box>
-
+          <CategoryCards/>
       {/* Product grid section with minimal spacing */}
       <Box sx={{ 
         padding: { 
