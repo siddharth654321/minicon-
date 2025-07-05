@@ -132,14 +132,13 @@ export const ProductCard: React.FC<{
     <Box
       onClick={() => router.push(`/preCheckout?id=${encodeURIComponent(product.id)}`)}
       sx={{
-        width: { xs: '90vw', sm: '45vw', md: '20vw' },
-        minWidth: { xs: 'auto', sm: 220 },
-        maxWidth: { xs: '100%', sm: 300 },
+        width: { xs: '100%', sm: '100%', md: '100%' },
+       
         height: { xs: '45vh', sm: '50vh' },
         minHeight: { xs: 280, sm: 340 },
         maxHeight: { xs: 360, sm: 400 },
         border: '1px solid #ededed',
-        borderRadius: 4,
+        borderRadius: 2,
         boxShadow: 1,
         background: '#fff',
         display: 'flex',

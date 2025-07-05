@@ -11,6 +11,7 @@ import { ProductCard } from './components/productCard';
 import { useAuth } from './components/AuthProvider';
 import { supabase } from '@/lib/supabaseClient';
 import { Product } from './dummyData';
+import CategoryCards from './components/categoryCards';
 
 // Define types for API responses
 interface WishlistItem {
@@ -124,9 +125,10 @@ export default function Home() {
         align="center"
         sx={{
           margin: {
-            xs: '2vh 0 5vh 0',  // smaller margins for mobile
-            sm: '5vh 0 10vh 0'  // original margins for larger screens
-          }
+            xs: 1,  // Reduced from 2vh/5vh to fixed pixels
+            sm: 1  // Reduced from 5vh/10vh to fixed pixels
+          },
+          fontWeight: 600
         }}
         color="black">
         Top picks for the week
@@ -146,6 +148,7 @@ export default function Home() {
           display: 'flex',
           alignItems: 'center',
           background: '#fff',
+          mb: { xs: 4, sm: 1 } // Add margin bottom to separate from next section
         }}
       >
         <Box
@@ -154,81 +157,105 @@ export default function Home() {
             alignItems: 'center',
             whiteSpace: 'nowrap',
             width: 'max-content',
-            animation: `${scroll} ${isMobile ? '20s' : '30s'} linear infinite`,
-            '&:hover': {
-              animationPlayState: 'paused',
-            },
-            '&::-webkit-scrollbar': {
-              display: 'none',
-            },
-            msOverflowStyle: 'none',
-            scrollbarWidth: 'none',
-            WebkitOverflowScrolling: 'touch',
-            userSelect: 'none',
-            touchAction: 'pan-x',
+            animation: `${scroll} ${isMobile ? 20 : 30}s linear infinite`,
+            gap: { xs: 1, sm: 1.5 }, // Minimal gap between images
           }}
         >
-          {[...marqueeImages, ...marqueeImages].map((src, i) => (
+          {/* First set of images */}
+          {marqueeImages.map((src, i) => (
             <Box
-              key={i}
+              key={`${src}-1-${i}`}
               sx={{
                 position: 'relative',
-                width: {
-                  xs: '80vw',
-                  sm: '280px',
-                  md: '100'
-                },
-                height: {
-                  xs: '45vh',
-                  sm: '220px',
-                  md: '320px'
-                },
-                marginRight: {
-                  xs: '4vw',
-                  sm: '5vw'
-                },
-                borderRadius: '20px',
+                width: { xs: '70vw', sm: '28vw' },
+                minWidth: { xs: 240, sm: 280 },
+                maxWidth: { xs: 280, sm: 360 },
+                height: { xs: '50vh', sm: '40vh' },
+                minHeight: { xs: 300, sm: 320 },
+                maxHeight: { xs: 360, sm: 400 },
+                borderRadius: { xs: 2, sm: 3 },
                 overflow: 'hidden',
-                flex: '0 0 auto',
-                boxShadow: 2,
-                background: '#f5f5f5',
-                pointerEvents: 'auto',
-                touchAction: 'pan-x',
+                flexShrink: 0
               }}
             >
               <Image
                 src={src}
-                alt="marquee image"
+                alt={`Marquee ${i + 1}`}
                 fill
-                style={{
-                  objectFit: 'cover',
-                  borderRadius: '20px',
-                }}
-                sizes="(max-width: 600px) 80vw, (max-width: 900px) 280px, 400px"
-                priority={i < 2}
+                sizes="(max-width:600px) 70vw, 28vw"
+                style={{ objectFit: 'cover' }}
+              />
+            </Box>
+          ))}
+          {/* Duplicate set for seamless loop */}
+          {marqueeImages.map((src, i) => (
+            <Box
+              key={`${src}-2-${i}`}
+              sx={{
+                position: 'relative',
+                width: { xs: '70vw', sm: '28vw' },
+                minWidth: { xs: 240, sm: 280 },
+                maxWidth: { xs: 280, sm: 360 },
+                height: { xs: '50vh', sm: '40vh' },
+                minHeight: { xs: 300, sm: 320 },
+                maxHeight: { xs: 360, sm: 400 },
+                borderRadius: { xs: 2, sm: 3 },
+                overflow: 'hidden',
+                flexShrink: 0
+              }}
+            >
+              <Image
+                src={src}
+                alt={`Marquee duplicate ${i + 1}`}
+                fill
+                sizes="(max-width:600px) 70vw, 28vw"
+                style={{ objectFit: 'cover' }}
               />
             </Box>
           ))}
         </Box>
       </Box>
-
-      <Typography variant="h4"
-        align="center"
-        sx={{
-          margin: {
-            xs: '10vh 0 5vh 0',  // smaller margins for mobile
-            sm: '20vh 0 10vh 0'  // original margins for larger screens
-          }
-        }}
-        color="black">
-        New Arrivals
-      </Typography>
-
-      <Box component="section" sx={{ px: { xs: 1, sm: 2 , md: 10}, py: 4}}>
-        <Grid container spacing={{ xs: 1, sm: 2, md: 1 }} justifyContent="center">
-          {products.map((p) => (
-            <Grid item xs={6} sm={4} md={3} key={p.id}>
-              <ProductCard
+      <Typography variant="h4" 
+          align="center" 
+          sx={{ 
+            mb: { 
+              xs: 1,  // Reduced margin bottom
+              sm: 1,
+              md: 3,
+              lg: 3
+            },
+            fontWeight: 600
+          }}
+          color="black">
+          Trending
+        </Typography>
+          <CategoryCards/>
+      {/* Product grid section with minimal spacing */}
+      <Box sx={{ 
+        padding: { 
+          xs: '0 8px 0 0',    // Minimal padding on mobile
+          sm: '0 16px 0 0',   // Small padding on tablets
+          md: '0 24px 0 0'    // Moderate padding on desktop
+        },
+        mb: 6 
+      }}>
+        <Typography variant="h4" 
+          align="center" 
+          sx={{ 
+            mb: { 
+              xs: 1,  // Reduced margin bottom
+              sm: 1 
+            },
+            fontWeight: 600
+          }}
+          color="black">
+          New Arrivals
+        </Typography>
+        
+        <Grid  container spacing={{ xs: 0.5, sm: 1, md: 1 }} justifyContent="center">
+        {products.map((p) => (
+            <Grid item xs={6} sm={4} md={1.5} key={p.id}>
+                            <ProductCard
                 product={p}
                 initialIsWished={wishedIds.has(p.id)}
                 initialCartQty={cartMap.get(p.id) ?? 0}

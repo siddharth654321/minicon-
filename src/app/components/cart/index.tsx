@@ -263,11 +263,11 @@ export default function CartPage({ buyNowProductId }: { buyNowProductId?: string
         >
             {/* 2. MAIN CONTENT GROWS - px: 0 ensures no double padding */}
             <Container
-                maxWidth="lg"
+                maxWidth="md"
                 sx={{
                     flex: '1 0 auto',
-                    py: { xs: 2, md: 4 },
-                    px: { xs: 1, sm: 2, md: 4 },
+                    py: { xs: 2, md: 4, lg: 4 },
+                    px: { xs: 1, sm: 2, md: 4, lg: 4 },
                     boxSizing: 'border-box',
                     width: '100%',
                     minWidth: 0,
@@ -277,9 +277,9 @@ export default function CartPage({ buyNowProductId }: { buyNowProductId?: string
                     variant="h4"
                     sx={{
                         fontWeight: 700,
-                        mb: { xs: 2, md: 4 },
+                        mb: { xs: 2, md: 4, lg: 4 },
                         color: '#1a1a1a',
-                        fontSize: { xs: '1.5rem', md: '2rem' },
+                        fontSize: { xs: '1.5rem', md: '2rem', lg: '2rem' },
                         fontFamily: 'sans-serif',
                         wordBreak: 'break-word',
                     }}
@@ -288,8 +288,8 @@ export default function CartPage({ buyNowProductId }: { buyNowProductId?: string
                 </Typography>
 
                 <Stack
-                    direction={{ xs: 'column', md: 'row' }}
-                    spacing={{ xs: 2, md: 4 }}
+                    direction={{ xs: 'column', md: 'row', lg: 'row' }}
+                    spacing={{ xs: 2, md: 4, lg: 4 }}
                     alignItems="flex-start"
                     sx={{ width: '100%', minWidth: 0, flexGrow: 1 }}
                 >
@@ -298,7 +298,7 @@ export default function CartPage({ buyNowProductId }: { buyNowProductId?: string
                         flex: 1,
                         width: '100%',
                         minWidth: 0,
-                        mb: { xs: 2, md: 0 },
+                        mb: { xs: 2, md: 0, lg: 0 },
                         boxSizing: 'border-box',
                     }}>
                         {cart.length === 0 ? (
@@ -332,7 +332,7 @@ export default function CartPage({ buyNowProductId }: { buyNowProductId?: string
                                 <Paper
                                     elevation={0}
                                     sx={{
-                                        p: { xs: 1.5, md: 3 },
+                                        p: { xs: 1.5, md: 3, lg: 3 },
                                         mb: 2,
                                         bgcolor: 'white',
                                         borderRadius: 2,
@@ -469,7 +469,7 @@ export default function CartPage({ buyNowProductId }: { buyNowProductId?: string
                                 <Paper
                                     elevation={0}
                                     sx={{
-                                        p: { xs: 1.5, md: 3 },
+                                        p: { xs: 1.5, md: 3, lg: 3 },
                                         bgcolor: 'white',
                                         borderRadius: 2,
                                         width: '100%',
@@ -517,7 +517,7 @@ export default function CartPage({ buyNowProductId }: { buyNowProductId?: string
 
                     {/* Right Column - Address & Payment */}
                     <Box sx={{
-                        width: { xs: '100%', md: 400 },
+                        width: { xs: '100%', md: 400, lg: 400 },
                         minWidth: 0,
                         boxSizing: 'border-box',
                     }}>
@@ -525,7 +525,7 @@ export default function CartPage({ buyNowProductId }: { buyNowProductId?: string
                         <Paper
                             elevation={0}
                             sx={{
-                                p: { xs: 1.5, md: 3 },
+                                p: { xs: 1.5, md: 3, lg: 3 },
                                 mb: 2,
                                 bgcolor: 'white',
                                 borderRadius: 2,
@@ -642,7 +642,7 @@ export default function CartPage({ buyNowProductId }: { buyNowProductId?: string
                         <Paper
                             elevation={0}
                             sx={{
-                                p: { xs: 1.5, md: 3 },
+                                p: { xs: 1.5, md: 3, lg: 3 },
                                 mb: 2,
                                 bgcolor: 'white',
                                 borderRadius: 2,
