@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, MouseEvent, useEffect } from 'react';
+import { useState, MouseEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -20,10 +20,9 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import styles from './index.module.css';
 import { MENUS } from '@/app/dummyData';
-import { Typography, Card, CardMedia, CardContent, Grid, Divider, InputAdornment } from '@mui/material'
+import { Typography, Divider, InputAdornment } from '@mui/material'
 import CartDrawer from '../cartDrawer'
 import { useAuth } from '../AuthProvider'
-import { Product } from '@/app/dummyData';
 
 export default function Header() {
   const router = useRouter();
