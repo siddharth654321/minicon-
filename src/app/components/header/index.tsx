@@ -68,8 +68,8 @@ export default function Header() {
       {MENUS.map(({ label, items }, idx) => (
         <div key={label}>
           <Button
-            sx={{ 
-              fontFamily: "'Bagel Fat One', system-ui", 
+            sx={{
+              fontFamily: 'sans-serif',
               color: 'white',
               fontSize: { xs: '0.9rem', sm: '1rem' }
             }}
@@ -105,7 +105,7 @@ export default function Header() {
                   '&:hover': { bgcolor: '#222' }
                 }}
               >
-                <Typography sx={{ color: 'white', fontFamily: "'Bagel Fat One', system-ui" }}>
+                <Typography sx={{ color: 'white', fontFamily: 'sans-serif' }}>
                   {item}
                 </Typography>
               </MenuItem>
@@ -279,7 +279,7 @@ export default function Header() {
                       },
                     }}
                   >
-                    <Typography sx={{ fontFamily: "'Bagel Fat One', system-ui", fontSize: '1.1rem', color: '#000', pl: 1 }}>
+                    <Typography sx={{ fontFamily: 'sans-serif', fontSize: '1.1rem', color: '#000', pl: 1 }}>
                       {label}
                     </Typography>
                   </AccordionSummary>
@@ -299,7 +299,7 @@ export default function Header() {
                           margin: 0,
                         }}
                       >
-                        <Typography sx={{ color: '#000', fontFamily: "'Bagel Fat One', system-ui", fontSize: '1rem' }}>
+                        <Typography sx={{ color: '#000', fontFamily: 'sans-serif', fontSize: '1rem' }}>
                           {item}
                         </Typography>
                       </Box>
