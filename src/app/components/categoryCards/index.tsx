@@ -15,7 +15,10 @@ const categories: CategoryCardProps[] = [
   { image: '/images/M-15.png', title: 'Oversized' },
   { image: '/images/mockup 3.png', title: 'Relaxed' },
   { image: '/images/mockup 5.png', title: 'Polo' },
-  { image: '/images/mockup 6.png', title: 'Sweatshirts' },
+  { image: '/images/mockup 6.png', title: 'Gym vest' },
+  { image: '/images/M-13.png', title: 'Sweatshirts' },
+  { image: '/images/M-15.png', title: 'Puff' },
+  { image: '/images/M-14.png', title: 'Supima' },
 ];
 
 export default function CategoryCards() {
