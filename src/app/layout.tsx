@@ -40,6 +40,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={bagelFatOne.className}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <link
+          rel="icon"
+          type="image/svg+xml"
+          href="/images/FaviconLightMode.svg"
+          media="(prefers-color-scheme: light)"
+        />
+        <link
+          rel="icon"
+          type="image/svg+xml"
+          href="/images/FaviconDarkMode.svg"
+          media="(prefers-color-scheme: dark)"
+        />
       </head>
       <body
         style={{
