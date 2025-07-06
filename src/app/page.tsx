@@ -227,7 +227,7 @@ export default function Home() {
             fontWeight: 600
           }}
           color="black">
-          Trending
+          Trending Category
         </Typography>
           <CategoryCards/>
       {/* Product grid section with minimal spacing */}

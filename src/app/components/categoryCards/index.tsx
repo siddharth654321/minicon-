@@ -1,10 +1,8 @@
 'use client';
-
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
 import { GridLegacy as Grid } from '@mui/material';
-
 
 interface CategoryCardProps {
   image: string;
@@ -21,60 +19,65 @@ const categories: CategoryCardProps[] = [
 ];
 
 export default function CategoryCards() {
-
   return (
-    <Box sx={{  mb: 4 }}>
-      <Grid container spacing={2}>
+    <Box sx={{ mb: 4, px: { xs: 1, sm: 2 } }}> {/* Added horizontal padding */}
+      <Grid container spacing={{ xs: 1, sm: 2 }}> {/* Added spacing */}
         {categories.map((category, idx) => (
           <Grid
             item
-            xs={6}
+            xs={4} // Changed from 6 to 4 for 3 columns on mobile
             sm={4}
             key={idx}
-            sx={{
-              position: 'relative',
-              aspectRatio: '9/16',
-              width: '100%',
-              overflow: 'hidden',
-              borderRadius: 2,
-            }}
           >
-            <Image
-              src={category.image}
-              alt={category.title}
-              fill
-              style={{ objectFit: 'cover' }}
-            />
-            {/* Dark to transparent vignette overlay */}
             <Box
               sx={{
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                right: 0,
-                height: '40%',
-                background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 10%, transparent 20%)',
-                pointerEvents: 'none',
-              }}
-            />
-            <Box
-              sx={{
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                px: 1,
-                py: 0.5,
-                zIndex: 1,
+                position: 'relative',
+                aspectRatio: '9/16',
+                width: '100%',
+                overflow: 'hidden',
+                borderRadius: 2,
               }}
             >
-              <Typography
-                variant="subtitle1"
-                color="#fff"
-                fontWeight={500}
-                sx={{ fontFamily: 'sans-serif' }}
+              <Image
+                src={category.image}
+                alt={category.title}
+                fill
+                style={{ objectFit: 'cover' }}
+              />
+              {/* Dark to transparent vignette overlay */}
+              <Box
+                sx={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: '40%',
+                  background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 10%, transparent 20%)',
+                  pointerEvents: 'none',
+                }}
+              />
+              <Box
+                sx={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  px: 1,
+                  py: 0.5,
+                  zIndex: 1,
+                }}
               >
-                {category.title}
-              </Typography>
+                <Typography
+                  variant="subtitle1"
+                  color="#fff"
+                  fontWeight={500}
+                  sx={{ 
+                    fontFamily: 'sans-serif',
+                    fontSize: { xs: '0.875rem', sm: '1rem' } // Smaller font on mobile
+                  }}
+                >
+                  {category.title}
+                </Typography>
+              </Box>
             </Box>
           </Grid>
         ))}
