@@ -16,7 +16,7 @@ export interface Product {
   title: string;
   subtitle: string;
   price: number;
-  image: string;
+  images?: string[];
 }
 
 export const ProductCard: React.FC<{
@@ -29,6 +29,7 @@ export const ProductCard: React.FC<{
   const [isWished, setIsWished] = useState(initialIsWished ?? false);
   const [cartQty, setCartQty] = useState(initialCartQty ?? 0);
 
+  console.log("ProductCard props", product, initialIsWished, initialCartQty)
   useEffect(() => {
     if (!user) return;
     if (initialIsWished !== undefined && initialCartQty !== undefined) return;
@@ -152,7 +153,7 @@ export const ProductCard: React.FC<{
       {/* --- Product Image --- */}
       <Box sx={{ flex: 1, position: 'relative' }}>
         <Image
-          src={product.image}
+          src={product.images?.[1] || product.images?.[0] || ''}
           alt={product.title}
           fill
           sizes="(max-width:600px) 90vw, (max-width:900px) 45vw, 20vw"
