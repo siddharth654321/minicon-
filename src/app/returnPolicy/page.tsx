@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react';
-import { Box, Typography, Container, Accordion, AccordionSummary, AccordionDetails, Chip } from '@mui/material';
+import { Box, Typography, Container, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const ReturnPolicy = () => {
@@ -201,20 +201,7 @@ const ReturnPolicy = () => {
       <Container maxWidth="md">
         {/* Header Section */}
         <Box textAlign="center" mb={6}>
-          <Chip 
-            label="Return & Exchange Policy"
-            sx={{ 
-              mb: 3,
-              bgcolor: '#000',
-              color: 'white',
-              fontSize: '0.875rem',
-              fontWeight: 500,
-              px: 3,
-              py: 2.5,
-              height: 'auto',
-              fontFamily: 'sans-serif'
-            }}
-          />
+       
           
           <Typography 
             variant="h1" 
