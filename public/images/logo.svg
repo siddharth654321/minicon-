@@ -7,7 +7,6 @@
 
   <!-- ------------- Embedded CSS ------------- -->
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Bagel+Fat+One&display=swap');
 
     /* cycle faces – 1.5 s each → 7.5 s loop */
     .face { opacity: 0; animation: cycle 7.5s linear infinite; }
@@ -25,7 +24,7 @@
 
     .stroke { stroke:#fff; }
     .fill   { fill:#fff; }
-    .mark   { fill:#fff; font-family:'Bagel Fat One',sans-serif; letter-spacing:8px; }
+    .mark   { fill:#fff; font-family:sans-serif; letter-spacing:8px; }
   </style>
 
   <!-- ------------- Icon block ------------- -->
@@ -35,7 +34,7 @@
 
     <!-- 😉 -->
     <g class="face face-1">
-      <text x="35" y="55" font-size="28" class="fill" font-family="Arial">&gt;</text>
+      <text x="35" y="55" font-size="28" class="fill" font-family="sans-serif">&gt;</text>
       <circle cx="90" cy="50" r="6" class="fill"/>
       <path d="M36 96 Q60 116 84 96" class="stroke" stroke-width="6" fill="none"/>
     </g>
