@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 
 const theme = createTheme({
   typography: {
-    fontFamily: "'Bagel Fat One', system-ui",
+    fontFamily: 'sans-serif',
   },
   palette: {
     text: {
@@ -19,7 +19,7 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          fontFamily: "'Bagel Fat One', system-ui",
+          fontFamily: 'sans-serif',
         },
       },
     },

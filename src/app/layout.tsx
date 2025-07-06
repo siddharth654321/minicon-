@@ -4,16 +4,10 @@ import Footer from './components/footer'
 import MuiTheme from './components/ThemeProvider'
 import AuthProvider from './components/AuthProvider'
 import { Box } from '@mui/material';
-import { Bagel_Fat_One } from 'next/font/google';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 
-const bagelFatOne = Bagel_Fat_One({
-  weight: '400',
-  subsets: ['latin'],
-  display: 'swap',
-});
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -37,9 +31,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   }, [pathname, isAuthPage, router]);
 
   return (
-    <html lang="en" className={bagelFatOne.className}>
+    <html lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <link
+          rel="icon"
+          type="image/svg+xml"
+          href="/images/FaviconLightMode.svg"
+          media="(prefers-color-scheme: light)"
+        />
+        <link
+          rel="icon"
+          type="image/svg+xml"
+          href="/images/FaviconDarkMode.svg"
+          media="(prefers-color-scheme: dark)"
+        />
       </head>
       <body
         style={{
