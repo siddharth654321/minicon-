@@ -10,14 +10,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { useAuth } from '../AuthProvider';
-
-export interface Product {
-  id: number;
-  title: string;
-  subtitle: string;
-  price: number;
-  image: string;
-}
+import type { Product } from '@/types';
 
 export const ProductCard: React.FC<{
   product: Product;
@@ -29,6 +22,7 @@ export const ProductCard: React.FC<{
   const [isWished, setIsWished] = useState(initialIsWished ?? false);
   const [cartQty, setCartQty] = useState(initialCartQty ?? 0);
 
+  console.log("ProductCard props", product, initialIsWished, initialCartQty)
   useEffect(() => {
     if (!user) return;
     if (initialIsWished !== undefined && initialCartQty !== undefined) return;
@@ -152,7 +146,7 @@ export const ProductCard: React.FC<{
       {/* --- Product Image --- */}
       <Box sx={{ flex: 1, position: 'relative' }}>
         <Image
-          src={product.image}
+          src={product.images?.[1] || product.images?.[0] || ''}
           alt={product.title}
           fill
           sizes="(max-width:600px) 90vw, (max-width:900px) 45vw, 20vw"
@@ -211,7 +205,7 @@ export const ProductCard: React.FC<{
             fontSize: { xs: '0.9rem', sm: '1rem' }
           }}
         >
-          ₹{product.price}
+          ₹{product.price_after}
           <Typography
           variant="body2"
           fontWeight={400}
@@ -224,7 +218,7 @@ export const ProductCard: React.FC<{
             ml: 1,
           }}
         >
-            ₹{product.price + 200}
+            ₹{product.price_before ?? product.price_after}
         </Typography>
         </Typography>
         {/* Actions */}
