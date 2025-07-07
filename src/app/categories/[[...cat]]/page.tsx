@@ -30,7 +30,8 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 /* -------------------------------------------------------------------------- */
 /*                             Product utilities                              */
 /* -------------------------------------------------------------------------- */
-import { Product } from '@/app/dummyData';
+import type { Product } from '@/types';
+import { slugify } from '@/app/dummyData';
 import { ProductCard } from '@/app/components/productCard';
 import { useAuth } from '@/app/components/AuthProvider';
 import { supabase } from '@/lib/supabaseClient';
@@ -99,9 +100,9 @@ export default function CataloguePage() {
   }, [user]);
 
   const filters = useMemo(() => ({
-    categories: Array.from(new Set(allProducts.map(p => p.subtitle))).sort(),
-    size: ['S', 'M', 'L', 'XL', 'XXL'],
-    colors: Array.from(new Set(allProducts.map(p => p.color))).sort(),
+    categories: Array.from(new Set(allProducts.map(p => p.category))).sort(),
+    size: Array.from(new Set(allProducts.flatMap(p => p.available_sizes))).sort(),
+    colors: Array.from(new Set(allProducts.flatMap(p => p.available_colors))).sort(),
   }), [allProducts]);
 
   /* ---------------- Filter products by label / item ----------------------- */
@@ -111,26 +112,26 @@ export default function CataloguePage() {
     // First apply URL-based filtering
     if (catSegments.length > 0) {
       const [labelSlug, itemSlug] = catSegments;
-      if (!itemSlug) {
-        filtered = filtered.filter(p => p.label === labelSlug);
-      } else {
-        filtered = filtered.filter(p => p.label === labelSlug && p.item === itemSlug);
+      if (labelSlug === 'category' && itemSlug) {
+        filtered = filtered.filter(p => slugify(p.category) === itemSlug);
+      } else if (labelSlug === 'collections' && itemSlug) {
+        filtered = filtered.filter(p => p.collection.some(c => slugify(c) === itemSlug));
       }
     }
     
     // Apply category filters
     if (selectedCategories.size > 0) {
-      filtered = filtered.filter(p => selectedCategories.has(p.subtitle));
+      filtered = filtered.filter(p => selectedCategories.has(p.category));
     }
     
     // Apply size filters
     if (selectedSizes.size > 0) {
-      filtered = filtered.filter(p => selectedSizes.has(p.size));
+      filtered = filtered.filter(p => p.available_sizes.some(s => selectedSizes.has(s)));
     }
     
     // Apply color filters
     if (selectedColors.size > 0) {
-      filtered = filtered.filter(p => selectedColors.has(p.color));
+      filtered = filtered.filter(p => p.available_colors.some(c => selectedColors.has(c)));
     }
     
     return filtered;
@@ -141,8 +142,8 @@ export default function CataloguePage() {
     const list = [...filteredProducts];
     switch (sortOpt) {
       case 'new': return list.reverse();           // dummy "newest first"
-      case 'price_low': return list.sort((a, b) => a.price - b.price);
-      case 'price_high': return list.sort((a, b) => b.price - a.price);
+      case 'price_low': return list.sort((a, b) => a.price_after - b.price_after);
+      case 'price_high': return list.sort((a, b) => b.price_after - a.price_after);
       default: return list;
     }
   }, [filteredProducts, sortOpt]);

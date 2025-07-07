@@ -1,7 +1,7 @@
 "use client";
 import React, { Suspense, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { PRODUCTS } from "../dummyData";
+import type { Product } from '@/types';
 import Image from "next/image";
 import { Typography, Button, Box, Accordion, AccordionSummary, AccordionDetails, IconButton } from "@mui/material";
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
@@ -32,20 +32,31 @@ const PreCheckout = () => {
   const router = useRouter();
   const { user } = useAuth();
   const id = searchParams.get("id");
-  const value = PRODUCTS.filter((product) => product.id === Number(id));
-  const ALL_FILTERS = {
-    categories: Array.from(new Set(PRODUCTS.map((p) => p.subtitle))).sort(),
-    size: ['S', 'M', 'L', 'XL', 'XXL'],
-  };
-  const [selectedSize, setSelectedSize] = React.useState(ALL_FILTERS.size[0] || "");
+  const [product, setProduct] = useState<Product | null>(null);
+  const [selectedSize, setSelectedSize] = React.useState('');
   const [quantity, setQuantity] = React.useState(1);
   const [pincode, setPincode] = React.useState("");
   const [isWished, setIsWished] = useState(false);
 
+  useEffect(() => {
+    async function fetchProduct() {
+      if (!id) return;
+      try {
+        const res = await fetch('/api/products');
+        const data: Product[] = await res.json();
+        const prod = data.find(p => p.id === Number(id)) || null;
+        setProduct(prod || null);
+        if (prod) setSelectedSize(prod.available_sizes[0] || '');
+      } catch (error) {
+        console.error('Error fetching product:', error);
+      }
+    }
+    fetchProduct();
+  }, [id]);
+
   // Check initial wishlist and cart status
   useEffect(() => {
-    if (!value.length || !user) return;
-    const product = value[0];
+    if (!product || !user) return;
     supabase.auth.getSession().then(({ data: { session } }) => {
       const headers: Record<string, string> = {};
       if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
@@ -53,12 +64,11 @@ const PreCheckout = () => {
         .then(res => res.ok ? res.json() : null)
         .then(data => setIsWished(!!data));
     });
-  }, [user, value]);
+  }, [user, product]);
 
-  if (!value.length) {
+  if (!product) {
     return <Typography color="error">Product not found</Typography>;
   }
-  const product = value[0];
 
   // Handlers
   const handleWishlistToggle = async () => {
@@ -147,7 +157,7 @@ const PreCheckout = () => {
         }}
       >
         <Image
-          src={product.image}
+          src={product.images[0]}
           alt={product.title}
           fill
           style={{ objectFit: 'contain' }}
@@ -189,7 +199,7 @@ const PreCheckout = () => {
         {/* Price and Quantity */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
           <Typography sx={{ fontSize: "1.6rem", fontWeight: 600, fontFamily: 'sans-serif', color: '#222' }}>
-            ₹{product.price}
+            ₹{product.price_after}
           </Typography>
           <Select
             value={quantity}
@@ -207,7 +217,7 @@ const PreCheckout = () => {
           <Typography variant="subtitle1" fontWeight={700} mb={1} sx={{ fontFamily: 'sans-serif' }}>
             Select size
           </Typography>
-          {ALL_FILTERS.size.map((s) => (
+          {product.available_sizes.map((s) => (
             <Button
               key={s}
               onClick={() => setSelectedSize(s)}

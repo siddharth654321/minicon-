@@ -10,14 +10,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { useAuth } from '../AuthProvider';
-
-export interface Product {
-  id: number;
-  title: string;
-  subtitle: string;
-  price: number;
-  images?: string[];
-}
+import type { Product } from '@/types';
 
 export const ProductCard: React.FC<{
   product: Product;
@@ -212,7 +205,7 @@ export const ProductCard: React.FC<{
             fontSize: { xs: '0.9rem', sm: '1rem' }
           }}
         >
-          ₹{product.price}
+          ₹{product.price_after}
           <Typography
           variant="body2"
           fontWeight={400}
@@ -225,7 +218,7 @@ export const ProductCard: React.FC<{
             ml: 1,
           }}
         >
-            ₹{product.price + 200}
+            ₹{product.price_before ?? product.price_after}
         </Typography>
         </Typography>
         {/* Actions */}

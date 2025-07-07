@@ -28,7 +28,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import PaymentOutlinedIcon from '@mui/icons-material/PaymentOutlined';
-import { Product, preProduct } from '@/app/dummyData';
+import type { Product } from '@/types';
 
 interface CartItem {
     id: number;
@@ -36,7 +36,6 @@ interface CartItem {
     subtitle: string;
     img: string;
     price: number;
-    size: string;
     qty: number;
 }
 
@@ -111,36 +110,30 @@ export default function CartPage({ buyNowProductId }: { buyNowProductId?: string
                                 id: data.product.id,
                                 title: data.product.title,
                                 subtitle: data.product.subtitle,
-                                img: data.product.image,
-                                price: data.product.price,
-                                size: data.product.size,
+                                img: data.product.images[0],
+                                price: data.product.price_after,
                                 qty: data.quantity,
                             }]);
                         } else {
                             // Product not in cart, add it with quantity 1
-                            const product = preProduct.find(p => p.id === Number(buyNowProductId));
-                            if (product) {
-                                // Add product to cart with quantity 1 using buyNow parameter
-                                await fetch('/api/cart?buyNow=true', {
-                                    method: 'POST',
-                                    headers: { ...headers, 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({ product_id: product.id, quantity: 1 })
-                                });
-                                
-                                // Now fetch the cart item
-                                const cartRes = await fetch(`/api/cart?productId=${buyNowProductId}`, { headers });
-                                const cartData = await cartRes.json();
-                                if (cartData) {
-                                    setCart([{
-                                        id: cartData.product.id,
-                                        title: cartData.product.title,
-                                        subtitle: cartData.product.subtitle,
-                                        img: cartData.product.image,
-                                        price: cartData.product.price,
-                                        size: cartData.product.size,
-                                        qty: cartData.quantity,
-                                    }]);
-                                }
+                            await fetch('/api/cart?buyNow=true', {
+                                method: 'POST',
+                                headers: { ...headers, 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ product_id: Number(buyNowProductId), quantity: 1 })
+                            });
+
+                            // Now fetch the cart item
+                            const cartRes = await fetch(`/api/cart?productId=${buyNowProductId}`, { headers });
+                            const cartData = await cartRes.json();
+                            if (cartData) {
+                                setCart([{
+                                    id: cartData.product.id,
+                                    title: cartData.product.title,
+                                    subtitle: cartData.product.subtitle,
+                                    img: cartData.product.images[0],
+                                    price: cartData.product.price_after,
+                                    qty: cartData.quantity,
+                                }]);
                             }
                         }
                     });
@@ -152,9 +145,8 @@ export default function CartPage({ buyNowProductId }: { buyNowProductId?: string
                         id: item.product.id,
                         title: item.product.title,
                         subtitle: item.product.subtitle,
-                        img: item.product.image,
-                        price: item.product.price,
-                        size: item.product.size,
+                        img: item.product.images[0],
+                        price: item.product.price_after,
                         qty: item.quantity,
                     }))))
             }
@@ -430,7 +422,7 @@ export default function CartPage({ buyNowProductId }: { buyNowProductId?: string
                                                             color="text.secondary"
                                                             sx={{ fontFamily: 'sans-serif' }}
                                                         >
-                                                            Size: {item.size} | Qty: {item.qty}
+                                                            Qty: {item.qty}
                                                         </Typography>
                                                     </Box>
                                                     <IconButton

@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import {  Typography, Container } from '@mui/material';
 import { supabase } from '@/lib/supabaseClient';
-import { ProductCard, Product } from '../productCard';
+import { ProductCard } from '../productCard';
+import type { Product } from '@/types';
 import { GridLegacy as Grid } from '@mui/material';
 
 
