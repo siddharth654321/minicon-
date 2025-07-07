@@ -43,7 +43,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link
           rel="icon"
           type="image/svg+xml"
-          href="/images/FaviconDarkMode.svg"
+          href="/images/white.png"
           media="(prefers-color-scheme: dark)"
         />
       </head>

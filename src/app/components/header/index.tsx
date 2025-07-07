@@ -136,7 +136,7 @@ export default function Header() {
         <div className={styles.centerGroup}>
           <Link href="/" scroll={false} className={styles.logo}>
             <video
-              src="/images/logomp4.mp4"
+              src="/gifs/miniconLatestLogo.mp4"
               autoPlay
               muted
               loop

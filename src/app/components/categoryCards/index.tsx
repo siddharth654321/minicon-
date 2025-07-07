@@ -10,16 +10,18 @@ interface CategoryCardProps {
 }
 
 const categories: CategoryCardProps[] = [
-  { image: '/images/M-13.png', title: 'Under 999' },
-  { image: '/images/M-14.png', title: 'T-shirts' },
-  { image: '/images/M-15.png', title: 'Oversized' },
-  { image: '/images/mockup 3.png', title: 'Relaxed' },
-  { image: '/images/mockup 5.png', title: 'Polo' },
-  { image: '/images/mockup 6.png', title: 'Gym vest' },
-  { image: '/images/M-13.png', title: 'Sweatshirts' },
-  { image: '/images/M-15.png', title: 'Puff' },
-  { image: '/images/M-14.png', title: 'Supima' },
+  { image: '/products/Regular Fit Tshirt/Rabbit/3 rabbit.png', title: 'T-shirts' },
+  { image: '/products/Regular Fit Tshirt/Peace/3Peace.png', title: 'Under 999' },
+  { image: '/products/Regular Fit Tshirt/Supernova/1Supernova.png', title: 'Oversized' },
+  { image: '/products/Regular Fit Tshirt/Aesthetics Bloom/2Minicon Asthetic 2.png', title: 'Relaxed' },
+  { image: '/products/Regular Fit Tshirt/Aesthetic Outgrown/1Minicon Asthetic 3.png', title: 'Polo' },
+  { image: '/products/Regular Fit Tshirt/Aesthetics Royal Blue/5 Minicon Asthetic.png', title: 'Gym vest' },
+  { image: '/products/Regular Fit Tshirt/AstroBuddy/2 AstroBuddy.png', title: 'Sweatshirts' },
+  { image: '/products/Regular Fit Tshirt/Hedgehog/2Hedgehog Regular fit.png', title: 'Puff' },
+  { image: '/products/Regular Fit Tshirt/Hoot Pepar/3Hoot Pepar.png', title: 'Supima' },
 ];
+
+
 
 export default function CategoryCards() {
   return (

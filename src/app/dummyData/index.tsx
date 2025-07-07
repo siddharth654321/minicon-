@@ -6,11 +6,11 @@ export const MENUS = [
     { label: 'Shop by', items: ['New Arrivals', 'Best Sellers', 'All T-Shirts', 'Sale'] },
     {
       label: 'Category',
-      items: ['Regular Fit', 'Oversized Fit', "Men's Polo", "Men's Gym Vest", "Men's sweatshirts"],
+      items: ['Regular Fit', 'Oversized Fit', "Men's Polo", "Men's Gym Vest", "Men's Sweatshirts"],
     },
     {
       label: 'Collections',
-      items: ['Solid', 'Printed', 'Minimalist', 'Streetwear', 'Aesthetic', 'puff', 'Acid Washed', 'supima'],
+      items: ['Solid', 'Printed', 'Minimalist', 'Streetwear', 'Aesthetic', 'Puffed', 'Acid Washed', 'Supima'],
     },
    
   ] as const;
