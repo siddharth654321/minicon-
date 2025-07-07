@@ -9,7 +9,7 @@ import RemoveIcon from '@mui/icons-material/Remove'
 import { supabase } from '@/lib/supabaseClient'
 import { useAuth } from '../AuthProvider'
 import { useRouter } from 'next/navigation'
-import { Product } from '@/app/dummyData'
+import type { Product } from '@/types'
 
 interface CartItem {
   id: number
@@ -17,7 +17,6 @@ interface CartItem {
   subtitle: string
   img: string
   price: number
-  size: string
   qty: number
 }
 
@@ -44,9 +43,8 @@ export default function CartDrawer({ open, onClose }:{ open:boolean; onClose:()=
           id: item.product.id,
           title: item.product.title,
           subtitle: item.product.subtitle,
-          img: item.product.image,
-          price: item.product.price,
-          size: item.product.size,
+          img: item.product.images[0],
+          price: item.product.price_after,
           qty: item.quantity,
         }))))
     })
@@ -109,7 +107,6 @@ export default function CartDrawer({ open, onClose }:{ open:boolean; onClose:()=
               <Box sx={{ flex: 1, minWidth: 0 }}>
                 <Typography variant="subtitle2" sx={{ fontWeight: 600, fontFamily: 'sans-serif' }}>{item.title}</Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'sans-serif' }}>{item.subtitle}</Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'sans-serif' }}>Size: {item.size}</Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
                   <IconButton size="small" onClick={() => handleDecrease(item.id)}><RemoveIcon fontSize="inherit" /></IconButton>
                   <Typography sx={{ mx: 0.5, fontFamily: 'sans-serif' }}>{item.qty}</Typography>

@@ -10,7 +10,7 @@ import { GridLegacy as Grid } from '@mui/material';
 import { ProductCard } from './components/productCard';
 import { useAuth } from './components/AuthProvider';
 import { supabase } from '@/lib/supabaseClient';
-import { Product } from './dummyData';
+import type { Product } from '@/types';
 import CategoryCards from './components/categoryCards';
 
 // Define types for API responses
