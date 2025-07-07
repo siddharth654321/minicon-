@@ -253,7 +253,7 @@ export default function Home() {
         </Typography>
         
         <Grid  container spacing={{ xs: 0.5, sm: 1, md: 1 }} justifyContent="center">
-        {products.slice(0, 16).map((p) => (
+        {products.slice(0, 51).map((p) => (
             <Grid item xs={6} sm={4} md={1.5} key={p.id}>
                             <ProductCard
                 product={p}

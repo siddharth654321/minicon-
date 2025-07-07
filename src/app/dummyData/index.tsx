@@ -3,14 +3,14 @@
 /* -------------------------------------------------------------------------- */
 
 export const MENUS = [
-    { label: 'Shop', items: ['New Arrivals', 'Best Sellers', 'All T-Shirts', 'Sale'] },
+    { label: 'Shop by', items: ['New Arrivals', 'Best Sellers', 'All T-Shirts', 'Sale'] },
     {
-      label: 'Styles',
-      items: ['Graphic Tees', 'Plain Tees', 'Oversized Tees', 'Slim Fit Tees', 'Athleisure'],
+      label: 'Category',
+      items: ['Regular Fit', 'Oversized Fit', "Men's Polo", "Men's Gym Vest", "Men's sweatshirts"],
     },
     {
       label: 'Collections',
-      items: ['Streetwear', 'Minimalist', 'Bold Prints', 'Vintage Vibes', 'Premium Collection', 'Limited Edition'],
+      items: ['Solid', 'Printed', 'Minimalist', 'Streetwear', 'Aesthetic', 'puff', 'Acid Washed', 'supima'],
     },
    
   ] as const;
