@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { keyframes } from '@mui/system';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Button } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { GridLegacy as Grid } from '@mui/material';
@@ -47,6 +47,7 @@ export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const { user } = useAuth();
   const [wishedIds, setWishedIds] = useState<Set<number>>(new Set());
+  const [showAllProducts, setShowAllProducts] = useState(false);
 
   useEffect(() => {
     async function fetchProducts() {
@@ -81,6 +82,9 @@ export default function Home() {
         });
     });
   }, [user]);
+
+  // Get products to display based on showAllProducts state
+  const displayProducts = showAllProducts ? products : products.slice(0, 16);
 
   return (
     <Box
@@ -277,16 +281,47 @@ export default function Home() {
           New Arrivals
         </Typography>
         
-        <Grid  container spacing={{ xs: 0.5, sm: 1, md: 1 }} justifyContent="center">
-        {products.slice(0, 51).map((p) => (
+        <Grid container spacing={{ xs: 0.5, sm: 1, md: 1 }} justifyContent="center">
+          {displayProducts.map((p) => (
             <Grid item xs={6} sm={4} md={1.5} key={p.id}>
-                            <ProductCard
+              <ProductCard
                 product={p}
                 initialIsWished={wishedIds.has(p.id)}
               />
             </Grid>
           ))}
         </Grid>
+
+        {/* Show More Button */}
+        {!showAllProducts && products.length > 16 && (
+          <Box sx={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            mt: { xs: 3, sm: 4 }
+          }}>
+            <Button
+              variant="contained"
+              onClick={() => setShowAllProducts(true)}
+              sx={{
+                backgroundColor: '#000',
+                color: '#fff',
+                padding: { xs: '12px 24px', sm: '16px 32px' },
+                fontSize: { xs: '14px', sm: '16px' },
+                fontWeight: 600,
+                borderRadius: '8px',
+                textTransform: 'none',
+                '&:hover': {
+                  backgroundColor: '#333',
+                },
+                '&:active': {
+                  backgroundColor: '#555',
+                }
+              }}
+            >
+              Show More ({products.length - 16} more items)
+            </Button>
+          </Box>
+        )}
       </Box>
     </Box>
   );
