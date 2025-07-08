@@ -1,13 +1,10 @@
 'use client';
 
 import Image from 'next/image';
-import { Box, Typography, Button, IconButton } from '@mui/material';
+import { Box, Typography, IconButton } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { useAuth } from '../AuthProvider';
 import type { Product } from '@/types';
@@ -15,38 +12,63 @@ import type { Product } from '@/types';
 export const ProductCard: React.FC<{
   product: Product;
   initialIsWished?: boolean;
-  initialCartQty?: number;
-}> = ({ product, initialIsWished, initialCartQty }) => {
+}> = ({ product, initialIsWished }) => {
   const router = useRouter();
   const { user } = useAuth();
   const [isWished, setIsWished] = useState(initialIsWished ?? false);
-  const [cartQty, setCartQty] = useState(initialCartQty ?? 0);
+  const [titleFontSize, setTitleFontSize] = useState('1rem');
+  const titleRef = useRef<HTMLSpanElement>(null);
 
-  console.log("ProductCard props", product, initialIsWished, initialCartQty)
   useEffect(() => {
     if (!user) return;
-    if (initialIsWished !== undefined && initialCartQty !== undefined) return;
+    if (initialIsWished !== undefined) return;
     supabase.auth.getSession().then(({ data: { session } }) => {
       const headers: Record<string, string> = {};
       if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
       fetch(`/api/wishlist?productId=${product.id}`, { headers })
         .then(res => res.ok ? res.json() : null)
         .then(data => setIsWished(!!data));
-      fetch(`/api/cart?productId=${product.id}`, { headers })
-        .then(res => res.ok ? res.json() : null)
-        .then(data => setCartQty(data?.quantity ?? 0));
     });
-  }, [user, product.id, initialIsWished, initialCartQty]);
+  }, [user, product.id, initialIsWished]);
 
   useEffect(() => {
     if (initialIsWished !== undefined) setIsWished(initialIsWished);
   }, [initialIsWished]);
 
+  // Dynamic font size adjustment for title
   useEffect(() => {
-    if (initialCartQty !== undefined) setCartQty(initialCartQty);
-  }, [initialCartQty]);
+    const adjustTitleFontSize = () => {
+      if (!titleRef.current) return;
+      
+      const container = titleRef.current.parentElement;
+      if (!container) return;
+      
+      const containerWidth = container.clientWidth - 16; // Account for padding
+      titleRef.current.style.fontSize = '1rem';
+      titleRef.current.style.whiteSpace = 'nowrap';
+      
+      let fontSize = 16; // Start with 1rem = 16px
+      
+      while (titleRef.current.scrollWidth > containerWidth && fontSize > 10) {
+        fontSize -= 0.5;
+        titleRef.current.style.fontSize = `${fontSize}px`;
+      }
+      
+      setTitleFontSize(`${fontSize}px`);
+    };
 
-  // Handlers
+    // Small delay to ensure DOM is ready
+    const timer = setTimeout(adjustTitleFontSize, 100);
+    
+    // Adjust on window resize
+    window.addEventListener('resize', adjustTitleFontSize);
+    
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', adjustTitleFontSize);
+    };
+  }, [product.title]);
+
   const handleWishlistToggle = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     if (!user) {
@@ -65,72 +87,14 @@ export const ProductCard: React.FC<{
     }
   };
 
-  const handleAddToCart = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    if (!user) {
-      router.push('/login');
-      return;
-    }
-    const { data: { session } } = await supabase.auth.getSession();
-    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-    if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
-    const res = await fetch('/api/cart', {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({ product_id: product.id, quantity: 1 })
-    });
-    if (res.ok) {
-      const data = await res.json();
-      setCartQty(data.quantity);
-    }
-  };
-
-  const handleIncrease = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    handleAddToCart(e);
-  };
-
-  const handleDecrease = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    if (!user) {
-      router.push('/login');
-      return;
-    }
-    const { data: { session } } = await supabase.auth.getSession();
-    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-    if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
-    if (cartQty <= 1) {
-      await fetch('/api/cart', { method: 'DELETE', headers, body: JSON.stringify({ product_id: product.id }) });
-      setCartQty(0);
-    } else {
-      const res = await fetch('/api/cart', {
-        method: 'PUT',
-        headers,
-        body: JSON.stringify({ product_id: product.id, quantity: cartQty - 1 })
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setCartQty(data.quantity);
-      }
-    }
-  };
-
-  const handleBuyNow = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    // Go to cart page with this specific product for "buy now"
-    // The cart component will handle adding the product with quantity 1
-    router.push(`/cart?buyNow=${product.id}`);
-  };
-
   return (
     <Box
       onClick={() => router.push(`/preCheckout?id=${encodeURIComponent(product.id)}`)}
       sx={{
-        width: { xs: '100%', sm: '100%', md: '100%' },
-       
-        height: { xs: '45vh', sm: '50vh' },
-        minHeight: { xs: 280, sm: 340 },
-        maxHeight: { xs: 360, sm: 400 },
+        width: '100%',
+        height: { xs: 320, sm: 390, md: 420 },
+        minHeight: 280,
+        maxHeight: 480,
         border: '1px solid #ededed',
         borderRadius: 2,
         boxShadow: 1,
@@ -143,8 +107,8 @@ export const ProductCard: React.FC<{
         m: { xs: 1, sm: 1.5, md: 2 }
       }}
     >
-      {/* --- Product Image --- */}
-      <Box sx={{ flex: 1, position: 'relative' }}>
+      {/* Product Image - 85% height */}
+      <Box sx={{ position: 'relative', height: '85%' }}>
         <Image
           src={product.images?.[1] || product.images?.[0] || ''}
           alt={product.title}
@@ -152,131 +116,83 @@ export const ProductCard: React.FC<{
           sizes="(max-width:600px) 90vw, (max-width:900px) 45vw, 20vw"
           style={{ objectFit: 'cover' }}
         />
+        <IconButton
+          aria-label="add to wishlist"
+          onClick={handleWishlistToggle}
+          sx={{
+            position: 'absolute',
+            top: 12,
+            right: 12,
+            color: isWished ? 'red' : 'white',
+            zIndex: 2,
+            '&:hover': { background: 'rgba(0,0,0,0.35)' }
+          }}
+        >
+          <FavoriteIcon sx={{ fontSize: '1.7rem' }} />
+        </IconButton>
       </Box>
 
-      {/* --- Info and Actions Overlay (white) --- */}
+      {/* Bottom Info Row */}
       <Box
         sx={{
-          position: 'absolute',
-          left: 0,
-          bottom: 0,
-          width: '100%',
-          bgcolor: 'rgba(255,255,255,0.98)',
-          px: { xs: 1.5, sm: 2 },
-          pt: { xs: 1, sm: 1.5 },
-          pb: { xs: 0.5, sm: 1 },
           display: 'flex',
-          flexDirection: 'column',
-          gap: { xs: 0.25, sm: 0.5 },
+          alignItems: 'flex-start',
+          justifyContent: 'flex-start',
+          px: 2,
+          py: 1.1,
+          height: '15%',
+          bgcolor: 'rgba(255,255,255,0.98)',
+          borderBottomLeftRadius: 8,
+          borderBottomRightRadius: 8,
         }}
       >
-        {/* Info */}
-        <Typography 
-          variant="subtitle1" 
-          fontWeight={700} 
-          color="black" 
-          noWrap 
-          sx={{ 
-            fontFamily: 'sans-serif',
-            fontSize: { xs: '0.9rem', sm: '1rem' }
-          }}
-        >
-          {product.title}
-        </Typography>
-        <Typography 
-          variant="body2" 
-          fontWeight={400} 
-          color="text.secondary" 
-          noWrap 
-          sx={{ 
-            fontFamily: 'sans-serif',
-            fontSize: { xs: '0.8rem', sm: '0.875rem' }
-          }}
-        >
-          {product.subtitle}
-        </Typography>
-        <Typography 
-          variant="subtitle2" 
-          fontWeight={600} 
-          color="black" 
-          sx={{ 
-            mb: { xs: 0.5, sm: 1 }, 
-            fontFamily: 'sans-serif',
-            fontSize: { xs: '0.9rem', sm: '1rem' }
-          }}
-        >
-          ₹{product.price_after}
-          <Typography
-          variant="body2"
-          fontWeight={400}
-          color="text.secondary"
-          sx={{
-            textDecoration: 'line-through',
-            fontFamily: 'sans-serif',
-            fontSize: { xs: '0.8rem', sm: '0.95rem' },
-            display: 'inline',
-            ml: 1,
-          }}
-        >
-            ₹{product.price_before ?? product.price_after}
-        </Typography>
-        </Typography>
-        {/* Actions */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0.5, sm: 1 } }}>
-          <IconButton
-            aria-label="add to wishlist"
-            onClick={handleWishlistToggle}
-            sx={{ 
-              color: isWished ? 'red' : 'grey.600',
-              padding: { xs: 0.5, sm: 1 }
-            }}
-          >
-            <FavoriteIcon sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }} />
-          </IconButton>
-          {cartQty === 0 ? (
-            <IconButton
-              aria-label="add to cart"
-              onClick={handleAddToCart}
-              sx={{ color: 'grey.600', padding: { xs: 0.5, sm: 1 } }}
+        <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+          {/* Title Row */}
+          <Box sx={{ width: '100%' }}>
+            <Typography
+              variant="subtitle1"
+              fontWeight={700}
+              color="black"
+              sx={{
+                fontFamily: 'sans-serif',
+                fontSize: titleFontSize,
+                whiteSpace: 'nowrap',
+                overflow: 'visible',
+                textOverflow: 'clip',
+              }}
             >
-              <ShoppingCartIcon sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }} />
-            </IconButton>
-          ) : (
-            <Box sx={{ display: 'flex', alignItems: 'center', bgcolor: '#f5f5f5', borderRadius: 1 }}>
-              <IconButton onClick={handleDecrease} size="small" sx={{ p: 0.5 }}>
-                <RemoveIcon fontSize="inherit" />
-              </IconButton>
-              <Typography sx={{ mx: 0.5, fontSize: { xs: '0.8rem', sm: '0.875rem' }, fontFamily: 'sans-serif' }}>
-                {cartQty}
-              </Typography>
-              <IconButton onClick={handleIncrease} size="small" sx={{ p: 0.5 }}>
-                <AddIcon fontSize="inherit" />
-              </IconButton>
-            </Box>
-          )}
-          <Button
-            onClick={handleBuyNow}
-            size="small"
-            variant="contained"
-            sx={{
-              ml: 'auto',
-              mr: { xs: 3, sm: 3 },
-              background: '#fe5000',
-              color: 'white',
-              fontWeight: 700,
-              borderRadius: 3,
-              px: { xs: 1, sm: 2 },
-              textTransform: 'none',
-              fontSize: { xs: '0.8rem', sm: '0.9375rem' },
-              boxShadow: 'none',
-              backgroundColor: 'black',
-              fontFamily: 'sans-serif',
-              '&:hover': { background: 'black' },
-              py: { xs: 0.5, sm: 1 }
-            }}
-          >
-            Buy Now
-          </Button>
+              <span ref={titleRef}>{product.title}</span>
+            </Typography>
+          </Box>
+          
+          {/* Price Row */}
+          <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center' }}>
+            <Typography
+              variant="subtitle2"
+              fontWeight={700}
+              color="black"
+              sx={{
+                fontFamily: 'sans-serif',
+                fontSize: { xs: '0.92rem', sm: '1rem' },
+                whiteSpace: 'nowrap',
+              }}
+            >
+              ₹{product.price_after}
+            </Typography>
+            <Typography
+              variant="body2"
+              fontWeight={400}
+              color="text.secondary"
+              sx={{
+                textDecoration: 'line-through',
+                fontFamily: 'sans-serif',
+                fontSize: { xs: '0.7rem', sm: '0.82rem' },
+                whiteSpace: 'nowrap',
+              }}
+            >
+              ₹{product.price_before ?? product.price_after}
+            </Typography>
+          </Box>
         </Box>
       </Box>
     </Box>
