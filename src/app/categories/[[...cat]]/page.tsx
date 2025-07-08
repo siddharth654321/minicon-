@@ -53,7 +53,6 @@ export default function CataloguePage() {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const { user } = useAuth();
   const [wishedIds, setWishedIds] = useState<Set<number>>(new Set());
-  const [cartMap, setCartMap] = useState<Map<number, number>>(new Map());
   const pathname = usePathname();
   const catSegments = useMemo(() => pathname.split('/').slice(2), [pathname]);
   const [sortOpt, setSortOpt] = useState<string>('');
@@ -80,7 +79,6 @@ export default function CataloguePage() {
   useEffect(() => {
     if (!user) {
       setWishedIds(new Set());
-      setCartMap(new Map());
       return;
     }
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -94,7 +92,6 @@ export default function CataloguePage() {
         .then((data: CartItem[]) => {
           const map = new Map<number, number>();
           data.forEach((c) => map.set(c.product.id, c.quantity));
-          setCartMap(map);
         });
     });
   }, [user]);
@@ -658,7 +655,6 @@ export default function CataloguePage() {
               <ProductCard
                 product={p}
                 initialIsWished={wishedIds.has(p.id)}
-                initialCartQty={cartMap.get(p.id) ?? 0}
               />
             </Grid>
           ))}

@@ -47,7 +47,6 @@ export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const { user } = useAuth();
   const [wishedIds, setWishedIds] = useState<Set<number>>(new Set());
-  const [cartMap, setCartMap] = useState<Map<number, number>>(new Map());
 
   useEffect(() => {
     async function fetchProducts() {
@@ -66,7 +65,6 @@ export default function Home() {
   useEffect(() => {
     if (!user) {
       setWishedIds(new Set());
-      setCartMap(new Map());
       return;
     }
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -80,7 +78,6 @@ export default function Home() {
         .then((data: CartItem[]) => {
           const map = new Map<number, number>();
           data.forEach((c) => map.set(c.product.id, c.quantity));
-          setCartMap(map);
         });
     });
   }, [user]);
@@ -286,7 +283,6 @@ export default function Home() {
                             <ProductCard
                 product={p}
                 initialIsWished={wishedIds.has(p.id)}
-                initialCartQty={cartMap.get(p.id) ?? 0}
               />
             </Grid>
           ))}
